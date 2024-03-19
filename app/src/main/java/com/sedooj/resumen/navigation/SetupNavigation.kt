@@ -1,32 +1,51 @@
 package com.sedooj.resumen.navigation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.sedooj.resumen.navigation.pages.SignInPage
 
 @Composable
-fun SetupNavigation() {
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = Screens.Authorisation.route) {
+fun SetupNavigation(
+    navController: NavHostController,
+    modifier: Modifier,
+    onShowBottomBar: (show: Boolean) -> Unit
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Screens.Authorisation.route,
+    ) {
         navigation(
             startDestination = Screens.Authorisation.SIGN_IN.route,
             route = Screens.Authorisation.route
         ) {
             composable(route = Screens.Authorisation.SIGN_IN.route) {
-                SignInPage {
+                SignInPage(
+                    login = {
+                        if (auth())
+                            onShowBottomBar(true)
+                    }
+                ) {
                     navController.navigate(
                         it, NavOptions.Builder()
                             .setLaunchSingleTop(true)
@@ -34,6 +53,7 @@ fun SetupNavigation() {
                     )
                 }
             }
+
             composable(route = Screens.Authorisation.SIGN_UP.route) {
                 SignUpPage {
                     navController.navigate(
@@ -43,43 +63,44 @@ fun SetupNavigation() {
                     )
                 }
             }
-        }
-        navigation(
-            startDestination = Screens.Home.MAIN.route,
-            route = Screens.Home.route
-        ) {
 
-            composable(route = Screens.Home.MAIN.route) {
-                MainPage {
-                    navController.navigate(
-                        it, NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
+
+            navigation(
+                startDestination = Screens.Home.MAIN.route,
+                route = Screens.Home.route
+            ) {
+                composable(route = Screens.Home.MAIN.route) {
+                    MainPage {
+                        navController.navigate(
+                            it, NavOptions.Builder()
+                                .setLaunchSingleTop(true)
+                                .build()
+                        )
+                    }
                 }
-            }
-            composable(route = Screens.Home.MY_RESUMES.route) {
-                ResumesPage {
-                    navController.navigate(
-                        it, NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
+                composable(route = Screens.Home.MY_RESUMES.route) {
+                    ResumesPage {
+                        navController.navigate(
+                            it, NavOptions.Builder()
+                                .setLaunchSingleTop(true)
+                                .build()
+                        )
+                    }
                 }
-            }
-            composable(route = Screens.Home.PROFILE.route) {
-                ProfilePage {
-                    navController.navigate(
-                        it, NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
+                composable(route = Screens.Home.PROFILE.route) {
+                    ProfilePage {
+                        navController.navigate(
+                            it, NavOptions.Builder()
+                                .setLaunchSingleTop(true)
+                                .build()
+                        )
+                    }
                 }
             }
         }
     }
-}
 
+}
 
 
 @Composable

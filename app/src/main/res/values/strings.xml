@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Resumen</string>
+    <string name="main">Главная</string>
+    <string name="sign_in">Войти</string>
 </resources>

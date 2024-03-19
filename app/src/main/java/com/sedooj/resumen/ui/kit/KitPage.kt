@@ -1,6 +1,7 @@
 package com.sedooj.resumen.ui.kit
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,9 +19,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.sedooj.resumen.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,13 +38,19 @@ fun KitPageWithNavigation(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     modifier: Modifier = Modifier
         .fillMaxSize()
-        .padding(10.dp)
+        .padding(10.dp),
+    content:@Composable () -> Unit
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(title = {
-                Text(text = title)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = title, fontWeight = FontWeight.Bold)
+                }
             }, navigationIcon = {
                 navigationButton()
             }, actions = {
@@ -50,46 +61,15 @@ fun KitPageWithNavigation(
             floatingActionButton()
         },
         floatingActionButtonPosition = floatingActionButtonPosition,
-        bottomBar = {
-            NavigationBarComponent()
-        },
         content = {
             ScaffoldContentComponent(modifier = modifier.padding(it)) {
-                KitFilledButton(label = "Login", onClick = { /*TODO*/ })
+                content()
             }
-        })
+        }
+    )
 }
 
-@Composable
-private fun NavigationBarComponent(
-    modifier: Modifier = Modifier.fillMaxWidth(),
-) {
-    val selectedPage = remember { mutableStateOf(Screens.Home.MAIN.route) }
-    val homePagesList = listOf(
-        Screens.Home.MAIN,
-        Screens.Home.MY_RESUMES,
-        Screens.Home.PROFILE,
-    )
-    NavigationBar(
-        modifier = modifier
-    ) {
-        homePagesList.forEach { screen ->
-            NavigationBarItem(
-                label = {
-                    Text(text = screen.transcription)
-                },
-                selected = selectedPage.value == screen.route,
-                onClick = {
-                    if (selectedPage.value != screen.route)
-                        selectedPage.value = screen.route
-                },
-                icon = {
-                    screen.icon()
-                }
-            )
-        }
-    }
-}
+
 
 @Composable
 private fun ScaffoldContentComponent(
