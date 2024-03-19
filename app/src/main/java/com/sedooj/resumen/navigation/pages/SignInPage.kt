@@ -11,16 +11,5 @@ import com.sedooj.resumen.ui.kit.KitFilledButton
 
 @Composable
 fun SignInPage(navigateTo: (route: String) -> Unit) {
-    Scaffold(
-        topBar = {
-            Text("${NavConfig.SIGN_IN}")
-        },
-        content = {
-            Surface(
-                modifier = Modifier.padding(it)
-            ) {
-                KitFilledButton(label = "Login", onClick = { /*TODO*/ })
-            }
-        }
-    )
+
 }
