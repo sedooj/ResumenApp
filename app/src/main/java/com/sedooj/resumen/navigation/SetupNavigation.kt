@@ -26,7 +26,6 @@ fun SetupNavigation() {
         ) {
             composable(route = Screens.Authorisation.SIGN_IN.route) {
                 SignInPage {
-
                     navController.navigate(
                         it, NavOptions.Builder()
                             .setLaunchSingleTop(true)
@@ -43,7 +42,6 @@ fun SetupNavigation() {
                     )
                 }
             }
-
         }
         navigation(
             startDestination = Screens.Home.MAIN.route,
@@ -77,10 +75,7 @@ fun SetupNavigation() {
                     )
                 }
             }
-
         }
-
-
     }
 }
 
