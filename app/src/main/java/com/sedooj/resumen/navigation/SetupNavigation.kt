@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.sedooj.resumen.navigation.pages.SignInPage
 
 @Composable
 fun SetupNavigation() {
@@ -79,31 +80,7 @@ fun SetupNavigation() {
     }
 }
 
-@Composable
-fun SignInPage(navigateTo: (route: String) -> Unit) {
-    Scaffold(
-        topBar = {
-            Text("${NavConfig.SIGN_IN}")
-        },
-        content = {
-            Surface(
-                modifier = Modifier.padding(it)
-            ) {
-                Column {
-                    OutlinedButton(onClick = { navigateTo(Screens.Authorisation.SIGN_UP.route) }) {
-                        Text(text = "to sign up")
-                    }
-                    OutlinedButton(onClick = { navigateTo(Screens.Home.route) }) {
-                        Text(text = "to home nav stack")
-                    }
-                    HostRouteChanger(route = 1) {
-                        navigateTo(it)
-                    }
-                }
-            }
-        }
-    )
-}
+
 
 @Composable
 fun HostRouteChanger(
