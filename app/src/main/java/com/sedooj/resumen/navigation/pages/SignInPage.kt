@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sedooj.resumen.navigation.NavConfig
+import com.sedooj.resumen.ui.kit.KitFilledButton
 
 @Composable
 fun SignInPage(navigateTo: (route: String) -> Unit) {
@@ -18,7 +19,7 @@ fun SignInPage(navigateTo: (route: String) -> Unit) {
             Surface(
                 modifier = Modifier.padding(it)
             ) {
-
+                KitFilledButton(label = "Login", onClick = { /*TODO*/ })
             }
         }
     )
