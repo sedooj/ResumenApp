@@ -5,7 +5,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sedooj.resumen.R
 
@@ -22,14 +21,32 @@ enum class NavConfig(val route: String) {
 sealed class Screens(
     val route: String,
     val transcription: String,
-    val icon: @Composable () -> Unit = {}
+    val icon: @Composable () -> Unit = {},
+    val screenType: ScreenType
 ) {
-    object Authorisation : Screens(NavConfig.AUTHORISATION.route, transcription = "Авторизация") {
-        object SIGN_IN : Screens(NavConfig.SIGN_IN.route, transcription = "Войти")
-        object SIGN_UP : Screens(NavConfig.SIGN_UP.route, transcription = "Зарегистрироваться")
+    enum class ScreenType {
+        AUTH,
+        HOME,
+        OTHER,
+        NONE
     }
 
-    object Home : Screens(NavConfig.HOME.route, "Главная") {
+    object Authorisation : Screens(
+        NavConfig.AUTHORISATION.route,
+        transcription = "Авторизация",
+        screenType = ScreenType.AUTH
+    ) {
+        object SIGN_IN :
+            Screens(NavConfig.SIGN_IN.route, transcription = "Войти", screenType = ScreenType.AUTH)
+
+        object SIGN_UP : Screens(
+            NavConfig.SIGN_UP.route,
+            transcription = "Зарегистрироваться",
+            screenType = ScreenType.AUTH
+        )
+    }
+
+    object Home : Screens(NavConfig.HOME.route, "Главная", screenType = ScreenType.HOME) {
         object MAIN : Screens(
             NavConfig.MAIN.route,
             transcription = "Главная",
@@ -39,9 +56,20 @@ sealed class Screens(
                     painter = painterResource(id = R.drawable.home),
                     contentDescription = "Home page"
                 )
-            })
+            },
+            screenType = ScreenType.HOME
+        )
 
-        object MY_RESUMES : Screens(NavConfig.MY_RESUMES.route, transcription = "Мои резюме")
-        object PROFILE : Screens(NavConfig.PROFILE.route, transcription = "Профиль")
+        object MY_RESUMES : Screens(
+            NavConfig.MY_RESUMES.route,
+            transcription = "Мои резюме",
+            screenType = ScreenType.HOME
+        )
+
+        object PROFILE : Screens(
+            NavConfig.PROFILE.route,
+            transcription = "Профиль",
+            screenType = ScreenType.HOME
+        )
     }
 }

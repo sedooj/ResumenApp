@@ -13,20 +13,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val showBottomBar = rememberSaveable {
-        mutableStateOf(false)
+    val screenType = rememberSaveable {
+        mutableStateOf(Screens.ScreenType.AUTH)
     }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            if (showBottomBar.value)
-                NavigationBarComponent(navController = navController)
+            if (screenType.value == Screens.ScreenType.HOME)
+                NavigationBarComponent(
+                    modifier = Modifier.fillMaxWidth(),
+                    navController = navController
+                ) { toRoute, type ->
+                    navController.navigate(toRoute)
+                    screenType.value = type
+                }
         }
     ) {
         SetupNavigation(
@@ -34,8 +42,25 @@ fun MainScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-        ) {
-            showBottomBar.value = it
+        ) { route, type ->
+            if (screenType.value == Screens.ScreenType.AUTH) {
+                // TODO(pop up to login)
+                navController.navigate(
+                    route, NavOptions
+                        .Builder()
+                        .setLaunchSingleTop(true)
+                        .build())
+
+            } else {
+                navController.navigate(
+                    route
+                ) {
+                    this.launchSingleTop = true
+                }
+            }
+            screenType.value = type
+
+
         }
     }
 }
@@ -46,15 +71,16 @@ fun auth(): Boolean {
 
 @Composable
 private fun NavigationBarComponent(
-    modifier: Modifier = Modifier.fillMaxWidth(),
-    navController: NavController
+    modifier: Modifier,
+    navController: NavController,
+    onClick: (route: String, screenType: Screens.ScreenType) -> Unit
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val selectedPage = backStackEntry?.destination?.route
     val homePagesList = listOf(
         Screens.Home.MAIN,
         Screens.Home.MY_RESUMES,
-        Screens.Home.PROFILE,
+        Screens.Home.PROFILE
     )
     NavigationBar(
         modifier = modifier
@@ -67,7 +93,7 @@ private fun NavigationBarComponent(
                 selected = selectedPage == screen.route,
                 onClick = {
                     if (selectedPage != screen.route) {
-                        navController.navigate(screen.route)
+                        onClick(screen.route, screen.screenType)
                     }
                 },
                 icon = {

@@ -11,10 +11,9 @@ import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 
 @Composable
 fun SignInPage(
-    login:() -> Unit,
-    navigateTo: (route: String) -> Unit
+    navigateTo: (toRoute: String) -> Unit
 ) {
     KitPageWithNavigation(title = stringResource(id = R.string.app_name)) {
-        KitFilledButton(label = "Login", onClick = { login() })
+        KitFilledButton(label = "Login", onClick = { navigateTo(Screens.Home.MAIN.route) })
     }
 }
