@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -66,7 +67,8 @@ dependencies {
     implementation(libs.network.ktor.client.negotiation)
     implementation(libs.network.ktor.client.serialization)
     implementation(libs.kotlinx.serialization)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.destinations.core)
+    ksp(libs.destinations.ksp)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
