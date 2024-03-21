@@ -1,7 +1,6 @@
 package com.sedooj.resumen.ui.kit
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -14,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun KitFilledButton(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     label: String,
     enabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(10.dp),
@@ -25,7 +24,7 @@ fun KitFilledButton(
         disabledContentColor = Color.LightGray
     ),
     shape: RoundedCornerShape = RoundedCornerShape(10.dp),
-    onClick:() -> Unit,
+    onClick: () -> Unit,
 //    content:@Composable () -> Unit
 ) {
     Button(

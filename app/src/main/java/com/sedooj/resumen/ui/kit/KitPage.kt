@@ -10,36 +10,26 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.sedooj.resumen.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KitPageWithNavigation(
+    modifier: Modifier = Modifier,
     title: String,
     navigationButton: @Composable () -> Unit = {},
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    modifier: Modifier = Modifier
-        .fillMaxSize()
-        .padding(10.dp),
-    content:@Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -68,7 +58,6 @@ fun KitPageWithNavigation(
         }
     )
 }
-
 
 
 @Composable
