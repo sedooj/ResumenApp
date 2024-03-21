@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Resumen</string>
+    <string name="home">Главная</string>
+    <string name="my_resumes">Мои резюме</string>
+    <string name="profile">Профиль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="has_account">Уже есть аккаунт?</string>
+    <string name="create_resume">Создать резюме</string>
+    <string name="no_content_here_now">Здесь пока ничего нет</string>
 </resources>
