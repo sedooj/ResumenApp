@@ -13,8 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
-import com.ramcosta.composedestinations.generated.destinations.SIGNINDestination
-import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
+import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
+import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
+import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.startDestination
 import com.sedooj.resumen.navigation.pages.home.bottomBar.BottomBar
@@ -28,7 +29,7 @@ fun MainScreen() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             AnimatedVisibility(
-                visible = currentDestination != SIGNINDestination && currentDestination != SIGNUPDestination,
+                visible = currentDestination == HOMEDestination || currentDestination == MYRESUMESDestination || currentDestination == PROFILEDestination,
                 enter = scaleIn(tween(200)),
                 exit = scaleOut(tween(200))
             ) {
