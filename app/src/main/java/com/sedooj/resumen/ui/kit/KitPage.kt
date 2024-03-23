@@ -73,7 +73,7 @@ private fun ScaffoldContentComponent(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             content()

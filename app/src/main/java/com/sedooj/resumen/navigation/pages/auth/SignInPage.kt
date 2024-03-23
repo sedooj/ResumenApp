@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,8 +31,9 @@ fun SignInPage(
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name), modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(20.dp)
     ) {
+
         KitFilledButton(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.sign_in),

@@ -25,7 +25,7 @@ fun HomeScreen(
         title = stringResource(id = R.string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(20.dp)
     ) {
         KitFilledButton(
             modifier = Modifier.fillMaxWidth(),
