@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -30,8 +32,8 @@ fun MainScreen() {
         bottomBar = {
             AnimatedVisibility(
                 visible = currentDestination == HOMEDestination || currentDestination == MYRESUMESDestination || currentDestination == PROFILEDestination,
-                enter = scaleIn(tween(200)),
-                exit = scaleOut(tween(200))
+                enter = slideInVertically(tween(200)) { it },
+                exit = slideOutVertically(tween(200)) { it }
             ) {
                 BottomBar(navController = navController)
             }
