@@ -15,6 +15,7 @@ import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
+import kotlin.random.Random
 
 @Destination<RootGraph>(start = false, route = Routes.HOME, style = ScreensTransitions::class)
 @Composable
@@ -22,7 +23,7 @@ fun HomeScreen(
     destinationsNavigator: DestinationsNavigator
 ) {
     KitPageWithNavigation(
-        title = stringResource(id = R.string.app_name),
+        title = stringResource(id = R.string.app_name) + " ${Random.nextInt()}",
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)

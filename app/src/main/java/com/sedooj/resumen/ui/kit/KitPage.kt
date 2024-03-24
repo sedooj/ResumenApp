@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun KitPageWithNavigation(
     modifier: Modifier = Modifier,
-    title: String,
+    title: String? = null,
     navigationButton: @Composable () -> Unit = {},
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
@@ -34,18 +34,20 @@ fun KitPageWithNavigation(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = title, fontWeight = FontWeight.Bold)
-                }
-            }, navigationIcon = {
-                navigationButton()
-            }, actions = {
-                actionButton()
-            })
+            if (title != null)
+                TopAppBar(title = {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = title, fontWeight = FontWeight.Bold)
+                    }
+
+                }, navigationIcon = {
+                    navigationButton()
+                }, actions = {
+                    actionButton()
+                })
         },
         floatingActionButton = {
             floatingActionButton()
