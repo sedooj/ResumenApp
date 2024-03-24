@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
@@ -78,6 +79,7 @@ fun SignInPage(
             SignInComponent(
                 enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && hasErrorState.intValue == 0,
                 toSignUp = {
+                    destinationsNavigator.popBackStack()
                     destinationsNavigator.navigate(Routes.SIGN_UP)
                 }
             ) {
@@ -170,7 +172,7 @@ private fun PasswordInputComponent(
 }
 
 @Composable
-fun SignInComponent(
+private fun SignInComponent(
     enabled: Boolean,
     toSignUp: () -> Unit,
     authorize: () -> Unit
