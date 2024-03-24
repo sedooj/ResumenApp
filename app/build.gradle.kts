@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -38,7 +39,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
@@ -57,6 +58,18 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.navigation)
+    implementation(libs.network.coil)
+    implementation(libs.network.ktor.client.core)
+    implementation(libs.network.ktor.client.android)
+    implementation(libs.network.ktor.client.cio)
+    implementation(libs.network.ktor.client.logging)
+    implementation(libs.network.ktor.client.negotiation)
+    implementation(libs.network.ktor.client.serialization)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.destinations.core)
+    ksp(libs.destinations.ksp)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
