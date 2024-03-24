@@ -1,17 +1,3 @@
 <resources>
     <string name="app_name">Resumen</string>
-    <string name="home">Главная</string>
-    <string name="my_resumes">Мои резюме</string>
-    <string name="profile">Профиль</string>
-    <string name="sign_in">Войти</string>
-    <string name="sign_in_into_account">Войдите в аккаунт</string>
-    <string name="type_username_and_password">Введите имя пользователя и пароль</string>
-    <string name="username">Имя пользователя</string>
-    <string name="password">Пароль</string>
-    <string name="sign_up">Зарегистрироваться</string>
-    <string name="no_account">Нет аккаунта?</string>
-    <string name="has_account">Уже есть аккаунт?</string>
-    <string name="create_resume">Создать резюме</string>
-    <string name="no_content_here_now">Здесь пока ничего нет</string>
-    <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
 </resources>
