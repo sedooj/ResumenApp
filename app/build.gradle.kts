@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.network.ktor.client.negotiation)
     implementation(libs.network.ktor.client.serialization)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.destinations.core)
     ksp(libs.destinations.ksp)
 

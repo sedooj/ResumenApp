@@ -12,8 +12,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,14 +30,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.SIGNINDestination
-import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
+import com.sedooj.resumen.domain.Client
+import com.sedooj.resumen.domain.data.user.create.CreateUserInput
+import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
+import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(
     start = false,
@@ -48,7 +55,9 @@ fun SignUpPage(
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
     val hasErrorState = rememberSaveable { mutableIntStateOf(0) }
-
+    val client = remember { Client.create() }
+    val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
+    val scope = rememberCoroutineScope()
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name),
         modifier = Modifier
@@ -85,7 +94,12 @@ fun SignUpPage(
                 }
             ) {
                 hasErrorState.intValue =
-                    register(username = usernameState.value, password = passwordState.value)
+                    register(
+                        username = usernameState.value,
+                        password = passwordState.value,
+                        usersNetworkRepository = usersNetworkRepository,
+                        scope = scope
+                    )
                 if (
                     hasErrorState.intValue == 0
                 ) {
@@ -211,7 +225,19 @@ private fun SignUpComponent(
     }
 }
 
-private fun register(username: String, password: String): Int {
+private fun register(
+    username: String,
+    password: String,
+    usersNetworkRepository: UsersNetworkRepository,
+    scope: CoroutineScope
+): Int {
+    scope.launch {
+        usersNetworkRepository.createUser(
+            input = CreateUserInput(
+                username = username, password = password
+            )
+        )
+    }
     if (username.isBlank()) return R.string.wrong_username_or_password
     if (password.isBlank()) return R.string.wrong_username_or_password
     return 0
