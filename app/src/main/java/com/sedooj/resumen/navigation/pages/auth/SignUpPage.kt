@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +33,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.Client
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
+import com.sedooj.resumen.domain.data.user.create.CreateUserOutput
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
@@ -231,8 +231,9 @@ private fun register(
     usersNetworkRepository: UsersNetworkRepository,
     scope: CoroutineScope
 ): Int {
+    var response: CreateUserOutput? = null
     scope.launch {
-        usersNetworkRepository.createUser(
+        response = usersNetworkRepository.createUser(
             input = CreateUserInput(
                 username = username, password = password
             )
@@ -240,5 +241,8 @@ private fun register(
     }
     if (username.isBlank()) return R.string.wrong_username_or_password
     if (password.isBlank()) return R.string.wrong_username_or_password
+    if (username.length < 6) return R.string.wrong_username_length
+    if (password.length < 8) return R.string.wrong_password_length
+    if (response == null) return R.string.unknown_error
     return 0
 }
