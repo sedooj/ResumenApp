@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 android {
@@ -25,7 +26,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -67,6 +71,7 @@ dependencies {
     implementation(libs.network.ktor.client.negotiation)
     implementation(libs.network.ktor.client.serialization)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.destinations.core)
     ksp(libs.destinations.ksp)
 

@@ -15,5 +15,11 @@
     <string name="create_resume">Создать резюме</string>
     <string name="no_content_here_now">Здесь пока ничего нет</string>
     <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
+    <string name="wrong_username_length">Имя пользователя должно быть не меньше 6 символов</string>
+    <string name="wrong_password_length">Пароль должен быть не меньше 8 символов</string>
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="uncorrect_input_data">Некорректные данные</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="no_connection">Проблемы подключением к удаленному серверу</string>
     <string name="by_clicking_register_agreement">Нажимая кнопку «Зарегистрироваться», Вы соглашаетесь с нашими <b>Условиями обслуживания</b> и <b>Политикой конфиденциальности</b></string>
 </resources>
