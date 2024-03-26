@@ -6,5 +6,5 @@ import com.sedooj.resumen.domain.data.user.create.CreateUserOutput
 
 interface UsersNetworkRepository : Client {
 
-    suspend fun createUser(input: CreateUserInput): CreateUserOutput
+    suspend fun createUser(input: CreateUserInput): Int
 }

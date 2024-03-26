@@ -37,6 +37,7 @@ interface Client {
                 install(ContentNegotiation) {
                     json(Json {
                         this.coerceInputValues = true
+                        this.ignoreUnknownKeys = true
                     })
                 }
             }

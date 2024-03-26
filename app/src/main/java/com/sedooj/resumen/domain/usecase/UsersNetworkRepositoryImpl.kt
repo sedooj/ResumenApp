@@ -1,5 +1,6 @@
 package com.sedooj.resumen.domain.usecase
 
+import android.provider.VoicemailContract
 import com.sedooj.resumen.domain.NetworkConfig
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
 import com.sedooj.resumen.domain.data.user.create.CreateUserOutput
@@ -14,7 +15,7 @@ import io.ktor.client.request.setBody
 class UsersNetworkRepositoryImpl(
     private val client: HttpClient
 ) : UsersNetworkRepository {
-    override suspend fun createUser(input: CreateUserInput): CreateUserOutput {
+    override suspend fun createUser(input: CreateUserInput): Int {
         val response = client.post("${NetworkConfig.AUTH_URL}sign-up") {
             setBody(MultiPartFormDataContent(
                 formData {
@@ -23,9 +24,7 @@ class UsersNetworkRepositoryImpl(
                 }
             ))
         }
-        val body = response.body<CreateUserOutput>()
-        return CreateUserOutput(
-            userId = body.userId
-        )
+        if (response.status.value == VoicemailContract.Status.DATA_CHANNEL_STATE_NO_CONNECTION) return -1
+        return response.status.value
     }
 }
