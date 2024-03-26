@@ -5,14 +5,11 @@ import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
 enum class AuthState {
     NOT_AUTHORIZED,
@@ -64,22 +61,22 @@ class AuthorizationViewModel() : ViewModel() {
             when (response) {
                 -1 -> {
                     updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result =  R.string.no_connection
+                    result = R.string.no_connection
                 }
 
                 200 -> {
                     updatePageState(state = AuthState.AUTHORIZED)
-                    result =  0
+                    result = 0
                 }
 
                 400 -> {
                     updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result =  R.string.uncorrect_input_data
+                    result = R.string.uncorrect_input_data
                 }
 
                 else -> {
                     updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result =  R.string.unknown_error
+                    result = R.string.unknown_error
                 }
             }
             return@launch

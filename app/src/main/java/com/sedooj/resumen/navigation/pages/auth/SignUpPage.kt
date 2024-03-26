@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -42,14 +45,18 @@ import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
+import com.sedooj.resumen.network.connectionHandler.ConnectionState
+import com.sedooj.resumen.network.connectionHandler.connectivityState
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 import com.sedooj.resumen.viewmodel.AuthState
 import com.sedooj.resumen.viewmodel.AuthorizationViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_UP,
@@ -61,12 +68,14 @@ fun SignUpPage(
 ) {
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
+    val connectionState = connectivityState().value
     val hasErrorState = rememberSaveable { mutableIntStateOf(0) }
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
     val authorizationViewModel = viewModel<AuthorizationViewModel>()
     val uiState = authorizationViewModel.uiState.collectAsState().value.state
+
     KitPageWithNavigation(
         title = uiState.name,
         modifier = Modifier
@@ -84,6 +93,18 @@ fun SignUpPage(
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                if (connectionState == ConnectionState.Unavailable) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.no_internet_connection),
+                        contentDescription = "No internet connection",
+                        tint = Color.Red,
+                        modifier = Modifier.size(25.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.no_internet_connection),
+                        color = Color.Red
+                    )
+                }
                 TextComponents(hasError = hasErrorState.intValue, uiState)
                 UsernameInputComponent(
                     value = usernameState.value,
@@ -102,7 +123,7 @@ fun SignUpPage(
                     passwordState.value = it
                 }
                 SignUpComponent(
-                    enabled = uiState != AuthState.AUTHORIZATION && usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && hasErrorState.intValue == 0,
+                    enabled = connectionState == ConnectionState.Available && usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && hasErrorState.intValue == 0,
                     toSignIn = {
                         destinationsNavigator.popBackStack()
                         destinationsNavigator.navigate(Routes.SIGN_IN)
