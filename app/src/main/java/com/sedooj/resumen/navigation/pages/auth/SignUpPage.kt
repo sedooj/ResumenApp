@@ -52,7 +52,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_UP,
@@ -64,7 +63,6 @@ fun SignUpPage(
 ) {
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
-    val connectionState = connectivityState().value
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()

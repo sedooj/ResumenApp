@@ -1,4 +1,4 @@
-package com.sedooj.resumen.navigation.pages.auth.signIn
+package com.sedooj.resumen.navigation.pages.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,15 +9,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -25,15 +31,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
+import com.sedooj.resumen.domain.Client
+import com.sedooj.resumen.domain.data.user.create.CreateUserInput
+import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
+import com.sedooj.resumen.viewmodel.AuthState
+import com.sedooj.resumen.viewmodel.AuthorizationViewModel
 
 @Destination<RootGraph>(
     start = true,
@@ -44,57 +55,71 @@ import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 fun SignInPage(
     destinationsNavigator: DestinationsNavigator
 ) {
-    val usernameState = rememberSaveable { mutableStateOf("") }
-    val passwordState = rememberSaveable { mutableStateOf("") }
-    val hasErrorState = rememberSaveable { mutableIntStateOf(0) }
+//    val usernameState = rememberSaveable { mutableStateOf("") }
+//    val passwordState = rememberSaveable { mutableStateOf("") }
+//    val client = remember { Client.create() }
+//    val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
+//    val scope = rememberCoroutineScope()
+//    val authorizationViewModel = viewModel<AuthorizationViewModel>()
+//    val uiState = authorizationViewModel.uiState.collectAsState().value.state
+//    val errorState = authorizationViewModel.uiState.collectAsState().value.error
+//
+//    LaunchedEffect(key1 = uiState) {
+//        if (uiState == AuthState.AUTHORIZED) {
+            destinationsNavigator.popBackStack()
+            destinationsNavigator.navigate(Routes.SIGN_UP)
+//        }
+//    }
 
-    KitPageWithNavigation(
-        title = stringResource(id = R.string.app_name),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(
-                10.dp,
-                alignment = Alignment.CenterVertically
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextComponents(hasError = hasErrorState.intValue)
-            UsernameInputComponent(
-                value = usernameState.value,
-                hasError = hasErrorState.intValue
-            ) {
-                if (hasErrorState.intValue != 0)
-                    hasErrorState.intValue = 0
-                usernameState.value = it
-            }
-            PasswordInputComponent(value = passwordState.value, hasError = hasErrorState.intValue) {
-                if (hasErrorState.intValue != 0)
-                    hasErrorState.intValue = 0
-                passwordState.value = it
-            }
-            SignInComponent(
-                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && hasErrorState.intValue == 0,
-                toSignUp = {
-                    destinationsNavigator.popBackStack()
-                    destinationsNavigator.navigate(Routes.SIGN_UP)
-                }
-            ) {
-                hasErrorState.intValue =
-                    authorize(username = usernameState.value, password = passwordState.value)
-                if (
-                    hasErrorState.intValue == 0
-                ) {
-                    destinationsNavigator.popBackStack()
-                    destinationsNavigator.navigate(Routes.HOME)
-                }
-            }
-
-        }
-    }
+//    KitPageWithNavigation(
+//        title = stringResource(id = R.string.app_name),
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(20.dp)
+//    ) {
+//        if (uiState == AuthState.AUTHORIZATION)
+//            CircularProgressIndicator(strokeCap = StrokeCap.Round)
+//        else
+//            Column(
+//                modifier = Modifier.fillMaxSize(),
+//                verticalArrangement = Arrangement.spacedBy(
+//                    10.dp,
+//                    alignment = Alignment.CenterVertically
+//                ),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                TextComponents(errorState = errorState, uiState)
+//                UsernameInputComponent(
+//                    value = usernameState.value,
+//                    hasError = errorState
+//                ) {
+//                    authorizationViewModel.resetErrorState()
+//                    usernameState.value = it
+//                }
+//                PasswordInputComponent(
+//                    value = passwordState.value,
+//                    errorState = errorState
+//                ) {
+//                    authorizationViewModel.resetErrorState()
+//                    passwordState.value = it
+//                }
+//                SignUpComponent(
+//                    enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
+//                    toSignIn = {
+//                        destinationsNavigator.popBackStack()
+//                        destinationsNavigator.navigate(Routes.SIGN_IN)
+//                    },
+//                    register = {
+//                        authorizationViewModel.register(
+//                            input = CreateUserInput(
+//                                username = usernameState.value,
+//                                password = passwordState.value
+//                            ), usersNetworkRepository = usersNetworkRepository, scope = scope
+//                        )
+//                    }
+//                )
+//            }
+//    }
 }
 
 @Composable

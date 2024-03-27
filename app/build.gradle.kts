@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.destinations.core)
+    implementation(libs.network.auth)
+    implementation(libs.play.services.auth)
     ksp(libs.destinations.ksp)
 
     testImplementation(libs.junit)

@@ -20,7 +20,7 @@ enum class AuthState {
 
 data class AuthUiState(
     val state: AuthState = AuthState.NOT_AUTHORIZED,
-    val error: Int? = null
+    val error: Int? = null,
 )
 
 class AuthorizationViewModel() : ViewModel() {
@@ -48,12 +48,7 @@ class AuthorizationViewModel() : ViewModel() {
         }
     }
 
-    fun register(
-        input: CreateUserInput,
-        usersNetworkRepository: UsersNetworkRepository,
-        scope: CoroutineScope,
-    ) {
-        updatePageState(state = AuthState.AUTHORIZATION)
+    private fun validateInput(input: CreateUserInput) {
         if (input.username.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
             setError(R.string.wrong_username_or_password)
@@ -74,16 +69,36 @@ class AuthorizationViewModel() : ViewModel() {
             setError(R.string.wrong_password_length)
             return
         }
+    }
 
+    fun login(
+        input: CreateUserInput,
+        usersNetworkRepository: UsersNetworkRepository,
+        scope: CoroutineScope,
+    ) {
+        updatePageState(state = AuthState.AUTHORIZATION)
+        validateInput(input = input)
+        scope.launch {
+
+        }
+    }
+
+    fun register(
+        input: CreateUserInput,
+        usersNetworkRepository: UsersNetworkRepository,
+        scope: CoroutineScope,
+    ) {
+        updatePageState(state = AuthState.AUTHORIZATION)
+        validateInput(input = input)
         scope.launch {
             try {
                 val response = usersNetworkRepository.createUser(input = input)
-
                 when (response) {
                     200 -> {
                         resetErrorState()
                         updatePageState(state = AuthState.AUTHORIZED)
                     }
+
                     400 -> {
                         setError(R.string.uncorrect_input_data)
                         updatePageState(state = AuthState.NOT_AUTHORIZED)
