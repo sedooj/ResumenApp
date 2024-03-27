@@ -15,6 +15,7 @@ serialization_version = "1.6.0"
 coroutines_version = "1.8.0"
 ksp = "1.9.22-1.0.17"
 destinations = "2.0.0-alpha07"
+play-services-auth = "21.0.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -41,10 +42,12 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 network-ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor_version" }
 network-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor_version" }
 network-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
+network-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor_version"}
 # Coroutines
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines_version" }
 destinations-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref="destinations" }
 destinations-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref="destinations" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
