@@ -9,5 +9,5 @@ interface UsersNetworkRepository : Client {
 
     suspend fun createUser(input: CreateUserInput): Int
 
-    suspend fun auth(input: AuthUserInput): Boolean
+    suspend fun auth(input: AuthUserInput): Int
 }

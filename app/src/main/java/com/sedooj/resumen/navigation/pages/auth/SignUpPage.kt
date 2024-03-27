@@ -38,19 +38,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.Client
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
-import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
-import com.sedooj.resumen.network.connectionHandler.connectivityState
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
-import com.sedooj.resumen.viewmodel.AuthState
-import com.sedooj.resumen.viewmodel.AuthorizationViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import com.sedooj.resumen.viewmodel.SignUpViewModel
+import com.sedooj.resumen.viewmodel.models.AuthenticationModel.*
+import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 
 @Destination<RootGraph>(
     start = false,
@@ -66,9 +61,9 @@ fun SignUpPage(
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
-    val authorizationViewModel = viewModel<AuthorizationViewModel>()
-    val uiState = authorizationViewModel.uiState.collectAsState().value.state
-    val errorState = authorizationViewModel.uiState.collectAsState().value.error
+    val signUpViewModel = viewModel<SignUpViewModel>()
+    val uiState = signUpViewModel.uiState.collectAsState().value.state
+    val errorState = signUpViewModel.uiState.collectAsState().value.error
 
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
@@ -99,14 +94,14 @@ fun SignUpPage(
                     value = usernameState.value,
                     hasError = errorState
                 ) {
-                    authorizationViewModel.resetErrorState()
+                    signUpViewModel.resetErrorState()
                     usernameState.value = it
                 }
                 PasswordInputComponent(
                     value = passwordState.value,
                     errorState = errorState
                 ) {
-                    authorizationViewModel.resetErrorState()
+                    signUpViewModel.resetErrorState()
                     passwordState.value = it
                 }
                 SignUpComponent(
@@ -116,8 +111,8 @@ fun SignUpPage(
                         destinationsNavigator.navigate(Routes.SIGN_IN)
                     },
                     register = {
-                        authorizationViewModel.register(
-                            input = CreateUserInput(
+                        signUpViewModel.auth(
+                            input = AuthorizationInput(
                                 username = usernameState.value,
                                 password = passwordState.value
                             ), usersNetworkRepository = usersNetworkRepository, scope = scope
@@ -241,29 +236,4 @@ private fun SignUpComponent(
             fontWeight = FontWeight.Bold
         )
     }
-}
-
-private fun register(
-    username: String,
-    password: String,
-    usersNetworkRepository: UsersNetworkRepository,
-    scope: CoroutineScope,
-): Int {
-
-    var response: Int = 0
-    scope.launch {
-        response = usersNetworkRepository.createUser(
-            input = CreateUserInput(
-                username = username, password = password
-            )
-        )
-    }
-    if (!scope.isActive)
-        return when (response) {
-            -1 -> R.string.no_connection
-            200 -> 0
-            400 -> R.string.uncorrect_input_data
-            else -> R.string.unknown_error
-        }
-    return 1
 }
