@@ -15,8 +15,9 @@ import kotlinx.serialization.json.Json
 import okhttp3.Credentials.basic
 
 object NetworkConfig {
-
-    const val BASE_URL: String = "http://217.71.129.139:4159/"
+    const val LOCAL_URL: String = "https://localhost:8080/"
+    const val REMOTE_URL: String = "http://217.71.129.139:4159/"
+    const val BASE_URL: String = LOCAL_URL
     const val API_URL: String = "${BASE_URL}api/"
     const val AUTH_URL: String = "${BASE_URL}auth/"
     const val API_RESUME: String = "${API_URL}resume/"
