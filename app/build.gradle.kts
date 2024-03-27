@@ -62,7 +62,6 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.navigation)
     implementation(libs.network.coil)
     implementation(libs.network.ktor.client.core)
     implementation(libs.network.ktor.client.android)

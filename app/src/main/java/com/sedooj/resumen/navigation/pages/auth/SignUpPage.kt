@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -45,7 +42,6 @@ import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.navigation.pages.Routes
-import com.sedooj.resumen.network.connectionHandler.ConnectionState
 import com.sedooj.resumen.network.connectionHandler.connectivityState
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
@@ -69,15 +65,22 @@ fun SignUpPage(
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
     val connectionState = connectivityState().value
-    val hasErrorState = rememberSaveable { mutableIntStateOf(0) }
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
     val authorizationViewModel = viewModel<AuthorizationViewModel>()
     val uiState = authorizationViewModel.uiState.collectAsState().value.state
+    val errorState = authorizationViewModel.uiState.collectAsState().value.error
+
+    LaunchedEffect(key1 = uiState) {
+        if (uiState == AuthState.AUTHORIZED) {
+            destinationsNavigator.popBackStack()
+            destinationsNavigator.navigate(Routes.HOME)
+        }
+    }
 
     KitPageWithNavigation(
-        title = uiState.name,
+        title = stringResource(id = R.string.app_name),
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
@@ -93,63 +96,43 @@ fun SignUpPage(
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (connectionState == ConnectionState.Unavailable) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.no_internet_connection),
-                        contentDescription = "No internet connection",
-                        tint = Color.Red,
-                        modifier = Modifier.size(25.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.no_internet_connection),
-                        color = Color.Red
-                    )
-                }
-                TextComponents(hasError = hasErrorState.intValue, uiState)
+                TextComponents(errorState = errorState, uiState)
                 UsernameInputComponent(
                     value = usernameState.value,
-                    hasError = hasErrorState.intValue
+                    hasError = errorState
                 ) {
-                    if (hasErrorState.intValue != 0)
-                        hasErrorState.intValue = 0
+                    authorizationViewModel.resetErrorState()
                     usernameState.value = it
                 }
                 PasswordInputComponent(
                     value = passwordState.value,
-                    hasError = hasErrorState.intValue
+                    errorState = errorState
                 ) {
-                    if (hasErrorState.intValue != 0)
-                        hasErrorState.intValue = 0
+                    authorizationViewModel.resetErrorState()
                     passwordState.value = it
                 }
                 SignUpComponent(
-                    enabled = connectionState == ConnectionState.Available && usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && hasErrorState.intValue == 0,
+                    enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
                     toSignIn = {
                         destinationsNavigator.popBackStack()
                         destinationsNavigator.navigate(Routes.SIGN_IN)
+                    },
+                    register = {
+                        authorizationViewModel.register(
+                            input = CreateUserInput(
+                                username = usernameState.value,
+                                password = passwordState.value
+                            ), usersNetworkRepository = usersNetworkRepository, scope = scope
+                        )
                     }
-                ) {
-                    hasErrorState.intValue = authorizationViewModel.register(
-                        input = CreateUserInput(
-                            username = usernameState.value,
-                            password = passwordState.value
-                        ), usersNetworkRepository = usersNetworkRepository, scope = scope
-                    )
-                    if (
-                        hasErrorState.intValue == 0
-                    ) {
-                        destinationsNavigator.popBackStack()
-                        destinationsNavigator.navigate(Routes.HOME)
-                    }
-                }
-
+                )
             }
     }
 }
 
 @Composable
 private fun TextComponents(
-    hasError: Int,
+    errorState: Int?,
     uiState: AuthState,
 ) {
     Text(
@@ -160,9 +143,9 @@ private fun TextComponents(
         text = stringResource(id = R.string.type_username_and_password),
         fontWeight = FontWeight.Light
     )
-    if (hasError != 0 && uiState != AuthState.AUTHORIZATION)
+    if (errorState != null && uiState != AuthState.AUTHORIZATION)
         Text(
-            text = stringResource(id = hasError),
+            text = stringResource(id = errorState),
             fontWeight = FontWeight.Light,
             color = Color.Red,
             textAlign = TextAlign.Center
@@ -173,7 +156,7 @@ private fun TextComponents(
 @Composable
 private fun UsernameInputComponent(
     value: String,
-    hasError: Int,
+    hasError: Int?,
     onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
@@ -188,7 +171,7 @@ private fun UsernameInputComponent(
         singleLine = true,
         maxLines = 1,
         shape = RoundedCornerShape(10.dp),
-        isError = hasError != 0,
+        isError = hasError != null,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next
         )
@@ -198,7 +181,7 @@ private fun UsernameInputComponent(
 @Composable
 private fun PasswordInputComponent(
     value: String,
-    hasError: Int,
+    errorState: Int?,
     onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
@@ -218,7 +201,7 @@ private fun PasswordInputComponent(
             imeAction = ImeAction.Done
         ),
         shape = RoundedCornerShape(10.dp),
-        isError = hasError != 0
+        isError = errorState != null
     )
 }
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 enum class AuthState {
     NOT_AUTHORIZED,
@@ -18,7 +19,8 @@ enum class AuthState {
 }
 
 data class AuthUiState(
-    var state: AuthState = AuthState.NOT_AUTHORIZED,
+    val state: AuthState = AuthState.NOT_AUTHORIZED,
+    val error: Int? = null
 )
 
 class AuthorizationViewModel() : ViewModel() {
@@ -32,55 +34,71 @@ class AuthorizationViewModel() : ViewModel() {
         }
     }
 
+    fun resetErrorState() {
+        _uiState.update {
+            it.copy(error = null)
+        }
+    }
+
+    private fun setError(msg: Int) {
+        _uiState.update {
+            it.copy(
+                error = msg
+            )
+        }
+    }
+
     fun register(
         input: CreateUserInput,
         usersNetworkRepository: UsersNetworkRepository,
         scope: CoroutineScope,
-    ): Int {
+    ) {
         updatePageState(state = AuthState.AUTHORIZATION)
         if (input.username.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            return R.string.wrong_username_or_password
+            setError(R.string.wrong_username_or_password)
+            return
         }
         if (input.password.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            return R.string.wrong_username_or_password
+            setError(R.string.wrong_username_or_password)
+            return
         }
         if (input.username.length < 6) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            return R.string.wrong_username_length
+            setError(R.string.wrong_username_length)
+            return
         }
         if (input.password.length < 8) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            return R.string.wrong_password_length
+            setError(R.string.wrong_password_length)
+            return
         }
-        var result = 0
 
         scope.launch {
-            val response = usersNetworkRepository.createUser(input = input)
-            when (response) {
-                -1 -> {
-                    updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result = R.string.no_connection
-                }
+            try {
+                val response = usersNetworkRepository.createUser(input = input)
 
-                200 -> {
-                    updatePageState(state = AuthState.AUTHORIZED)
-                    result = 0
-                }
+                when (response) {
+                    200 -> {
+                        resetErrorState()
+                        updatePageState(state = AuthState.AUTHORIZED)
+                    }
+                    400 -> {
+                        setError(R.string.uncorrect_input_data)
+                        updatePageState(state = AuthState.NOT_AUTHORIZED)
+                    }
 
-                400 -> {
-                    updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result = R.string.uncorrect_input_data
+                    else -> {
+                        setError(R.string.unknown_error)
+                        updatePageState(state = AuthState.NOT_AUTHORIZED)
+                    }
                 }
-
-                else -> {
-                    updatePageState(state = AuthState.NOT_AUTHORIZED)
-                    result = R.string.unknown_error
-                }
+            } catch (e: ConnectException) {
+                setError(R.string.no_connection)
+                updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
             return@launch
         }
-        return result
     }
 }
