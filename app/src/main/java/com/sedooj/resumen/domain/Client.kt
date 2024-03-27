@@ -24,6 +24,7 @@ object NetworkConfig {
 
 }
 
+
 interface Client {
 
     companion object {
