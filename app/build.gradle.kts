@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.network.auth)
     implementation(libs.play.services.auth)
     ksp(libs.destinations.ksp)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
