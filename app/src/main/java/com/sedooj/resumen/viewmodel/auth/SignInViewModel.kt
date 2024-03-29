@@ -1,4 +1,4 @@
-package com.sedooj.resumen.viewmodel
+package com.sedooj.resumen.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -38,6 +38,11 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
     override fun resetErrorState() {
         _uiState.update {
             it.copy(error = null)
+        }
+    }
+    fun resetAll() {
+        _uiState.update {
+            it.copy(state = AuthState.NOT_AUTHORIZED)
         }
     }
 
