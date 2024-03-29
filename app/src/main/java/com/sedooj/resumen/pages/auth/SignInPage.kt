@@ -75,7 +75,6 @@ fun SignInPage(
         if (uiState == AuthState.AUTHORIZED) {
             destinationsNavigator.popBackStack()
             destinationsNavigator.navigate(Routes.SIGN_IN_CONFIRMATION)
-            signInViewModel.resetAll()
         }
     }
 

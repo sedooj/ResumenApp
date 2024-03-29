@@ -10,10 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 enum class ConfirmationState {
-    REJECTED,
     APPROVED,
     NOT_SELECTED,
-    REJECTED_FORCIBLE
 }
 
 data class SignInConfirmationUiState(
@@ -27,10 +25,10 @@ class SignInConfirmationViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SignInConfirmationUiState())
     val uiState: StateFlow<SignInConfirmationUiState> = _uiState.asStateFlow()
 
-    private fun updateConfirmationState(state: ConfirmationState) {
+    private fun updateConfirmationState() {
         _uiState.update {
             it.copy(
-                confirmationState = state
+                confirmationState = ConfirmationState.APPROVED
             )
         }
     }
@@ -52,11 +50,7 @@ class SignInConfirmationViewModel : ViewModel() {
     }
 
     fun approve() {
-        updateConfirmationState(state = ConfirmationState.APPROVED)
-    }
-
-    fun reject() {
-        updateConfirmationState(state = ConfirmationState.REJECTED)
+        updateConfirmationState()
     }
 
     suspend fun loadData(context: Context) {
@@ -66,12 +60,9 @@ class SignInConfirmationViewModel : ViewModel() {
         ).build()
         val authUserDao = db.authUserDao()
         val authorizationData = authUserDao.getAuthorizationData()
-        if (authorizationData == null)
-            updateConfirmationState(state = ConfirmationState.REJECTED_FORCIBLE)
-        else {
+        if (authorizationData != null) {
             updateUsername(authorizationData.username)
             setContentLoaded()
         }
-
     }
 }

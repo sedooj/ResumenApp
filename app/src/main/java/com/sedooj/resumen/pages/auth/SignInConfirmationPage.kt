@@ -25,10 +25,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
-import com.sedooj.resumen.navigation.config.ScreensTransitions
+import com.sedooj.resumen.navigation.config.ConfirmationScreenTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
-import com.sedooj.resumen.ui.kit.KitOutlinedButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 import com.sedooj.resumen.viewmodel.auth.ConfirmationState
 import com.sedooj.resumen.viewmodel.auth.SignInConfirmationViewModel
@@ -36,7 +35,7 @@ import com.sedooj.resumen.viewmodel.auth.SignInConfirmationViewModel
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_IN_CONFIRMATION,
-    style = ScreensTransitions::class
+    style = ConfirmationScreenTransitions::class
 )
 @Composable
 fun SignInConfirmationPage(
@@ -53,9 +52,6 @@ fun SignInConfirmationPage(
     val confirmationState = uiState.confirmationState
     val usernameState = uiState.username
     LaunchedEffect(key1 = confirmationState) {
-        if (confirmationState == ConfirmationState.REJECTED || confirmationState == ConfirmationState.REJECTED_FORCIBLE) {
-            destinationsNavigator.navigateUp()
-        }
         if (confirmationState == ConfirmationState.APPROVED) {
             destinationsNavigator.popBackStack()
             destinationsNavigator.navigate(Routes.HOME)
@@ -98,20 +94,9 @@ fun SignInConfirmationPage(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                KitOutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    label = stringResource(id = R.string.another_account),
-                    onClick = {
-                        signInConfirmationViewModel.reject()
-                    },
-                    enabled = confirmationState == ConfirmationState.NOT_SELECTED,
-                )
                 KitFilledButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(2f),
+                        .fillMaxWidth(),
                     label = stringResource(id = R.string.sign_in),
                     onClick = {
                         signInConfirmationViewModel.approve()
