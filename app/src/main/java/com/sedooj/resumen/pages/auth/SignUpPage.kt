@@ -1,4 +1,4 @@
-package com.sedooj.resumen.navigation.pages.auth
+package com.sedooj.resumen.pages.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -37,14 +38,13 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.Client
-import com.sedooj.resumen.domain.data.user.create.CreateUserInput
 import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
-import com.sedooj.resumen.navigation.pages.Routes
+import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 import com.sedooj.resumen.viewmodel.SignUpViewModel
-import com.sedooj.resumen.viewmodel.models.AuthenticationModel.*
+import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 
 @Destination<RootGraph>(
@@ -64,6 +64,7 @@ fun SignUpPage(
     val signUpViewModel = viewModel<SignUpViewModel>()
     val uiState = signUpViewModel.uiState.collectAsState().value.state
     val errorState = signUpViewModel.uiState.collectAsState().value.error
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
@@ -115,7 +116,10 @@ fun SignUpPage(
                             input = AuthorizationInput(
                                 username = usernameState.value,
                                 password = passwordState.value
-                            ), usersNetworkRepository = usersNetworkRepository, scope = scope
+                            ),
+                            usersNetworkRepository = usersNetworkRepository,
+                            scope = scope,
+                            context = context
                         )
                     }
                 )

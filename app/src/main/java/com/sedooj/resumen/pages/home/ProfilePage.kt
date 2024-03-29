@@ -1,4 +1,4 @@
-package com.sedooj.resumen.navigation.pages.home
+package com.sedooj.resumen.pages.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,12 +12,12 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
-import com.sedooj.resumen.navigation.pages.Routes
+import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 
-@Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = ScreensTransitions::class)
+@Destination<RootGraph>(start = false, route = Routes.PROFILE, style = ScreensTransitions::class)
 @Composable
-fun MyResumesScreen(
+fun ProfileScreen(
     destinationsNavigator: DestinationsNavigator
 ) {
     KitPageWithNavigation(

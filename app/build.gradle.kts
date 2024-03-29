@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     kotlin("plugin.serialization") version "1.9.22"
+    id("androidx.room") version "2.6.1" apply false
 }
 
 android {
@@ -75,8 +76,15 @@ dependencies {
     implementation(libs.network.auth)
     implementation(libs.play.services.auth)
     ksp(libs.destinations.ksp)
-    implementation(libs.androidx.core.splashscreen)
 
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.room)
+//    implementation(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime)
+    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

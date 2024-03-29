@@ -1,9 +1,15 @@
 package com.sedooj.resumen.viewmodel
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
+import com.sedooj.resumen.storage.dao.AuthUserDao
+import com.sedooj.resumen.storage.db.AppDatabase
+import com.sedooj.resumen.storage.entity.AuthUserEntity
 import com.sedooj.resumen.viewmodel.models.AuthenticationModel
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +27,7 @@ data class SignUpUiState(
     val error: Int? = null,
 )
 
-class SignUpViewModel() : ViewModel(), AuthenticationModel {
-
+class SignUpViewModel : ViewModel(), AuthenticationModel {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
@@ -51,6 +56,7 @@ class SignUpViewModel() : ViewModel(), AuthenticationModel {
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,
         scope: CoroutineScope,
+        context: Context
     ) {
         updatePageState(state = AuthState.AUTHORIZATION)
         if (!validateInput(
@@ -67,6 +73,18 @@ class SignUpViewModel() : ViewModel(), AuthenticationModel {
                 )
                 when (response) {
                     200 -> {
+                        val db = Room.databaseBuilder(
+                            context = context,
+                            AppDatabase::class.java, "resumen-app-db"
+                        ).build()
+
+                        db.authUserDao().update(
+                            auth = AuthUserEntity(
+                                id = 1,
+                                username = input.username,
+                                password = input.password
+                            )
+                        )
                         resetErrorState()
                         updatePageState(state = AuthState.AUTHORIZED)
                     }

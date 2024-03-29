@@ -1,7 +1,9 @@
 package com.sedooj.resumen.viewmodel.models
 
+import android.content.Context
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
+import com.sedooj.resumen.storage.dao.AuthUserDao
 import kotlinx.coroutines.CoroutineScope
 
 interface AuthenticationModel {
@@ -47,7 +49,8 @@ interface AuthenticationModel {
     fun auth(
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,
-        scope: CoroutineScope
+        scope: CoroutineScope,
+        context: Context
     )
 
 }
