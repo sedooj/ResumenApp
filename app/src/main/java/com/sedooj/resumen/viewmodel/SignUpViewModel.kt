@@ -52,6 +52,14 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
         }
     }
 
+    override fun coldAuth(
+        usersNetworkRepository: UsersNetworkRepository,
+        scope: CoroutineScope,
+        context: Context,
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun auth(
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,

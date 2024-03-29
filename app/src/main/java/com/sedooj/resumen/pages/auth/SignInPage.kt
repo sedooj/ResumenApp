@@ -64,7 +64,7 @@ fun SignInPage(
     val uiState = signUpViewModel.uiState.collectAsState().value.state
     val errorState = signUpViewModel.uiState.collectAsState().value.error
     val context = LocalContext.current
-
+    signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
             destinationsNavigator.popBackStack()

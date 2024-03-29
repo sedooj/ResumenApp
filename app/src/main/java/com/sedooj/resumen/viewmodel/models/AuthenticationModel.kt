@@ -46,6 +46,12 @@ interface AuthenticationModel {
         return true
     }
 
+    fun coldAuth(
+        usersNetworkRepository: UsersNetworkRepository,
+        scope: CoroutineScope,
+        context: Context
+    )
+
     fun auth(
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,
