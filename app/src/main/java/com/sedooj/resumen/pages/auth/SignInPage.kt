@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,7 +65,13 @@ fun SignInPage(
     val uiState = signUpViewModel.uiState.collectAsState().value.state
     val errorState = signUpViewModel.uiState.collectAsState().value.error
     val context = LocalContext.current
-    signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
+    val coldStart = rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    if (coldStart.intValue == 0) {
+        signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
+        coldStart.intValue++
+    }
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
             destinationsNavigator.popBackStack()

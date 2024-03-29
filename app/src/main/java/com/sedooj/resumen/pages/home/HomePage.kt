@@ -44,19 +44,21 @@ fun HomeScreen(
     val id = rememberSaveable { mutableIntStateOf(-1) }
     val username = rememberSaveable { mutableStateOf("")}
     val password = rememberSaveable { mutableStateOf("")}
+    LaunchedEffect(key1 = id.intValue == -1) {
+        val authorizationData = db.authUserDao().getAuthorizationData()
+        if (authorizationData != null) {
+            id.intValue = authorizationData.id
+            username.value = authorizationData.username
+            password.value = authorizationData.password
+        }
+    }
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name) + "$token",
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        LaunchedEffect(key1 = null) {
-            val authorizationData = db.authUserDao().getAuthorizationData()
-            id.value = authorizationData.id
-            username.value = authorizationData.username
-            password.value = authorizationData.password
-        }
-        Text(text = "${id.value}")
+        Text(text = "${id.intValue}")
         Text(text = username.value)
         Text(text = password.value)
         KitFilledButton(

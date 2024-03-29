@@ -108,11 +108,16 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
         ).build()
         var authData: AuthorizationInput? = input
         if (authData == null) {
-            val authorizationData = db.authUserDao().getAuthorizationData()
-            authData = AuthorizationInput(
-                username = authorizationData.username,
-                password = authorizationData.password
-            )
+            val authorizationData: AuthUserEntity? = db.authUserDao().getAuthorizationData()
+            if (authorizationData != null)
+                authData = AuthorizationInput(
+                    username = authorizationData.username,
+                    password = authorizationData.password
+                )
+            else {
+                updatePageState(state = AuthState.NOT_AUTHORIZED)
+                return
+            }
             val response = usersNetworkRepository.auth(
                 input = AuthUserInput(
                     username = authData.username,
@@ -131,17 +136,14 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
                 }
 
                 200 -> {
-
-                    scope.launch {
-
-                        db.authUserDao().update(
-                            auth = AuthUserEntity(
-                                id = 1,
-                                username = authData.username,
-                                password = authData.password
-                            )
+                    db.authUserDao().update(
+                        auth = AuthUserEntity(
+                            id = 1,
+                            username = authData.username,
+                            password = authData.password
                         )
-                    }
+                    )
+
                     resetErrorState()
                     updatePageState(state = AuthState.AUTHORIZED)
                 }
