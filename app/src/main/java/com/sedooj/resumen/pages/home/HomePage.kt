@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -33,25 +35,30 @@ fun HomeScreen(
 ) {
     val token = rememberSaveable { Random.nextInt() }
     val context = LocalContext.current
-    val db = rememberSaveable {
+    val db =
         Room.databaseBuilder(
             context = context,
             AppDatabase::class.java, "resumen-app-db"
         ).build()
-    }
-//    val authUserDao = rememberSaveable { db.authUserDao() }
-    var username : String? = null
+
+    val id = rememberSaveable { mutableIntStateOf(-1) }
+    val username = rememberSaveable { mutableStateOf("")}
+    val password = rememberSaveable { mutableStateOf("")}
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name) + "$token",
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
-//        LaunchedEffect(key1 = null) {
-//            val authorizationData = authUserDao.getAuthorizationData()
-//            username = authorizationData.username
-//        }
-//        username?.let { Text(text = it) }
+        LaunchedEffect(key1 = null) {
+            val authorizationData = db.authUserDao().getAuthorizationData()
+            id.value = authorizationData.id
+            username.value = authorizationData.username
+            password.value = authorizationData.password
+        }
+        Text(text = "${id.value}")
+        Text(text = username.value)
+        Text(text = password.value)
         KitFilledButton(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.create_resume),

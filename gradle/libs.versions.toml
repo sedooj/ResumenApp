@@ -39,6 +39,7 @@ navigation = { group = "androidx.navigation", name = "navigation-compose", versi
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen_version" }
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version"}
 androidx-lifecycle-viewmodel-ktx = {group = "androidx.lifecycle",name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle_viewmodel_version"}
 androidx-lifecycle-viewmodel-compose = {group = "androidx.lifecycle",name = "lifecycle-viewmodel-compose", version.ref = "lifecycle_viewmodel_version"}
 androidx-lifecycle-runtime = {group = "androidx.lifecycle",name = "lifecycle-runtime-ktx", version.ref = "lifecycle_viewmodel_version"}

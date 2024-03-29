@@ -76,7 +76,7 @@ dependencies {
     implementation(libs.network.auth)
     implementation(libs.play.services.auth)
     ksp(libs.destinations.ksp)
-
+    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.room)
 //    implementation(libs.androidx.room.compiler)

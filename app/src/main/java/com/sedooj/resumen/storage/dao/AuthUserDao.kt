@@ -9,11 +9,11 @@ import com.sedooj.resumen.storage.entity.AuthUserEntity
 @Dao
 interface AuthUserDao {
     @Query("SELECT * FROM  AuthUserEntity")
-    fun getAuthorizationData(): AuthUserEntity
+    suspend fun getAuthorizationData(): AuthUserEntity
 
     @Insert
-    fun insert(auth: AuthUserEntity)
+    suspend fun insert(auth: AuthUserEntity)
 
     @Update
-    fun update(auth: AuthUserEntity)
+    suspend fun update(auth: AuthUserEntity)
 }
