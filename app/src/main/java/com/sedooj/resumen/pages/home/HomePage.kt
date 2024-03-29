@@ -1,8 +1,8 @@
-package com.sedooj.resumen.navigation.pages.home
+package com.sedooj.resumen.pages.home
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -12,13 +12,14 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
-import com.sedooj.resumen.navigation.pages.Routes
+import com.sedooj.resumen.pages.Routes
+import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 
-@Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = ScreensTransitions::class)
+@Destination<RootGraph>(start = false, route = Routes.HOME, style = ScreensTransitions::class)
 @Composable
-fun MyResumesScreen(
-    destinationsNavigator: DestinationsNavigator
+fun HomeScreen(
+    destinationsNavigator: DestinationsNavigator,
 ) {
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name),
@@ -26,8 +27,11 @@ fun MyResumesScreen(
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        Text(text = stringResource(id = R.string.no_content_here_now))
+        KitFilledButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.create_resume),
+            onClick = {
+
+            })
     }
 }
-
-

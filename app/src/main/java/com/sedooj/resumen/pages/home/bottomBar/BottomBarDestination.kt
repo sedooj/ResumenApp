@@ -1,4 +1,4 @@
-package com.sedooj.resumen.navigation.pages.home.bottomBar
+package com.sedooj.resumen.pages.home.bottomBar
 
 import androidx.annotation.StringRes
 import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
@@ -6,7 +6,7 @@ import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestinat
 import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import com.sedooj.resumen.R
-import com.sedooj.resumen.navigation.pages.Routes
+import com.sedooj.resumen.pages.Routes
 
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,

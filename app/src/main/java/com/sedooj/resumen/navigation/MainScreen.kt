@@ -20,7 +20,7 @@ import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestinat
 import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.startDestination
-import com.sedooj.resumen.navigation.pages.home.bottomBar.BottomBar
+import com.sedooj.resumen.pages.home.bottomBar.BottomBar
 
 @Composable
 fun MainScreen() {

@@ -1,4 +1,4 @@
-package com.sedooj.resumen.navigation.pages.home.bottomBar
+package com.sedooj.resumen.pages.home.bottomBar
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding

@@ -1,6 +1,6 @@
 package com.sedooj.resumen.viewmodel.models
 
-import com.sedooj.resumen.R
+import android.content.Context
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
 import kotlinx.coroutines.CoroutineScope
 
@@ -16,38 +16,15 @@ interface AuthenticationModel {
 
     fun resetErrorState()
 
-
     fun setError(msg: Int)
 
-
-    fun validateInput(input: AuthorizationInput): Boolean {
-        if (input.username.isBlank()) {
-            updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
-            return false
-        }
-        if (input.password.isBlank()) {
-            updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
-            return false
-        }
-        if (input.username.length < 6) {
-            updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_length)
-            return false
-        }
-        if (input.password.length < 8) {
-            updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_password_length)
-            return false
-        }
-        return true
-    }
+    fun validateInput(input: AuthorizationInput): Boolean
 
     fun auth(
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,
-        scope: CoroutineScope
+        scope: CoroutineScope,
+        context: Context,
     )
 
 }
