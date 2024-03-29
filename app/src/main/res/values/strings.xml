@@ -22,5 +22,9 @@
     <string name="no_internet_connection">Нет подключения к интернету</string>
     <string name="no_connection">Проблемы подключением к удаленному серверу</string>
     <string name="user_not_found">Пользователь с указанным именем не найден</string>
+    <string name="user_already_exist">Пользователь с указанным именем уже существует</string>
+    <string name="logging_in">Вход в аккаунт</string>
+    <string name="signing_up">Создаём аккаунт</string>
+    <string name="signed_up_successfully">Аккаунт успешно создан</string>
     <string name="by_clicking_register_agreement">Нажимая кнопку «Зарегистрироваться», Вы соглашаетесь с нашими <b>Условиями обслуживания</b> и <b>Политикой конфиденциальности</b></string>
 </resources>

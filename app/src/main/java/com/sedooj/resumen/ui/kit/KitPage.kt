@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +75,7 @@ private fun ScaffoldContentComponent(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             content()
