@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,13 +64,13 @@ fun SignInPage(
     val signUpViewModel = viewModel<SignInViewModel>()
     val uiState = signUpViewModel.uiState.collectAsState().value.state
     val errorState = signUpViewModel.uiState.collectAsState().value.error
+    val coldStartAttempted = signUpViewModel.uiState.collectAsState().value.coldStartAttempted
     val context = LocalContext.current
-    val coldStart = rememberSaveable {
-        mutableIntStateOf(0)
-    }
-    if (coldStart.intValue == 0) {
-        signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
-        coldStart.intValue++
+
+    LaunchedEffect(key1 = coldStartAttempted) {
+        if (!coldStartAttempted) {
+            signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
+        }
     }
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
@@ -79,15 +79,31 @@ fun SignInPage(
         }
     }
 
-    KitPageWithNavigation(
-        title = stringResource(id = R.string.app_name),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
-        if (uiState == AuthState.AUTHORIZATION)
+    if (uiState == AuthState.AUTHORIZATION || uiState == AuthState.AUTHORIZED) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(
+                10.dp,
+                alignment = Alignment.CenterVertically
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
-        else
+            Text(
+                text = stringResource(id = R.string.logging_in),
+                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    } else {
+        KitPageWithNavigation(
+            title = stringResource(id = R.string.app_name),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+        ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(
@@ -129,6 +145,7 @@ fun SignInPage(
                     }
                 )
             }
+        }
     }
 }
 

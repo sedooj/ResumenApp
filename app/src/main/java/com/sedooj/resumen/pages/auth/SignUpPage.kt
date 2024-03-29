@@ -2,7 +2,6 @@ package com.sedooj.resumen.pages.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -46,6 +43,7 @@ import com.sedooj.resumen.ui.kit.KitPageWithNavigation
 import com.sedooj.resumen.viewmodel.SignUpViewModel
 import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
+import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(
     start = false,
@@ -66,30 +64,34 @@ fun SignUpPage(
     val errorState = signUpViewModel.uiState.collectAsState().value.error
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = uiState) {
-        if (uiState == AuthState.AUTHORIZED) {
-            destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(Routes.HOME)
-        }
-    }
-
     KitPageWithNavigation(
         title = stringResource(id = R.string.app_name),
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        if (uiState == AuthState.AUTHORIZATION)
-            CircularProgressIndicator(strokeCap = StrokeCap.Round)
-        else
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    alignment = Alignment.CenterVertically
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        if (uiState == AuthState.AUTHORIZED) {
+            Text(
+                text = stringResource(id = R.string.signed_up_successfully),
+                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+            KitFilledButton(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(id = R.string.sign_in),
+                onClick = {
+                    scope.launch {
+                        destinationsNavigator.navigateUp()
+                    }
+                })
+        } else {
+            if (uiState == AuthState.AUTHORIZATION) {
+                CircularProgressIndicator(strokeCap = StrokeCap.Round)
+                Text(
+                    text = stringResource(id = R.string.signing_up),
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    fontWeight = FontWeight.Medium
+                )
+            } else {
                 TextComponents(errorState = errorState, uiState)
                 UsernameInputComponent(
                     value = usernameState.value,
@@ -124,6 +126,7 @@ fun SignUpPage(
                     }
                 )
             }
+        }
     }
 }
 

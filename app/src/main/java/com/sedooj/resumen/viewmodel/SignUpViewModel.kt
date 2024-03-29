@@ -1,16 +1,12 @@
 package com.sedooj.resumen.viewmodel
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
 import com.sedooj.resumen.R
 import com.sedooj.resumen.domain.data.user.create.CreateUserInput
 import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
-import com.sedooj.resumen.storage.dao.AuthUserDao
-import com.sedooj.resumen.storage.db.AppDatabase
-import com.sedooj.resumen.storage.entity.AuthUserEntity
 import com.sedooj.resumen.viewmodel.models.AuthenticationModel
+import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.ConnectException
-import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
-
 
 data class SignUpUiState(
     val state: AuthState = AuthState.NOT_AUTHORIZED,
@@ -43,7 +37,6 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
         }
     }
 
-
     override fun setError(msg: Int) {
         _uiState.update {
             it.copy(
@@ -52,19 +45,35 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
         }
     }
 
-    override fun coldAuth(
-        usersNetworkRepository: UsersNetworkRepository,
-        scope: CoroutineScope,
-        context: Context,
-    ) {
-        TODO("Not yet implemented")
+    override fun validateInput(input: AuthorizationInput): Boolean {
+        if (input.username.isBlank()) {
+            updatePageState(state = AuthState.NOT_AUTHORIZED)
+            setError(R.string.wrong_username_or_password)
+            return false
+        }
+        if (input.password.isBlank()) {
+            updatePageState(state = AuthState.NOT_AUTHORIZED)
+            setError(R.string.wrong_username_or_password)
+            return false
+        }
+        if (input.username.length < 6) {
+            updatePageState(state = AuthState.NOT_AUTHORIZED)
+            setError(R.string.wrong_username_length)
+            return false
+        }
+        if (input.password.length < 8) {
+            updatePageState(state = AuthState.NOT_AUTHORIZED)
+            setError(R.string.wrong_password_length)
+            return false
+        }
+        return true
     }
 
     override fun auth(
         input: AuthorizationInput,
         usersNetworkRepository: UsersNetworkRepository,
         scope: CoroutineScope,
-        context: Context
+        context: Context,
     ) {
         updatePageState(state = AuthState.AUTHORIZATION)
         if (!validateInput(
@@ -81,24 +90,17 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
                 )
                 when (response) {
                     200 -> {
-                        val db = Room.databaseBuilder(
-                            context = context,
-                            AppDatabase::class.java, "resumen-app-db"
-                        ).build()
-
-                        db.authUserDao().update(
-                            auth = AuthUserEntity(
-                                id = 1,
-                                username = input.username,
-                                password = input.password
-                            )
-                        )
                         resetErrorState()
                         updatePageState(state = AuthState.AUTHORIZED)
                     }
 
                     400 -> {
                         setError(R.string.uncorrect_input_data)
+                        updatePageState(state = AuthState.NOT_AUTHORIZED)
+                    }
+
+                    409 -> {
+                        setError(R.string.user_already_exist)
                         updatePageState(state = AuthState.NOT_AUTHORIZED)
                     }
 
