@@ -40,7 +40,7 @@ import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
-import com.sedooj.resumen.viewmodel.SignUpViewModel
+import com.sedooj.resumen.viewmodel.auth.SignUpViewModel
 import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 import kotlinx.coroutines.launch

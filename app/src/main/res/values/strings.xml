@@ -26,5 +26,8 @@
     <string name="logging_in">Вход в аккаунт</string>
     <string name="signing_up">Создаём аккаунт</string>
     <string name="signed_up_successfully">Аккаунт успешно создан</string>
+    <string name="welcome">Здравствуйте,</string>
+    <string name="loading_data">Загружаем данные</string>
+    <string name="another_account">Другой аккаунт</string>
     <string name="by_clicking_register_agreement">Нажимая кнопку «Зарегистрироваться», Вы соглашаетесь с нашими <b>Условиями обслуживания</b> и <b>Политикой конфиденциальности</b></string>
 </resources>

@@ -2,7 +2,6 @@ package com.sedooj.resumen.pages.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -43,7 +41,7 @@ import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
-import com.sedooj.resumen.viewmodel.SignInViewModel
+import com.sedooj.resumen.viewmodel.auth.SignInViewModel
 import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
 import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 
@@ -61,90 +59,72 @@ fun SignInPage(
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
-    val signUpViewModel = viewModel<SignInViewModel>()
-    val uiState = signUpViewModel.uiState.collectAsState().value.state
-    val errorState = signUpViewModel.uiState.collectAsState().value.error
-    val coldStartAttempted = signUpViewModel.uiState.collectAsState().value.coldStartAttempted
+    val signInViewModel = viewModel<SignInViewModel>()
+    val uiState = signInViewModel.uiState.collectAsState().value.state
+    val errorState = signInViewModel.uiState.collectAsState().value.error
+    val coldStartAttempted = signInViewModel.uiState.collectAsState().value.coldStartAttempted
     val context = LocalContext.current
 
     LaunchedEffect(key1 = coldStartAttempted) {
         if (!coldStartAttempted) {
-            signUpViewModel.coldAuth(usersNetworkRepository, scope, context)
-        }
-    }
-    LaunchedEffect(key1 = uiState) {
-        if (uiState == AuthState.AUTHORIZED) {
-            destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(Routes.HOME)
+            signInViewModel.coldAuth(usersNetworkRepository, scope, context)
         }
     }
 
-    if (uiState == AuthState.AUTHORIZATION || uiState == AuthState.AUTHORIZED) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(
-                10.dp,
-                alignment = Alignment.CenterVertically
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    LaunchedEffect(key1 = uiState) {
+        if (uiState == AuthState.AUTHORIZED) {
+            destinationsNavigator.popBackStack()
+            destinationsNavigator.navigate(Routes.SIGN_IN_CONFIRMATION)
+            signInViewModel.resetAll()
+        }
+    }
+
+    KitPageWithNavigation(
+        title = stringResource(id = R.string.app_name),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+    ) {
+        if (uiState == AuthState.AUTHORIZATION || uiState == AuthState.AUTHORIZED) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
             Text(
                 text = stringResource(id = R.string.logging_in),
                 fontSize = MaterialTheme.typography.labelLarge.fontSize,
                 fontWeight = FontWeight.Medium
             )
-        }
-    } else {
-        KitPageWithNavigation(
-            title = stringResource(id = R.string.app_name),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    alignment = Alignment.CenterVertically
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally
+        } else {
+            TextComponents(errorState = errorState, uiState)
+            UsernameInputComponent(
+                value = usernameState.value,
+                hasError = errorState
             ) {
-                TextComponents(errorState = errorState, uiState)
-                UsernameInputComponent(
-                    value = usernameState.value,
-                    hasError = errorState
-                ) {
-                    signUpViewModel.resetErrorState()
-                    usernameState.value = it
-                }
-                PasswordInputComponent(
-                    value = passwordState.value,
-                    errorState = errorState
-                ) {
-                    signUpViewModel.resetErrorState()
-                    passwordState.value = it
-                }
-                SignInComponent(
-                    enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
-                    toSignUp = {
-                        destinationsNavigator.navigate(Routes.SIGN_UP)
-                    },
-                    register = {
-                        signUpViewModel.auth(
-                            input = AuthorizationInput(
-                                username = usernameState.value,
-                                password = passwordState.value
-                            ),
-                            scope = scope,
-                            usersNetworkRepository = usersNetworkRepository,
-                            context = context
-                        )
-                    }
-                )
+                signInViewModel.resetErrorState()
+                usernameState.value = it
             }
+            PasswordInputComponent(
+                value = passwordState.value,
+                errorState = errorState
+            ) {
+                signInViewModel.resetErrorState()
+                passwordState.value = it
+            }
+            SignInComponent(
+                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
+                toSignUp = {
+                    destinationsNavigator.navigate(Routes.SIGN_UP)
+                },
+                register = {
+                    signInViewModel.auth(
+                        input = AuthorizationInput(
+                            username = usernameState.value,
+                            password = passwordState.value
+                        ),
+                        scope = scope,
+                        usersNetworkRepository = usersNetworkRepository,
+                        context = context
+                    )
+                }
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.sedooj.resumen.viewmodel
+package com.sedooj.resumen.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
