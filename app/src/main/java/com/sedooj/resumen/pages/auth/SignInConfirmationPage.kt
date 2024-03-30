@@ -29,8 +29,6 @@ import com.sedooj.resumen.navigation.config.ConfirmationScreenTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
-import com.sedooj.resumen.viewmodel.auth.ConfirmationState
-import com.sedooj.resumen.viewmodel.auth.SignInConfirmationViewModel
 
 @Destination<RootGraph>(
     start = false,

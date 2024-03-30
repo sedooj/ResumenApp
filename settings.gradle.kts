@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Resumen"
 include(":app")
+include(":architecture")

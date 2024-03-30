@@ -34,8 +34,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.resumen.R
-import com.sedooj.resumen.domain.Client
-import com.sedooj.resumen.domain.usecase.UsersNetworkRepositoryImpl
+import com.sedooj.architecture.Client
+import com.sedooj.architecture.domain.usecase.UsersNetworkRepositoryImpl
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton

@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
-    kotlin("plugin.serialization") version "1.9.22"
-    id("androidx.room") version "2.6.1" apply false
 }
 
 android {
@@ -57,38 +55,39 @@ android {
 dependencies {
     implementation(libs.slf4j)
     implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
+    implementation(libs.material3)
+    implementation(libs.network.auth)
+    implementation(libs.play.services.auth)
+    // Coroutines
+
+
+    // Network
+
+
+    // Navigation
+    ksp(libs.destinations.ksp)
+    implementation(libs.destinations.core)
+
+
+    // Room
+//    implementation(libs.androidx.room)
+//    ksp(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.ktx)
+
+    // Ui
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    implementation(libs.network.coil)
-    implementation(libs.network.ktor.client.core)
-    implementation(libs.network.ktor.client.android)
-    implementation(libs.network.ktor.client.cio)
-    implementation(libs.network.ktor.client.logging)
-    implementation(libs.network.ktor.client.negotiation)
-    implementation(libs.network.ktor.client.serialization)
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.destinations.core)
-    implementation(libs.network.auth)
-    implementation(libs.play.services.auth)
-    ksp(libs.destinations.ksp)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.room)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.runtime)
-    ksp(libs.androidx.room.compiler)
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
 }
