@@ -20,6 +20,7 @@ splashscreen_version = "1.0.0"
 room_version = "2.6.1"
 kapt = "1.9.22"
 lifecycle_viewmodel_version = "2.7.0"
+slf4j_version = "2.0.12"
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -35,6 +36,7 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
+slf4j = {group = "org.slf4j", name = "slf4j-api", version.ref= "slf4j_version"}
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navver" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen_version" }
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }

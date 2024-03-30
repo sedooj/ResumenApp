@@ -26,7 +26,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -55,7 +55,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.slf4j)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -80,8 +80,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.room)
-//    implementation(libs.androidx.room.compiler)
-
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime)
