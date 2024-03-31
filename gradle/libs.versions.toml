@@ -16,13 +16,13 @@ coroutines_version = "1.8.0"
 ksp = "1.9.22-1.0.17"
 destinations = "2.0.0-alpha07"
 play-services-auth = "21.0.0"
-splashscreen_version = "1.0.0"
+splashscreen_version = "1.0.1"
 room_version = "2.6.1"
 kapt = "1.9.22"
 lifecycle_viewmodel_version = "2.7.0"
 slf4j_version = "2.0.12"
 appcompat = "1.6.1"
-material = "1.10.0"
+material = "1.11.0"
 jetbrains-kotlin-jvm = "1.9.22"
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -58,10 +58,10 @@ network-ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-conte
 network-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor_version" }
 network-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
 network-ktor-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor_version" }
-# Coroutines
-kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines_version" }
 destinations-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "destinations" }
 destinations-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
+# Coroutines
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines_version" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

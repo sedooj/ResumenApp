@@ -10,6 +10,7 @@ java {
 }
 
 dependencies {
+
     // Network
     implementation(libs.kotlinx.serialization)
     implementation(libs.network.ktor.client.core)
