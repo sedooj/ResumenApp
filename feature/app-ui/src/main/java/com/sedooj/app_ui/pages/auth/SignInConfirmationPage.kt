@@ -1,8 +1,6 @@
 package com.sedooj.app_ui.pages.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +16,11 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -79,32 +81,31 @@ fun SignInConfirmationPage(
                 fontWeight = FontWeight.Medium
             )
         } else {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Text(
-                    text = stringResource(id = string.welcome),
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
-                )
-                Text(
-                    text = usernameState,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                FilledButton(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    label = stringResource(id = string.sign_in),
-                    onClick = {
-                        signInConfirmationViewModel.approve()
-                    },
-                    enabled = confirmationState == ConfirmationState.NOT_SELECTED
-                )
-            }
+            Text(
+                text = buildAnnotatedString {
+                    append(text = stringResource(id = string.welcome))
+                    append(text = ", ")
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                        )
+                    ) {
+                        append(usernameState)
+                    }
+                    append(text = "!")
+                },
+                overflow = TextOverflow.Ellipsis,
+            )
+            FilledButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                label = stringResource(id = string.sign_in),
+                onClick = {
+                    signInConfirmationViewModel.approve()
+                },
+                enabled = confirmationState == ConfirmationState.NOT_SELECTED
+            )
         }
 
 
