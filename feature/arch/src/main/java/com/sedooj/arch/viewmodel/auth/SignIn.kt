@@ -3,10 +3,13 @@ package com.sedooj.architecture.viewmodel.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
-import com.sedooj.architecture.R
+import com.sedooj.arch.R
+import com.sedooj.architecture.domain.data.user.create.auth.AuthUserInput
 import com.sedooj.architecture.domain.repository.user.UsersNetworkRepository
+import com.sedooj.architecture.storage.db.AppDatabase
+import com.sedooj.architecture.storage.entity.AuthUserEntity
 import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel
-import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.*
+import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.architecture.viewmodel.auth.model.AuthorizationInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +40,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
             it.copy(error = null)
         }
     }
+
     fun resetAll() {
         _uiState.update {
             it.copy(state = AuthState.NOT_AUTHORIZED)

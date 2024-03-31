@@ -2,10 +2,11 @@ package com.sedooj.architecture.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.sedooj.architecture.R
+import com.sedooj.arch.R
+import com.sedooj.architecture.domain.data.user.create.CreateUserInput
 import com.sedooj.architecture.domain.repository.user.UsersNetworkRepository
 import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel
-import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.*
+import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.architecture.viewmodel.auth.model.AuthorizationInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

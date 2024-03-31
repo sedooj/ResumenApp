@@ -23,6 +23,7 @@ lifecycle_viewmodel_version = "2.7.0"
 slf4j_version = "2.0.12"
 appcompat = "1.6.1"
 material = "1.10.0"
+jetbrains-kotlin-jvm = "1.9.22"
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -56,7 +57,7 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 network-ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor_version" }
 network-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor_version" }
 network-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
-network-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor_version" }
+network-ktor-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor_version" }
 # Coroutines
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines_version" }
 destinations-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "destinations" }
@@ -71,3 +72,4 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kapt = { id = "kapt", version.ref = "kapt" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }

@@ -1,24 +1,22 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("plugin.serialization") version "1.9.22"
-    id("androidx.room") version "2.6.1" apply false
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.sedooj.architecture"
+    namespace = "com.sedooj.localstorage"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
-
+        minSdk = 29
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -38,24 +36,7 @@ dependencies {
     // Room
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
-
-    // Network
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.network.coil)
-    implementation(libs.network.ktor.client.core)
-    implementation(libs.network.ktor.client.android)
-    implementation(libs.network.ktor.client.cio)
-    implementation(libs.network.ktor.client.logging)
-    implementation(libs.network.ktor.client.negotiation)
-    implementation(libs.network.ktor.client.serialization)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.runtime)
-
+    ksp(libs.androidx.room.compiler)
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)

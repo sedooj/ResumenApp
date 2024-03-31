@@ -34,16 +34,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.resumen.R
-import com.sedooj.architecture.Client
+import com.sedooj.architecture.domain.Client
 import com.sedooj.architecture.domain.usecase.UsersNetworkRepositoryImpl
+import com.sedooj.architecture.viewmodel.auth.SignInViewModel
+import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.AuthState
+import com.sedooj.architecture.viewmodel.auth.model.AuthorizationInput
+import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes
 import com.sedooj.resumen.ui.kit.KitFilledButton
 import com.sedooj.resumen.ui.kit.KitPageWithNavigation
-import com.sedooj.resumen.viewmodel.auth.SignInViewModel
-import com.sedooj.resumen.viewmodel.models.AuthenticationModel.AuthState
-import com.sedooj.resumen.viewmodel.models.AuthorizationInput
 
 @Destination<RootGraph>(
     start = true,

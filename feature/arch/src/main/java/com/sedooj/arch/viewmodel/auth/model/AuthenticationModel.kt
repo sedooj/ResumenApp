@@ -1,7 +1,7 @@
 package com.sedooj.architecture.viewmodel.auth.model
 
 import android.content.Context
-import com.sedooj.resumen.domain.repository.user.UsersNetworkRepository
+import com.sedooj.architecture.domain.repository.user.UsersNetworkRepository
 import kotlinx.coroutines.CoroutineScope
 
 interface AuthenticationModel {

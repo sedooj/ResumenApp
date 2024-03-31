@@ -1,10 +1,10 @@
-package com.sedooj.architecture.storage.dao
+package com.sedooj.localstorage.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.sedooj.resumen.storage.entity.AuthUserEntity
+import com.sedooj.architecture.storage.entity.AuthUserEntity
 
 @Dao
 interface AuthUserDao {

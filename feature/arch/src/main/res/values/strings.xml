@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Resumen</string>
+    <string name="home">Главная</string>
+    <string name="my_resumes">Мои резюме</string>
+    <string name="profile">Профиль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_in_into_account">Войдите в аккаунт</string>
+    <string name="create_account">Создайте аккаунт</string>
+    <string name="type_username_and_password">Введите имя пользователя и пароль</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="has_account">Уже есть аккаунт?</string>
+    <string name="create_resume">Создать резюме</string>
+    <string name="no_content_here_now">Здесь пока ничего нет</string>
+    <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
+    <string name="wrong_username_length">Имя пользователя должно быть не меньше 6 символов</string>
+    <string name="wrong_password_length">Пароль должен быть не меньше 8 символов</string>
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="uncorrect_input_data">Некорректные данные</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="no_connection">Проблемы подключением к удаленному серверу</string>
+    <string name="user_not_found">Пользователь с указанным именем не найден</string>
+    <string name="user_already_exist">Пользователь с указанным именем уже существует</string>
+    <string name="logging_in">Вход в аккаунт</string>
+    <string name="signing_up">Создаём аккаунт</string>
+    <string name="signed_up_successfully">Аккаунт успешно создан</string>
+    <string name="welcome">Здравствуйте,</string>
+    <string name="loading_data">Загружаем данные</string>
+    <string name="another_account">Другой аккаунт</string>
+    <string name="by_clicking_register_agreement">Нажимая кнопку «Зарегистрироваться», Вы соглашаетесь с нашими <b>Условиями обслуживания</b> и <b>Политикой конфиденциальности</b></string>
+</resources>
