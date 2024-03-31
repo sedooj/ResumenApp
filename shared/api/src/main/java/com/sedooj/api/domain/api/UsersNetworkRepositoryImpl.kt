@@ -1,19 +1,16 @@
-package com.sedooj.architecture.domain.usecase
+package com.sedooj.api.domain.api
 
-import android.provider.VoicemailContract
-import com.sedooj.architecture.domain.NetworkConfig
-import com.sedooj.architecture.domain.data.user.create.CreateUserInput
-import com.sedooj.architecture.domain.data.user.create.auth.AuthUserInput
-import com.sedooj.architecture.domain.repository.user.UsersNetworkRepository
+import com.sedooj.api.domain.NetworkConfig
+import com.sedooj.api.domain.data.user.create.CreateUserInput
+import com.sedooj.api.domain.data.user.create.auth.AuthUserInput
+import com.sedooj.api.domain.repository.user.UsersNetworkRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 
 class UsersNetworkRepositoryImpl(
@@ -41,7 +38,8 @@ class UsersNetworkRepositoryImpl(
                 }
             ))
         }
-        if (response.status.value == VoicemailContract.Status.DATA_CHANNEL_STATE_NO_CONNECTION) return -1
+        // TODO: Move this line or handle no==connection error by another variant
+        //if (response.status.value == VoicemailContract.Status.DATA_CHANNEL_STATE_NO_CONNECTION) return -1
         return response.status.value
     }
 }

@@ -17,3 +17,4 @@ rootProject.name = "Resumen"
 include(":app")
 include(":feature:arch")
 include(":feature:localstorage")
+include(":shared:api")

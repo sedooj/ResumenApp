@@ -1,6 +1,5 @@
-package com.sedooj.architecture.domain
+package com.sedooj.api.domain
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.auth.Auth
@@ -31,7 +30,8 @@ interface Client {
                 install(Logging) {
                     class ClientLogger : Logger {
                         override fun log(message: String) {
-                            Log.d("ClientLogger", message)
+                            println(message)
+//                            Log.d("ClientLogger", message)
                         }
                     }
 

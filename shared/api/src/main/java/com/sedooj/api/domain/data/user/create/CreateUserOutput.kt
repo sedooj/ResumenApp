@@ -1,4 +1,4 @@
-package com.sedooj.architecture.domain.data.user.create
+package com.sedooj.api.domain.data.user.create
 
 import kotlinx.serialization.Serializable
 

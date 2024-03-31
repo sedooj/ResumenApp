@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("plugin.serialization") version "1.9.22"
-    id("androidx.room") version "2.6.1" apply false
 }
 
 android {
@@ -36,16 +34,7 @@ android {
 
 dependencies {
 
-    // Network
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.network.coil)
-    implementation(libs.network.ktor.client.core)
-    implementation(libs.network.ktor.client.android)
-    implementation(libs.network.ktor.client.cio)
-    implementation(libs.network.ktor.client.logging)
-    implementation(libs.network.ktor.client.negotiation)
-    implementation(libs.network.ktor.client.serialization)
-    implementation(libs.network.ktor.auth)
+
 
     // Coroutines
     implementation(libs.kotlinx.coroutines)
@@ -58,6 +47,9 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(project(":shared:api"))
+    implementation(libs.androidx.room.ktx)
+    implementation(project(":feature:localstorage"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

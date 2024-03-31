@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/arch" />
             <option value="$PROJECT_DIR$/feature/localstorage" />
+            <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/api" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

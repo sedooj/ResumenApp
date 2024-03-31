@@ -77,6 +77,7 @@ dependencies {
 
     implementation(libs.play.services.auth)
     implementation(project(":feature:arch"))
+    implementation(project(":shared:api"))
     ksp(libs.destinations.ksp)
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)

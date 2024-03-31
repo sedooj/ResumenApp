@@ -1,4 +1,4 @@
-package com.sedooj.architecture.viewmodel.auth
+package com.sedooj.arch.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

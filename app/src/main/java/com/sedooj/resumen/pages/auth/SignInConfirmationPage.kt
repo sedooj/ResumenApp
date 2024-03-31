@@ -24,8 +24,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.architecture.viewmodel.auth.ConfirmationState
-import com.sedooj.architecture.viewmodel.auth.SignInConfirmationViewModel
+import com.sedooj.arch.viewmodel.auth.ConfirmationState
+import com.sedooj.arch.viewmodel.auth.SignInConfirmationViewModel
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ConfirmationScreenTransitions
 import com.sedooj.resumen.pages.Routes

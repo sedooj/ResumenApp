@@ -34,11 +34,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.architecture.domain.Client
-import com.sedooj.architecture.domain.usecase.UsersNetworkRepositoryImpl
+import com.sedooj.api.domain.Client
+import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
+import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
+import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.architecture.viewmodel.auth.SignInViewModel
-import com.sedooj.architecture.viewmodel.auth.model.AuthenticationModel.AuthState
-import com.sedooj.architecture.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes

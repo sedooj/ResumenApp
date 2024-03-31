@@ -1,4 +1,4 @@
-package com.sedooj.architecture.viewmodel.auth.model
+package com.sedooj.arch.viewmodel.auth.model
 
 data class AuthorizationInput(
     var username: String,
