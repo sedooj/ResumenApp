@@ -14,7 +14,6 @@ dependencies {
     // Network
     implementation(libs.kotlinx.serialization)
     implementation(libs.network.ktor.client.core)
-    implementation(libs.network.ktor.client.android)
     implementation(libs.network.ktor.client.cio)
     implementation(libs.network.ktor.client.logging)
     implementation(libs.network.ktor.client.negotiation)
