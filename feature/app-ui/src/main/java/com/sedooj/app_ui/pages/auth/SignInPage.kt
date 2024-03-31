@@ -56,7 +56,7 @@ fun SignInPage(
 ) {
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
-    val client = remember { Client.create() }
+    val client =   remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
     val signInViewModel = viewModel<SignInViewModel>()

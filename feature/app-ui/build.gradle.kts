@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":shared:ui-kit"))
     implementation(project(":shared:api"))
 
+    api(libs.network.ktor.client.cio)
 
     api(libs.material)
     api(libs.activity.compose)
