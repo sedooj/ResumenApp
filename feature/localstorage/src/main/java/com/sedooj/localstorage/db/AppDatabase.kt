@@ -1,4 +1,4 @@
-package com.sedooj.architecture.storage.db
+package com.sedooj.localstorage.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

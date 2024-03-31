@@ -3,7 +3,7 @@ package com.sedooj.arch.viewmodel.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
-import com.sedooj.architecture.storage.db.AppDatabase
+import com.sedooj.localstorage.db.AppDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

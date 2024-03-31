@@ -38,7 +38,7 @@ import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
-import com.sedooj.architecture.viewmodel.auth.SignInViewModel
+import com.sedooj.arch.viewmodel.auth.SignInViewModel
 import com.sedooj.resumen.R
 import com.sedooj.resumen.navigation.config.ScreensTransitions
 import com.sedooj.resumen.pages.Routes

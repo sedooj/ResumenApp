@@ -1,16 +1,15 @@
-package com.sedooj.architecture.viewmodel.auth
+package com.sedooj.arch.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
 import com.sedooj.api.domain.data.user.create.auth.AuthUserInput
 import com.sedooj.api.domain.repository.user.UsersNetworkRepository
 import com.sedooj.arch.R
-import com.sedooj.architecture.storage.db.AppDatabase
 import com.sedooj.architecture.storage.entity.AuthUserEntity
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
+import com.sedooj.localstorage.api.LocalStorageImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,7 +65,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
     suspend fun coldAuth(
         usersNetworkRepository: UsersNetworkRepository,
         scope: CoroutineScope,
-        context: Context,
+        context: Context
     ) {
         updatePageState(state = AuthState.AUTHORIZATION)
         scope.launch {
@@ -123,7 +122,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
                     input = input,
                     usersNetworkRepository = usersNetworkRepository,
                     context = context,
-                    scope = this
+                    scope = this,
                 )
             } catch (e: ConnectException) {
                 setError(R.string.no_connection)
@@ -139,10 +138,8 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
         context: Context,
         scope: CoroutineScope,
     ) {
-        val db = Room.databaseBuilder(
-            context = context,
-            AppDatabase::class.java, "resumen-app-db"
-        ).build()
+        val localStorage = LocalStorageImpl()
+        val db = localStorage.getDatabase(context)
         val authUserDao = db.authUserDao()
         val authorizationData = authUserDao.getAuthorizationData()
         var userDetails: AuthorizationInput? = input
@@ -177,7 +174,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
             200 -> {
                 scope.launch {
                     if (authorizationData == null) {
-                        authUserDao.insert(
+                        authUserDao?.insert(
                             auth = AuthUserEntity(
                                 id = 1,
                                 username = userDetails.username,
