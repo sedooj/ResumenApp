@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(project(":shared:api"))
+    implementation(project(":shared:ui-kit"))
     implementation(libs.androidx.room.ktx)
     implementation(project(":feature:localstorage"))
     testImplementation(libs.junit)

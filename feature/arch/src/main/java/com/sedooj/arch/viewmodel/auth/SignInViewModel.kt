@@ -10,6 +10,7 @@ import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.localstorage.api.LocalStorageImpl
+import com.sedooj.ui_kit.R.string
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -76,7 +77,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
                     scope = this
                 )
             } catch (e: ConnectException) {
-                setError(R.string.no_connection)
+                setError(string.no_connection)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
             return@launch
@@ -87,22 +88,22 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
     override fun validateInput(input: AuthorizationInput): Boolean {
         if (input.username.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
+            setError(string.wrong_username_or_password)
             return false
         }
         if (input.password.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
+            setError(string.wrong_username_or_password)
             return false
         }
         if (input.username.length < 6) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_length)
+            setError(string.wrong_username_length)
             return false
         }
         if (input.password.length < 8) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_password_length)
+            setError(string.wrong_password_length)
             return false
         }
         return true
@@ -125,7 +126,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
                     scope = this,
                 )
             } catch (e: ConnectException) {
-                setError(R.string.no_connection)
+                setError(string.no_connection)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
             return@launch
@@ -162,19 +163,19 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
         )
         when (response) {
             404 -> {
-                setError(R.string.user_not_found)
+                setError(string.user_not_found)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
 
             403 -> {
-                setError(R.string.wrong_username_or_password)
+                setError(string.wrong_username_or_password)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
 
             200 -> {
                 scope.launch {
                     if (authorizationData == null) {
-                        authUserDao?.insert(
+                        authUserDao.insert(
                             auth = AuthUserEntity(
                                 id = 1,
                                 username = userDetails.username,
@@ -197,7 +198,7 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
             }
 
             else -> {
-                setError(R.string.unknown_error)
+                setError(string.unknown_error)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
         }

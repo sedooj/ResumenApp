@@ -36,13 +36,14 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
+import com.sedooj.app_ui.R
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.app_ui.pages.Routes
-import com.sedooj.arch.R.string
 import com.sedooj.arch.viewmodel.auth.SignInViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.ui_kit.FilledButton
+import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.Screen
 
 @Destination<RootGraph>(

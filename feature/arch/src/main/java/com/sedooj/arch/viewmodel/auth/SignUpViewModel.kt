@@ -8,6 +8,7 @@ import com.sedooj.arch.R
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
+import com.sedooj.ui_kit.R.string
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,22 +49,22 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
     override fun validateInput(input: AuthorizationInput): Boolean {
         if (input.username.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
+            setError(string.wrong_username_or_password)
             return false
         }
         if (input.password.isBlank()) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_or_password)
+            setError(string.wrong_username_or_password)
             return false
         }
         if (input.username.length < 6) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_username_length)
+            setError(string.wrong_username_length)
             return false
         }
         if (input.password.length < 8) {
             updatePageState(state = AuthState.NOT_AUTHORIZED)
-            setError(R.string.wrong_password_length)
+            setError(string.wrong_password_length)
             return false
         }
         return true
@@ -95,22 +96,22 @@ class SignUpViewModel : ViewModel(), AuthenticationModel {
                     }
 
                     400 -> {
-                        setError(R.string.uncorrect_input_data)
+                        setError(string.uncorrect_input_data)
                         updatePageState(state = AuthState.NOT_AUTHORIZED)
                     }
 
                     409 -> {
-                        setError(R.string.user_already_exist)
+                        setError(string.user_already_exist)
                         updatePageState(state = AuthState.NOT_AUTHORIZED)
                     }
 
                     else -> {
-                        setError(R.string.unknown_error)
+                        setError(string.unknown_error)
                         updatePageState(state = AuthState.NOT_AUTHORIZED)
                     }
                 }
             } catch (e: ConnectException) {
-                setError(R.string.no_connection)
+                setError(string.no_connection)
                 updatePageState(state = AuthState.NOT_AUTHORIZED)
             }
             return@launch
