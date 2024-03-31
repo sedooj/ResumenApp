@@ -15,3 +15,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Resumen"
 include(":app")
+include(":feature:arch")
+include(":feature:localstorage")
+include(":shared:api")
+include(":shared:ui-kit")
+include(":feature:app-ui")

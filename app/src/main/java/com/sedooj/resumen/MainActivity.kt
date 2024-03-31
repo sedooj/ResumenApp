@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.sedooj.resumen.navigation.MainScreen
+import com.sedooj.app_ui.navigation.MainScreen
 import com.sedooj.resumen.ui.theme.ResumenTheme
 
 class MainActivity : ComponentActivity() {
