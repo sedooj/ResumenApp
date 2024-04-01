@@ -29,5 +29,7 @@
     <string name="welcome">Здравствуйте</string>
     <string name="loading_data">Загружаем данные</string>
     <string name="another_account">Другой аккаунт</string>
+    <string name="show_content">Показать содержимое</string>
+    <string name="hide_content">Скрыть содержимое</string>
     <string name="by_clicking_register_agreement">Нажимая кнопку «Зарегистрироваться», Вы соглашаетесь с нашими <b>Условиями обслуживания</b> и <b>Политикой конфиденциальности</b></string>
 </resources>

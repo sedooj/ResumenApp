@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,9 +21,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,7 +29,6 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
-import com.sedooj.app_ui.R
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.app_ui.pages.Routes
 import com.sedooj.arch.viewmodel.auth.SignUpViewModel
@@ -44,6 +37,8 @@ import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.textField.PasswordTextField
+import com.sedooj.ui_kit.textField.UsernameTextField
 import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(
@@ -94,20 +89,18 @@ fun SignUpPage(
                 )
             } else {
                 TextComponents(errorState = errorState, uiState)
-                UsernameInputComponent(
+                UsernameTextField(
                     value = usernameState.value,
                     hasError = errorState
                 ) {
                     signUpViewModel.resetErrorState()
                     usernameState.value = it
                 }
-                PasswordInputComponent(
-                    value = passwordState.value,
-                    errorState = errorState
-                ) {
-                    signUpViewModel.resetErrorState()
-                    passwordState.value = it
-                }
+                PasswordTextField(value = passwordState.value,
+                    errorState = errorState, onValueChange = {
+                        signUpViewModel.resetErrorState()
+                        passwordState.value = it
+                    })
                 SignUpComponent(
                     enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
                     toSignIn = {
@@ -155,64 +148,12 @@ private fun TextComponents(
 }
 
 @Composable
-private fun UsernameInputComponent(
-    value: String,
-    hasError: Int?,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        onValueChange = {
-            onValueChange(it)
-        },
-        label = {
-            Text(text = stringResource(id = string.username))
-        },
-        singleLine = true,
-        maxLines = 1,
-        shape = RoundedCornerShape(10.dp),
-        isError = hasError != null,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
-        )
-    )
-}
-
-@Composable
-private fun PasswordInputComponent(
-    value: String,
-    errorState: Int?,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        onValueChange = {
-            onValueChange(it)
-        },
-        label = {
-            Text(text = stringResource(id = string.password))
-        },
-        singleLine = true,
-        maxLines = 1,
-        visualTransformation = PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        shape = RoundedCornerShape(10.dp),
-        isError = errorState != null
-    )
-}
-
-@Composable
 private fun SignUpComponent(
     enabled: Boolean,
     toSignIn: () -> Unit,
     register: () -> Unit,
 ) {
-    com.sedooj.ui_kit.FilledButton(
+    FilledButton(
         modifier = Modifier.fillMaxWidth(),
         label = stringResource(id = string.sign_up),
         enabled = enabled,
