@@ -2,13 +2,12 @@ package com.sedooj.arch.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.sedooj.api.domain.data.user.create.auth.AuthUserInput
+import com.sedooj.api.domain.data.user.auth.AuthUserInput
 import com.sedooj.api.domain.repository.user.UsersNetworkRepository
-import com.sedooj.arch.R
-import com.sedooj.architecture.storage.entity.AuthUserEntity
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
+import com.sedooj.architecture.storage.entity.AuthUserEntity
 import com.sedooj.localstorage.api.LocalStorageImpl
 import com.sedooj.ui_kit.R.string
 import kotlinx.coroutines.CoroutineScope

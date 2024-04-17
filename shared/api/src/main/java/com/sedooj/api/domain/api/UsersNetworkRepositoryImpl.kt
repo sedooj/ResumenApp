@@ -1,8 +1,8 @@
 package com.sedooj.api.domain.api
 
 import com.sedooj.api.domain.NetworkConfig
-import com.sedooj.api.domain.data.user.create.CreateUserInput
-import com.sedooj.api.domain.data.user.create.auth.AuthUserInput
+import com.sedooj.api.domain.data.user.CreateUserInput
+import com.sedooj.api.domain.data.user.auth.AuthUserInput
 import com.sedooj.api.domain.repository.user.UsersNetworkRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent

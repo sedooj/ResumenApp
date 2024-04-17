@@ -24,6 +24,7 @@ slf4j_version = "2.0.12"
 appcompat = "1.6.1"
 material = "1.11.0"
 jetbrains-kotlin-jvm = "1.9.22"
+datetime = "0.6.0-RC"
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -39,15 +40,15 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
-slf4j = {group = "org.slf4j", name = "slf4j-api", version.ref= "slf4j_version"}
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j_version" }
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navver" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen_version" }
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version"}
-androidx-lifecycle-viewmodel-ktx = {group = "androidx.lifecycle",name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle_viewmodel_version"}
-androidx-lifecycle-viewmodel-compose = {group = "androidx.lifecycle",name = "lifecycle-viewmodel-compose", version.ref = "lifecycle_viewmodel_version"}
-androidx-lifecycle-runtime = {group = "androidx.lifecycle",name = "lifecycle-runtime-ktx", version.ref = "lifecycle_viewmodel_version"}
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle_viewmodel_version" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle_viewmodel_version" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle_viewmodel_version" }
 # Network
 network-ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor_version" }
 network-ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor_version" }
@@ -55,6 +56,8 @@ network-ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version
 network-ktor-client-okkhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor_version" }
 network-ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor_version" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization_version" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+kotlinx-datetime-serializers = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime-serializers", version.ref = "datetime" }
 network-ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor_version" }
 network-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor_version" }
 network-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
