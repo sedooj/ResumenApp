@@ -6,8 +6,8 @@ import com.sedooj.api.domain.data.resume.entity.Resume
 
 interface ResumeNetworkRepository : Client {
 
-    suspend fun createResume(input: CreateResume): String
-    suspend fun updateResume(resumeId: Long, input: CreateResume): String
+    suspend fun createResume(input: CreateResume): Int
+    suspend fun updateResume(resumeId: Long, input: CreateResume): Int
     suspend fun getResumeList(): List<Resume>
     suspend fun getResume(resumeId: Long): Resume
     suspend fun dropResume(resumeId: Long)
