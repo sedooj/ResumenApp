@@ -2,9 +2,8 @@ package com.sedooj.arch.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.sedooj.api.domain.data.user.create.CreateUserInput
+import com.sedooj.api.domain.data.user.CreateUserInput
 import com.sedooj.api.domain.repository.user.UsersNetworkRepository
-import com.sedooj.arch.R
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
@@ -22,7 +21,7 @@ data class SignUpUiState(
     val error: Int? = null,
 )
 
-class SignUpViewModel : ViewModel(), AuthenticationModel {
+class SignUpViewModel: ViewModel(), AuthenticationModel {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 

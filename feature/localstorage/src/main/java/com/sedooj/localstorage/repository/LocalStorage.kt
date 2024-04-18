@@ -1,8 +1,12 @@
 package com.sedooj.localstorage.repository
 
-import android.content.Context
-import com.sedooj.localstorage.db.AppDatabase
+import com.sedooj.architecture.storage.entity.AuthUserEntity
 
 interface LocalStorage {
-    suspend fun getDatabase(context: Context): AppDatabase
+
+    suspend fun getAuthorizationData(): AuthUserEntity?
+
+    suspend fun insert(auth: AuthUserEntity)
+
+    suspend fun update(auth: AuthUserEntity)
 }

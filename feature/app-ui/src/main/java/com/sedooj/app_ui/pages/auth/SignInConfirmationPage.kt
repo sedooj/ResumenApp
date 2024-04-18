@@ -13,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -22,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -43,14 +42,13 @@ import com.sedooj.ui_kit.Screen
 @Composable
 fun SignInConfirmationPage(
     destinationsNavigator: DestinationsNavigator,
+    signInConfirmationViewModel: SignInConfirmationViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val signInConfirmationViewModel = viewModel<SignInConfirmationViewModel>()
     val uiState = signInConfirmationViewModel.uiState.collectAsState().value
     val isContentLoaded = uiState.isContentLoaded
     LaunchedEffect(key1 = isContentLoaded) {
         if (!isContentLoaded)
-            signInConfirmationViewModel.loadData(context = context)
+            signInConfirmationViewModel.loadData()
     }
     val confirmationState = uiState.confirmationState
     val usernameState = uiState.username

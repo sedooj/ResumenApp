@@ -1,8 +1,8 @@
 package com.sedooj.api.domain.repository.user
 
 import com.sedooj.api.domain.Client
-import com.sedooj.api.domain.data.user.create.CreateUserInput
-import com.sedooj.api.domain.data.user.create.auth.AuthUserInput
+import com.sedooj.api.domain.data.user.CreateUserInput
+import com.sedooj.api.domain.data.user.auth.AuthUserInput
 
 interface UsersNetworkRepository : Client {
 

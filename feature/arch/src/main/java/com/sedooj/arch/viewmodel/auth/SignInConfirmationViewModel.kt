@@ -1,13 +1,13 @@
 package com.sedooj.arch.viewmodel.auth
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
-import com.sedooj.localstorage.db.AppDatabase
+import com.sedooj.localstorage.dao.AuthUserDao
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 enum class ConfirmationState {
     APPROVED,
@@ -20,7 +20,10 @@ data class SignInConfirmationUiState(
     val isContentLoaded: Boolean = false,
 )
 
-class SignInConfirmationViewModel : ViewModel() {
+@HiltViewModel
+class SignInConfirmationViewModel @Inject constructor(
+    private val authUserDao: AuthUserDao
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(SignInConfirmationUiState())
     val uiState: StateFlow<SignInConfirmationUiState> = _uiState.asStateFlow()
@@ -53,16 +56,9 @@ class SignInConfirmationViewModel : ViewModel() {
         updateConfirmationState()
     }
 
-    suspend fun loadData(context: Context) {
-        val db = Room.databaseBuilder(
-            context = context,
-            AppDatabase::class.java, "resumen-app-db"
-        ).build()
-        val authUserDao = db.authUserDao()
-        val authorizationData = authUserDao.getAuthorizationData()
-        if (authorizationData != null) {
-            updateUsername(authorizationData.username)
-            setContentLoaded()
-        }
+    suspend fun loadData() {
+        val authorizationData = authUserDao.getAuthorizationData() ?: return
+        updateUsername(username = authorizationData.username)
+        setContentLoaded()
     }
 }

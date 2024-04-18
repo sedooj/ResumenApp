@@ -1,4 +1,4 @@
-package com.sedooj.api.domain.data.user.create.auth
+package com.sedooj.api.domain.data.user.auth
 
 import kotlinx.serialization.Serializable
 
