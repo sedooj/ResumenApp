@@ -21,5 +21,4 @@ dependencies {
     implementation(libs.network.ktor.client.serialization)
     implementation(libs.network.ktor.auth)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.datetime.serializers)
 }
