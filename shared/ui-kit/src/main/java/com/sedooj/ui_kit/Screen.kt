@@ -29,6 +29,7 @@ fun Screen(
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
+    alignment: Alignment.Vertical = Alignment.CenterVertically,
     content: @Composable () -> Unit
 ) {
     Scaffold(
@@ -54,9 +55,11 @@ fun Screen(
         },
         floatingActionButtonPosition = floatingActionButtonPosition,
         content = {
-            ScaffoldContentComponent(modifier = modifier.padding(it)) {
-                content()
-            }
+            ScaffoldContentComponent(
+                modifier = modifier.padding(it),
+                content = content,
+                alignment = alignment
+            )
         }
     )
 }
@@ -66,6 +69,7 @@ fun Screen(
 private fun ScaffoldContentComponent(
     modifier: Modifier,
     content: @Composable () -> Unit,
+    alignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Surface(
         modifier = modifier
@@ -75,7 +79,10 @@ private fun ScaffoldContentComponent(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
-            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(
+                15.dp,
+                alignment = alignment
+            ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             content()
