@@ -25,7 +25,8 @@ appcompat = "1.6.1"
 material = "1.11.0"
 jetbrains-kotlin-jvm = "1.9.22"
 datetime = "0.6.0-RC"
-hilt_android_version = "2.44"
+hilt_android_version = "2.46"
+hilt_androidx_version = "1.2.0"
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,6 +52,8 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle_viewmodel_version" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle_viewmodel_version" }
 #Hilt
+androidx-hilt-navigation-compose = {group="androidx.hilt", name="hilt-navigation-compose", version.ref="hilt_androidx_version"}
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt_android_version" }
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt_android_version" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt_android_version" }
 # Network

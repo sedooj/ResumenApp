@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -49,13 +49,13 @@ import com.sedooj.ui_kit.textField.UsernameTextField
 @Composable
 fun SignInPage(
     destinationsNavigator: DestinationsNavigator,
+    signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
     val usernameState = rememberSaveable { mutableStateOf("") }
     val passwordState = rememberSaveable { mutableStateOf("") }
     val client = remember { Client.create() }
     val usersNetworkRepository = remember { UsersNetworkRepositoryImpl(client = client) }
     val scope = rememberCoroutineScope()
-    val signInViewModel = viewModel<SignInViewModel>()
     val uiState = signInViewModel.uiState.collectAsState().value.state
     val errorState = signInViewModel.uiState.collectAsState().value.error
     val coldStartAttempted = signInViewModel.uiState.collectAsState().value.coldStartAttempted
@@ -63,7 +63,7 @@ fun SignInPage(
 
     LaunchedEffect(key1 = coldStartAttempted) {
         if (!coldStartAttempted) {
-            signInViewModel.coldAuth(usersNetworkRepository, scope, context)
+            signInViewModel.coldAuth(usersNetworkRepository, scope)
         }
     }
 

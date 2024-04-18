@@ -21,7 +21,7 @@ data class SignUpUiState(
     val error: Int? = null,
 )
 
-class SignUpViewModel : ViewModel(), AuthenticationModel {
+class SignUpViewModel: ViewModel(), AuthenticationModel {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 

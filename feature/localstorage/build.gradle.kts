@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("androidx.room") version "2.6.1" apply false
     kotlin("kapt")
-    id("com.google.dagger.hilt.android") version "2.44" apply false
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.dagger)
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
     // Room
