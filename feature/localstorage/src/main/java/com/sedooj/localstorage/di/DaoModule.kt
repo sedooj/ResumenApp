@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class DaoModule {
-
     @Provides
     @Singleton
     fun provideAuthDao(appDatabase: AppDatabase): AuthUserDao {

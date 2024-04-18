@@ -1,10 +1,9 @@
-package com.sedooj.api.domain.repository.resume
+package com.sedooj.arch.viewmodel.auth.model
 
-import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.data.resume.entity.Resume
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 
-interface ResumeNetworkRepository : Client {
+interface HomeModel {
 
     suspend fun createResume(input: CreateResumeUseCase): Int?
     suspend fun updateResume(resumeId: Long, input: CreateResumeUseCase): Int?
