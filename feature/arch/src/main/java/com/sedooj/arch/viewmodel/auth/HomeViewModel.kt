@@ -6,12 +6,22 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.HomeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+
+data class HomeUiState(
+    var resumeList: List<Resume>? = null
+)
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val resumeNetworkRepository: ResumeNetworkRepository,
 ) : ViewModel(), HomeModel {
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState : StateFlow<HomeUiState> = _uiState.asStateFlow()
     override suspend fun createResume(input: CreateResumeUseCase): Int? {
         return resumeNetworkRepository.createResume(input = input)
     }
@@ -20,8 +30,13 @@ class HomeViewModel @Inject constructor(
         return resumeNetworkRepository.updateResume(resumeId = resumeId, input = input)
     }
 
-    override suspend fun getResumeList(): List<Resume>? {
-        return resumeNetworkRepository.getResumeList()
+    override suspend fun getResumeList() {
+        val list = resumeNetworkRepository.getResumeList()
+        _uiState.update {
+            it.copy(
+                resumeList = list
+            )
+        }
     }
 
     override suspend fun getResume(resumeId: Long): Resume? {
@@ -30,6 +45,7 @@ class HomeViewModel @Inject constructor(
 
     override suspend fun dropResume(resumeId: Long) {
         resumeNetworkRepository.dropResume(resumeId = resumeId)
+        getResumeList()
     }
 
     override suspend fun downloadResume(resumeId: Long): ByteArray? {

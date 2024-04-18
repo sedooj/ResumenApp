@@ -8,7 +8,7 @@ class Resume (
     var title: String,
     var vacancyInformation: CreateResume.VacancyInformation,
     var personalInformation: CreateResume.PersonalInformation,
-    var workExperienceInformation: CreateResume.WorkExperienceInformation,
-    var skillsInformation: CreateResume.SkillsInformation.LanguageSkillsInformation,
+    var workExperienceInformation: List<CreateResume.WorkExperienceInformation>?,
+    var skillsInformation: CreateResume.SkillsInformation,
     var url: String?
 )

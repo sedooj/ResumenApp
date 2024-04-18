@@ -18,12 +18,13 @@ import com.sedooj.arch.viewmodel.auth.HomeViewModel
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.Screen
+import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(start = false, route = Routes.HOME, style = ScreensTransitions::class)
 @Composable
 fun HomeScreen(
     destinationsNavigator: DestinationsNavigator,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     Screen(
@@ -31,12 +32,14 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
-    ) {        
+    ) {
         FilledButton(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = string.create_resume),
             onClick = {
+                scope.launch {
 
+                }
             })
     }
 }

@@ -8,12 +8,13 @@ import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
+import java.time.LocalDate
 
 data class CreateResumeUseCase(
     var title: String,
     var vacancyInformation: VacancyInformation,
     var personalInformation: PersonalInformation,
-    var workExperienceInformation: List<WorkExperienceInformation>,
+    var workExperienceInformation: List<WorkExperienceInformation>?,
     var skillsInformation: SkillsInformation,
     var resumeOptions: ResumeOptionsComponent,
 ) {
@@ -23,7 +24,7 @@ data class CreateResumeUseCase(
         var platformType: PlatformType,
         var desiredRole: String,
         var desiredSalary: String?,
-        var busynessType: BusynessType,
+        var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
     )
@@ -32,14 +33,14 @@ data class CreateResumeUseCase(
         var firstName: String,
         var secondName: String,
         var thirdName: String?,
-        var dateOfBirth: java.time.LocalDate,
+        var dateOfBirth: LocalDate,
         var city: String,
         var residenceCountry: String,
         var genderType: GenderType,
         var maritalStatus: MaritalStatus?,
-        var education: List<Education>,
+        var education: List<Education>?,
         var hasChild: Boolean,
-        var socialMedia: List<SocialMedia>,
+        var socialMedia: List<SocialMedia>?,
         var aboutMe: String?,
         var personalQualities: String?,
     ) {
@@ -47,8 +48,8 @@ data class CreateResumeUseCase(
             var educationStage: EducationStage,
             var title: String,
             var locationCity: String,
-            var enterDate: java.time.LocalDate,
-            var graduatedDate: java.time.LocalDate,
+            var enterDate: LocalDate,
+            var graduatedDate: LocalDate,
             var faculty: String,
             var speciality: String,
         )
@@ -62,17 +63,17 @@ data class CreateResumeUseCase(
     data class WorkExperienceInformation(
         var companyName: String,
         var kindOfActivity: String,
-        var gotJobDate: java.time.LocalDate,
-        var quitJobDate: java.time.LocalDate?,
+        var gotJobDate: LocalDate,
+        var quitJobDate: LocalDate?,
         var isCurrentlyWorking: Boolean,
     )
 
     data class SkillsInformation(
-        var softSkillsInformation: List<String>,
-        var hardSkillsInformation: List<String>,
-        var workedFrameworksInformation: List<String>,
-        var languagesSkillsInformation: List<LanguageSkillsInformation>,
-        var workedProgrammingLanguageInformation: List<String>,
+        var softSkillsInformation: List<String>?,
+        var hardSkillsInformation: List<String>?,
+        var workedFrameworksInformation: List<String>?,
+        var languagesSkillsInformation: List<LanguageSkillsInformation>?,
+        var workedProgrammingLanguageInformation: List<String>?,
     ) {
         data class LanguageSkillsInformation(
             var languageName: String,

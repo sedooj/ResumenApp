@@ -1,4 +1,4 @@
-package com.sedooj.api.domain.data.resume.entity
+package com.sedooj.api.domain.data.resume.usecase
 
 import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.types.BusynessType
@@ -9,10 +9,9 @@ import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class CreateResume(
+data class ResumeUseCase(
+    var resumeId: Long,
     var title: String,
     var vacancyInformation: VacancyInformation,
     var personalInformation: PersonalInformation,
@@ -21,7 +20,6 @@ data class CreateResume(
     var resumeOptions: ResumeOptionsComponent,
 ) {
 
-    @Serializable
     data class VacancyInformation(
         var stackType: StackType,
         var platformType: PlatformType,
@@ -32,7 +30,6 @@ data class CreateResume(
         var readyForTravelling: Boolean,
     )
 
-    @Serializable
     data class PersonalInformation(
         var firstName: String,
         var secondName: String,
@@ -48,7 +45,6 @@ data class CreateResume(
         var aboutMe: String?,
         var personalQualities: String?,
     ) {
-        @Serializable
         class Education(
             var educationStage: EducationStage,
             var title: String,
@@ -59,14 +55,12 @@ data class CreateResume(
             var speciality: String,
         )
 
-        @Serializable
         data class SocialMedia(
             var type: String,
             var url: String,
         )
     }
 
-    @Serializable
     data class WorkExperienceInformation(
         var companyName: String,
         var kindOfActivity: String,
@@ -75,7 +69,6 @@ data class CreateResume(
         var isCurrentlyWorking: Boolean,
     )
 
-    @Serializable
     data class SkillsInformation(
         var softSkillsInformation: List<String>?,
         var hardSkillsInformation: List<String>?,
@@ -83,17 +76,15 @@ data class CreateResume(
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
         var workedProgrammingLanguageInformation: List<String>?,
     ) {
-        @Serializable
         data class LanguageSkillsInformation(
             var languageName: String,
             var knowledgeLevel: String,
         )
     }
 
-    @Serializable
     data class ResumeOptionsComponent(
         var generatePreview: Boolean,
         var generateFinalResult: Boolean,
-        var generationTemplate: Templates?
+        var generationTemplate: Templates?,
     )
 }
