@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     id("androidx.room") version "2.6.1" apply false
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -34,6 +36,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.dagger)
+    implementation(libs.dagger.hilt)
+    kapt(libs.dagger.hilt.compiler)
     // Room
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
@@ -45,4 +50,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+}
+
+kapt {
+    correctErrorTypes = true
 }

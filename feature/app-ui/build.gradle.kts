@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.destinations.core)
     implementation(project(":shared:ui-kit"))
     implementation(project(":shared:api"))
-
+    implementation(libs.androidx.hilt.navigation.compose)
     api(libs.network.ktor.client.cio)
 
     api(libs.material)

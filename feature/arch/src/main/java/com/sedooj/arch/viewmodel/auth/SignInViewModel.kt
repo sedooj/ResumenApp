@@ -8,8 +8,9 @@ import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
 import com.sedooj.architecture.storage.entity.AuthUserEntity
-import com.sedooj.localstorage.api.LocalStorageImpl
+import com.sedooj.localstorage.dao.AuthUserDao
 import com.sedooj.ui_kit.R.string
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.ConnectException
+import javax.inject.Inject
 
 data class SignInUiState(
     val state: AuthState = AuthState.NOT_AUTHORIZED,
@@ -24,7 +26,10 @@ data class SignInUiState(
     val coldStartAttempted: Boolean = false,
 )
 
-class SignInViewModel : ViewModel(), AuthenticationModel {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val authUserDao: AuthUserDao
+): ViewModel(), AuthenticationModel {
 
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
@@ -64,15 +69,13 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
 
     suspend fun coldAuth(
         usersNetworkRepository: UsersNetworkRepository,
-        scope: CoroutineScope,
-        context: Context
+        scope: CoroutineScope
     ) {
         updatePageState(state = AuthState.AUTHORIZATION)
         scope.launch {
             try {
                 doRequest(
                     usersNetworkRepository = usersNetworkRepository,
-                    context = context,
                     scope = this
                 )
             } catch (e: ConnectException) {
@@ -121,7 +124,6 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
                 doRequest(
                     input = input,
                     usersNetworkRepository = usersNetworkRepository,
-                    context = context,
                     scope = this,
                 )
             } catch (e: ConnectException) {
@@ -135,12 +137,8 @@ class SignInViewModel : ViewModel(), AuthenticationModel {
     private suspend fun doRequest(
         input: AuthorizationInput? = null,
         usersNetworkRepository: UsersNetworkRepository,
-        context: Context,
         scope: CoroutineScope,
     ) {
-        val localStorage = LocalStorageImpl()
-        val db = localStorage.getDatabase(context)
-        val authUserDao = db.authUserDao()
         val authorizationData = authUserDao.getAuthorizationData()
         var userDetails: AuthorizationInput? = input
         if (userDetails == null)
