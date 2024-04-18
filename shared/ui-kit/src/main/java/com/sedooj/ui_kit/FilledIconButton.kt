@@ -21,7 +21,7 @@ fun FilledIconButton(
     modifier: Modifier = Modifier,
     label: String? = null,
     enabled: Boolean = true,
-    contentPadding: PaddingValues = PaddingValues(10.dp),
+    contentPadding: PaddingValues = PaddingValues(6.dp),
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = Color.Black,
         contentColor = Color.White,
@@ -30,7 +30,8 @@ fun FilledIconButton(
     ),
     shape: RoundedCornerShape = RoundedCornerShape(10.dp),
     onClick: () -> Unit,
-    icon: Painter? = null
+    icon: Painter,
+    contentDescription: String = "Icon",
 ) {
     Button(
         onClick = {
@@ -43,9 +44,11 @@ fun FilledIconButton(
         contentPadding = contentPadding,
         content = {
             Row {
-                if (icon != null) {
-                    Icon(painter = icon, contentDescription = "icon", modifier = Modifier.size(25.dp))
-                }
+                Icon(
+                    painter = icon,
+                    contentDescription = contentDescription,
+                    modifier = Modifier.size(50.dp)
+                )
                 if (label != null) {
                     Text(text = label, textAlign = TextAlign.Center)
                 }
