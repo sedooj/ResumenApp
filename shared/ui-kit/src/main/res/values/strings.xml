@@ -16,8 +16,12 @@
     <string name="drop_resume">Удалить резюме</string>
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
+    <string name="resume_name">Название резюме</string>
+    <string name="resume_name_sample">Моё резюме</string>
     <string name="get_resume">Получить резюме</string>
     <string name="download_resume">Скачать резюме</string>
+    <string name="check_mark">Флажок</string>
+    <string name="empty_check_box">Пустой флажок</string>
     <string name="edit_resume">Обновить резюме</string>
     <string name="no_content_here_now">Здесь пока ничего нет</string>
     <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>

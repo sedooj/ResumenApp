@@ -6,4 +6,5 @@ object Routes {
     const val HOME = "HOME"
     const val MY_RESUMES = "MY_RESUMES"
     const val PROFILE = "PROFILE"
+    const val CREATE_RESUME = "CREATE_RESUME"
 }
