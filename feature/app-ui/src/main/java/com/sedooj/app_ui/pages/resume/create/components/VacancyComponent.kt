@@ -2,13 +2,10 @@ package com.sedooj.app_ui.pages.resume.create.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,20 +15,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.PlatformType
+import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.ui_kit.CheckButton
+import com.sedooj.ui_kit.MenuButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.SalaryTextField
 
 
 /*
-        var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
 * */
 @Composable
@@ -41,13 +38,16 @@ fun VacancyComponent(
     desiredRole: String,
     desiredSalary: String,
     busynessType: BusynessType?,
+    scheduleType: ScheduleType?,
+    readyForTravelling: Boolean,
     onStackSelect: (StackType) -> Unit,
     onPlatformSelect: (PlatformType) -> Unit,
     onRoleValueChange: (String) -> Unit,
     onSalaryValueChange: (String) -> Unit,
     onBusynessSelect: (BusynessType) -> Unit,
+    onScheduleSelect: (ScheduleType) -> Unit,
+    onReadyTravelValueChange: () -> Unit,
 ) {
-
     StackTypeMenu(
         onSelect = {
             onStackSelect(it)
@@ -60,16 +60,22 @@ fun VacancyComponent(
         },
         selectedType = platformType
     )
+    BusynessTypeMenu(
+        onSelect = { onBusynessSelect(it) },
+        selectedType = busynessType
+    )
+    ScheduleTypeMenu(
+        onSelect = {
+            onScheduleSelect(it)
+        },
+        selectedType = scheduleType
+    )
     NotNullableValueTextField(
         label = R.string.desired_role,
         onValueChange = {
             onRoleValueChange(it)
         },
         value = desiredRole
-    )
-    BusynessTypeMenu(
-        onSelect = { onBusynessSelect(it) },
-        selectedType = busynessType
     )
     SalaryTextField(
         label = R.string.desired_salary,
@@ -78,6 +84,54 @@ fun VacancyComponent(
         },
         value = desiredSalary
     )
+    CheckButton(
+        label = stringResource(id = R.string.ready_for_travelling),
+        onClick = { onReadyTravelValueChange() },
+        isChecked = readyForTravelling
+    )
+}
+
+@Composable
+private fun ScheduleTypeMenu(
+    onSelect: (ScheduleType) -> Unit,
+    selectedType: ScheduleType?,
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    MenuButton(
+        modifier = Modifier.fillMaxWidth(),
+        label = if (selectedType != null) stringResource(id = R.string.schedule_picker) else stringResource(
+            id = R.string.schedule_picked
+        ),
+        onClick = {
+            isExpanded = true
+        },
+        isChecked = selectedType != null,
+        title = if (selectedType != null) stringResource(id = selectedType.title) else "",
+        isExpanded = isExpanded
+    ) {
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
+        ) {
+            ScheduleType.entries.forEach { scheduleType ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = scheduleType.title),
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            maxLines = 1
+                        )
+                    },
+                    onClick = {
+                        onSelect(scheduleType)
+                        isExpanded = false
+                    },
+                    enabled = selectedType != scheduleType
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -86,42 +140,42 @@ private fun BusynessTypeMenu(
     selectedType: BusynessType?,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    CheckButton(
+    MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) "${
-            stringResource(
-                id = R.string.busyness_picked
-            )
-        }: ${stringResource(id = selectedType.title)}" else stringResource(
-            id = R.string.busyness_picker
+        label = if (selectedType != null) stringResource(id = R.string.busyness_picker) else stringResource(
+            id = R.string.busyness_picked
         ),
         onClick = {
             isExpanded = true
         },
-        isChecked = selectedType != null
-    )
-    DropdownMenu(
-        expanded = isExpanded,
-        onDismissRequest = { isExpanded = false }
+        isChecked = selectedType != null,
+        title = if (selectedType != null) stringResource(id = selectedType.title) else "",
+        isExpanded = isExpanded
     ) {
-        BusynessType.entries.forEach { busynessType ->
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = stringResource(id = busynessType.title),
-                        textAlign = TextAlign.Center,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        maxLines = 1
-                    )
-                },
-                onClick = {
-                    onSelect(busynessType)
-                    isExpanded = false
-                },
-                enabled = selectedType != busynessType
-            )
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
+        ) {
+            BusynessType.entries.forEach { busynessType ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = busynessType.title),
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            maxLines = 1
+                        )
+                    },
+                    onClick = {
+                        onSelect(busynessType)
+                        isExpanded = false
+                    },
+                    enabled = selectedType != busynessType
+                )
+            }
         }
     }
+
 }
 
 @Composable
@@ -130,49 +184,48 @@ private fun StackTypeMenu(
     selectedType: StackType?,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    CheckButton(
+    MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) "${
-            stringResource(
-                id = R.string.stack_picked
-            )
-        }: ${selectedType.title}" else stringResource(
-            id = R.string.stack_picker
+        label = if (selectedType != null) stringResource(id = R.string.stack_picker) else stringResource(
+            id = R.string.stack_picked
         ),
         onClick = {
             isExpanded = true
         },
-        isChecked = selectedType != null
-    )
-    DropdownMenu(
-        expanded = isExpanded,
-        onDismissRequest = { isExpanded = false }
+        isChecked = selectedType != null,
+        title = selectedType?.title ?: "",
+        isExpanded = isExpanded
     ) {
-        StackType.entries.forEach { stackType ->
-            DropdownMenuItem(
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = stackType.icon),
-                        contentDescription = stringResource(
-                            id = R.string.drop_down_item_icon
-                        ),
-                        modifier = Modifier.size(25.dp)
-                    )
-                },
-                text = {
-                    Text(
-                        text = stackType.title,
-                        textAlign = TextAlign.Center,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        maxLines = 1
-                    )
-                },
-                onClick = {
-                    onSelect(stackType)
-                    isExpanded = false
-                },
-                enabled = selectedType != stackType
-            )
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
+        ) {
+            StackType.entries.forEach { stackType ->
+                DropdownMenuItem(
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = stackType.icon),
+                            contentDescription = stringResource(
+                                id = R.string.drop_down_item_icon
+                            ),
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = stackType.title,
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            maxLines = 1
+                        )
+                    },
+                    onClick = {
+                        onSelect(stackType)
+                        isExpanded = false
+                    },
+                    enabled = selectedType != stackType
+                )
+            }
         }
     }
 }
@@ -183,73 +236,48 @@ private fun PlatformTypeMenu(
     selectedType: PlatformType?,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    CheckButton(
+    MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) "${
-            stringResource(
-                id = R.string.platform_picked
-            )
-        }: ${selectedType.title}" else stringResource(
-            id = R.string.platform_picker
+        label = if (selectedType != null) stringResource(id = R.string.platform_picker) else stringResource(
+            id = R.string.platform_picked
         ),
         onClick = {
             isExpanded = true
         },
-        isChecked = selectedType != null
-    )
-    DropdownMenu(
-        expanded = isExpanded,
-        onDismissRequest = { isExpanded = false }
+        isChecked = selectedType != null,
+        title = selectedType?.title ?: "",
+        isExpanded = isExpanded
     ) {
-        PlatformType.entries.forEach { type ->
-            DropdownMenuItem(
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = type.icon),
-                        contentDescription = stringResource(
-                            id = R.string.drop_down_item_icon
-                        ),
-                        modifier = Modifier.size(25.dp)
-                    )
-                },
-                text = {
-                    Text(
-                        text = type.title,
-                        textAlign = TextAlign.Center,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        maxLines = 1
-                    )
-                },
-                onClick = {
-                    onSelect(type)
-                    isExpanded = false
-                },
-                enabled = selectedType != type
-            )
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
+        ) {
+            PlatformType.entries.forEach { type ->
+                DropdownMenuItem(
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = type.icon),
+                            contentDescription = stringResource(
+                                id = R.string.drop_down_item_icon
+                            ),
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = type.title,
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            maxLines = 1
+                        )
+                    },
+                    onClick = {
+                        onSelect(type)
+                        isExpanded = false
+                    },
+                    enabled = selectedType != type
+                )
+            }
         }
     }
-}
-
-@Composable
-private fun RoleTextField(
-    onValueChange: (String) -> Unit,
-    value: String,
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        onValueChange = {
-            onValueChange(it)
-        },
-        label = {
-            Text(text = stringResource(id = R.string.desired_role))
-        },
-        singleLine = true,
-        maxLines = 1,
-        shape = RoundedCornerShape(10.dp),
-        isError = value.isBlank(),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
-        )
-    )
 }
