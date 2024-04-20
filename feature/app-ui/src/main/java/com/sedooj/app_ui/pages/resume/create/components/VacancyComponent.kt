@@ -26,6 +26,7 @@ import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.ui_kit.CheckButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.SalaryTextField
 
 
 /*
@@ -39,9 +40,11 @@ fun VacancyComponent(
     stackType: StackType?,
     platformType: PlatformType?,
     desiredRole: String,
+    desiredSalary: String,
     onStackSelect: (StackType) -> Unit,
     onPlatformSelect: (PlatformType) -> Unit,
     onRoleValueChange: (String) -> Unit,
+    onSalaryValueChange: (String) -> Unit,
 ) {
 
     StackTypeMenu(
@@ -62,6 +65,13 @@ fun VacancyComponent(
             onRoleValueChange(it)
         },
         value = desiredRole
+    )
+    SalaryTextField(
+        label = R.string.desired_salary,
+        onValueChange = {
+            onSalaryValueChange(it)
+        },
+        value = desiredSalary
     )
 }
 
