@@ -1,10 +1,6 @@
 package com.sedooj.arch.viewmodel.auth.model
 
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.ResumeOptionsComponent
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.SkillsInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.VacancyInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.WorkExperienceInformation
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 
 interface ResumeModel {
 
@@ -16,17 +12,17 @@ interface ResumeModel {
         SKILLS
     }
 
-    fun updateResumeOptions(input: ResumeOptionsComponent)
+    fun updateResumeOptions(input: CreateResumeUseCase.ResumeOptionsComponent)
 
     fun updateTitle(input: String)
 
-    fun updatePersonalInformation(input: PersonalInformation)
+    fun updatePersonalInformation(input: CreateResumeUseCase.PersonalInformation)
 
-    fun updateVacancyInformation(input: VacancyInformation)
+    fun updateVacancyInformation(input: CreateResumeUseCase.VacancyInformation)
 
-    fun updateSkillsInformation(input: SkillsInformation)
+    fun updateSkillsInformation(input: CreateResumeUseCase.SkillsInformation)
 
-    fun updateWorkExperienceInformation(input: List<WorkExperienceInformation>)
+    fun updateWorkExperienceInformation(input: List<CreateResumeUseCase.WorkExperienceInformation>)
 
     fun dropUiState()
 

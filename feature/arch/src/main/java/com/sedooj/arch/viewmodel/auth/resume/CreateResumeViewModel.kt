@@ -1,14 +1,9 @@
 package com.sedooj.arch.viewmodel.auth.resume
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.ResumeOptionsComponent
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.SkillsInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.VacancyInformation
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.WorkExperienceInformation
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
-import com.sedooj.arch.viewmodel.auth.exceptions.NullInputException
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,15 +11,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CreateResumeUiState(
     var title: String? = null,
-    var vacancyInformation: VacancyInformation? = null,
-    var personalInformation: PersonalInformation? = null,
-    var workExperienceInformation: List<WorkExperienceInformation>? = null,
-    var skillsInformation: SkillsInformation? = null,
-    var resumeOptions: ResumeOptionsComponent? = null,
+    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
+    var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
+    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
+    var skillsInformation: CreateResumeUseCase.SkillsInformation? = null,
+    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
 )
 
 data class TabsUiState(
@@ -43,11 +39,10 @@ class CreateResumeViewModel @Inject constructor(
     val tabsState: StateFlow<TabsUiState> = _tabsState.asStateFlow()
 
 
-
-    override fun updateResumeOptions(input: ResumeOptionsComponent) {
+    override fun updateResumeOptions(input: CreateResumeUseCase.ResumeOptionsComponent) {
         _uiState.update {
             it.copy(
-                resumeOptions = ResumeOptionsComponent(
+                resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
                     generatePreview = input.generatePreview,
                     generateFinalResult = input.generateFinalResult,
                     generationTemplate = input.generationTemplate
@@ -64,10 +59,10 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override fun updatePersonalInformation(input: PersonalInformation) {
+    override fun updatePersonalInformation(input: CreateResumeUseCase.PersonalInformation) {
         _uiState.update {
             it.copy(
-                personalInformation = PersonalInformation(
+                personalInformation = CreateResumeUseCase.PersonalInformation(
                     firstName = input.firstName,
                     secondName = input.secondName,
                     thirdName = input.thirdName,
@@ -86,10 +81,10 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override fun updateVacancyInformation(input: VacancyInformation) {
+    override fun updateVacancyInformation(input: CreateResumeUseCase.VacancyInformation) {
         _uiState.update {
             it.copy(
-                vacancyInformation = VacancyInformation(
+                vacancyInformation = CreateResumeUseCase.VacancyInformation(
                     stackType = input.stackType,
                     platformType = input.platformType,
                     desiredRole = input.desiredRole,
@@ -102,10 +97,10 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override fun updateSkillsInformation(input: SkillsInformation) {
+    override fun updateSkillsInformation(input: CreateResumeUseCase.SkillsInformation) {
         _uiState.update {
             it.copy(
-                skillsInformation = SkillsInformation(
+                skillsInformation = CreateResumeUseCase.SkillsInformation(
                     softSkillsInformation = input.softSkillsInformation,
                     hardSkillsInformation = input.hardSkillsInformation,
                     workedFrameworksInformation = input.workedFrameworksInformation,
@@ -116,11 +111,11 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override fun updateWorkExperienceInformation(input: List<WorkExperienceInformation>) {
+    override fun updateWorkExperienceInformation(input: List<CreateResumeUseCase.WorkExperienceInformation>) {
         _uiState.update {
             it.copy(
                 workExperienceInformation = input.map { work ->
-                    WorkExperienceInformation(
+                    CreateResumeUseCase.WorkExperienceInformation(
                         companyName = work.companyName,
                         kindOfActivity = work.kindOfActivity,
                         gotJobDate = work.gotJobDate,
@@ -146,30 +141,15 @@ class CreateResumeViewModel @Inject constructor(
     }
 
     override suspend fun push() {
-        val convertedState = _uiState.value.convertStateToPush() ?: throw NullInputException()
-        resumeNetworkRepository.createResume(
-            input = convertedState
-        )
+        viewModelScope.launch {
+//            val convertedState = _uiState.value.convertStateToPush() ?: throw NullInputException()
+//            resumeNetworkRepository.createResume(
+//                input = convertedState
+//            )
+        }
     }
 
-    private fun CreateResumeUiState.convertStateToPush(): CreateResumeUseCase? {
-        val state = _uiState.value
-        val title = state.title ?: return null
-        val vacancyInformation = state.vacancyInformation ?: return null
-        val personalInformation = state.personalInformation ?: return null
-        val workExperienceInformation = state.workExperienceInformation ?: return null
-        val skillsInformation = state.skillsInformation ?: return null
-        val resumeOptions = state.resumeOptions ?: return null
-        return CreateResumeUseCase(
-            title = title,
-            vacancyInformation = vacancyInformation,
-            personalInformation = personalInformation,
-            workExperienceInformation = workExperienceInformation,
-            skillsInformation = skillsInformation,
-            resumeOptions = resumeOptions
 
-        )
-    }
 
     override fun save() {
         TODO("Not yet implemented")

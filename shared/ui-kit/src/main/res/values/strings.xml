@@ -20,10 +20,15 @@
     <string name="personal_information">Персональная информация</string>
     <string name="work_experience">Опыт работы</string>
     <string name="skills">Навыки</string>
-    <string name="stack_icon">Иконка в меню выбора стека</string>
+    <string name="drop_down_item_icon">Иконка объекта в меню выбора</string>
     <string name="stack_picker">Выберите тип стека</string>
+    <string name="platform_picker">Выберите платформу разработки</string>
     <string name="stack_picked">Выбранный тип стека</string>
+    <string name="platform_picked">Выбранная платформа разработки</string>
+    <string name="field_must_not_be_empty">Поле не должно быть пустым</string>
+    <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
     <string name="resume_name">Название резюме</string>
+    <string name="desired_role">Желаемая должность</string>
     <string name="resume_name_sample">Моё резюме</string>
     <string name="get_resume">Получить резюме</string>
     <string name="download_resume">Скачать резюме</string>
