@@ -5,7 +5,6 @@ import com.sedooj.api.domain.data.resume.entity.CreateResume
 import com.sedooj.api.domain.data.resume.entity.Resume
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
-import com.sedooj.api.domain.util.convert
 import com.sedooj.localstorage.dao.AuthUserDao
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -49,7 +48,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         firstName = input.personalInformation.firstName,
                         secondName = input.personalInformation.secondName,
                         thirdName = input.personalInformation.thirdName,
-                        dateOfBirth = input.personalInformation.dateOfBirth.convert(),
+                        dateOfBirth = input.personalInformation.dateOfBirth,
                         city = input.personalInformation.city,
                         residenceCountry = input.personalInformation.residenceCountry,
                         genderType = input.personalInformation.genderType,
@@ -59,8 +58,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 educationStage = it.educationStage,
                                 title = it.title,
                                 locationCity = it.locationCity,
-                                enterDate = it.enterDate.convert(),
-                                graduatedDate = it.graduatedDate.convert(),
+                                enterDate = it.enterDate,
+                                graduatedDate = it.graduatedDate,
                                 faculty = it.faculty,
                                 speciality = it.speciality
                             )
@@ -79,8 +78,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         CreateResume.WorkExperienceInformation(
                             companyName = it.companyName,
                             kindOfActivity = it.kindOfActivity,
-                            gotJobDate = it.gotJobDate.convert(),
-                            quitJobDate = it.quitJobDate?.convert(),
+                            gotJobDate = it.gotJobDate,
+                            quitJobDate = it.quitJobDate,
                             isCurrentlyWorking = it.isCurrentlyWorking
                         )
                     },
@@ -132,7 +131,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         firstName = input.personalInformation.firstName,
                         secondName = input.personalInformation.secondName,
                         thirdName = input.personalInformation.thirdName,
-                        dateOfBirth = input.personalInformation.dateOfBirth.convert(),
+                        dateOfBirth = input.personalInformation.dateOfBirth,
                         city = input.personalInformation.city,
                         residenceCountry = input.personalInformation.residenceCountry,
                         genderType = input.personalInformation.genderType,
@@ -142,8 +141,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 educationStage = it.educationStage,
                                 title = it.title,
                                 locationCity = it.locationCity,
-                                enterDate = it.enterDate.convert(),
-                                graduatedDate = it.graduatedDate.convert(),
+                                enterDate = it.enterDate,
+                                graduatedDate = it.graduatedDate,
                                 faculty = it.faculty,
                                 speciality = it.speciality
                             )
@@ -162,8 +161,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         CreateResume.WorkExperienceInformation(
                             companyName = it.companyName,
                             kindOfActivity = it.kindOfActivity,
-                            gotJobDate = it.gotJobDate.convert(),
-                            quitJobDate = it.quitJobDate?.convert(),
+                            gotJobDate = it.gotJobDate,
+                            quitJobDate = it.quitJobDate,
                             isCurrentlyWorking = it.isCurrentlyWorking
                         )
                     },

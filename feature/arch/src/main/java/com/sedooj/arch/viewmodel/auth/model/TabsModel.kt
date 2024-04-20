@@ -12,5 +12,11 @@ interface TabsModel {
         SKILLS(title = R.string.skills, icon = R.drawable.skills),
     }
 
+    enum class PersonalTabs(val title: Int) {
+        MAIN(title = R.string.personal_main),
+        SECONDARY(title = R.string.personal_secondary)
+    }
+
     fun setTab(tab: Tabs, id: Int)
+    fun setPersonalTab(tab: PersonalTabs, id: Int)
 }

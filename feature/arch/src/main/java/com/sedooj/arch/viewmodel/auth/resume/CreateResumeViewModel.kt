@@ -26,6 +26,8 @@ data class CreateResumeUiState(
 data class TabsUiState(
     var selectedTab: TabsModel.Tabs = TabsModel.Tabs.RESUME,
     var selectedTabId: Int = 0,
+    var personalTab: TabsModel.PersonalTabs = TabsModel.PersonalTabs.MAIN,
+    var selectedPersonalTabId: Int = 0
 )
 
 @HiltViewModel
@@ -160,6 +162,15 @@ class CreateResumeViewModel @Inject constructor(
             it.copy(
                 selectedTab = tab,
                 selectedTabId = id
+            )
+        }
+    }
+
+    override fun setPersonalTab(tab: TabsModel.PersonalTabs, id: Int) {
+        _tabsState.update {
+            it.copy(
+                personalTab = tab,
+                selectedPersonalTabId = id
             )
         }
     }

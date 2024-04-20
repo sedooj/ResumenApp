@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Resumen</string>
+    <string name="save">Сохранить</string>
     <string name="home">Главная</string>
     <string name="my_resumes">Мои резюме</string>
     <string name="profile">Профиль</string>
@@ -17,6 +18,8 @@
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
     <string name="vacancy">Вакансия</string>
+    <string name="personal_main">Основная</string>
+    <string name="personal_secondary">Дополнительная</string>
     <string name="personal_information">Персональная информация</string>
     <string name="work_experience">Опыт работы</string>
     <string name="skills">Навыки</string>
@@ -27,6 +30,20 @@
     <string name="busyness_picker">Выберите тип занятости</string>
     <string name="busyness_picked">Выбранный тип занятости</string>
     <string name="schedule_picker">Выберите расписание</string>
+    <string name="firstname">Имя</string>
+    <string name="secondname">Фамилия</string>
+    <string name="thirdname">Отчество</string>
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
+    <string name="married">Женат</string>
+    <string name="not_married">Не женат</string>
+    <string name="female_not_married">Не замужем</string>
+    <string name="female_married">Замужем</string>
+    <string name="city">Город</string>
+    <string name="residence_country">Страна проживания</string>
+    <string name="gender_picker">Пол</string>
+    <string name="marital_picker">Семейное положение</string>
+    <string name="birth_date">Дата рождения</string>
     <string name="schedule_picked">Выбранное расписание</string>
     <string name="schedule_full_day">Полный день</string>
     <string name="schedule_shift_schedule">Сменный график</string>

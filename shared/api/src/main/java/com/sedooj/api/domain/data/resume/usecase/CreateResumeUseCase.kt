@@ -8,7 +8,6 @@ import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
-import java.time.LocalDate
 
 data class CreateResumeUseCase(
     var title: String,
@@ -33,7 +32,7 @@ data class CreateResumeUseCase(
         var firstName: String,
         var secondName: String,
         var thirdName: String?,
-        var dateOfBirth: LocalDate,
+        var dateOfBirth: String,
         var city: String,
         var residenceCountry: String,
         var genderType: GenderType,
@@ -48,8 +47,8 @@ data class CreateResumeUseCase(
             var educationStage: EducationStage,
             var title: String,
             var locationCity: String,
-            var enterDate: LocalDate,
-            var graduatedDate: LocalDate,
+            var enterDate: String,
+            var graduatedDate: String,
             var faculty: String,
             var speciality: String,
         )
@@ -63,8 +62,8 @@ data class CreateResumeUseCase(
     data class WorkExperienceInformation(
         var companyName: String,
         var kindOfActivity: String,
-        var gotJobDate: LocalDate,
-        var quitJobDate: LocalDate?,
+        var gotJobDate: String,
+        var quitJobDate: String?,
         var isCurrentlyWorking: Boolean,
     )
 

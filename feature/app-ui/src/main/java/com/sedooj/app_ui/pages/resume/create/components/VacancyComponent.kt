@@ -27,10 +27,6 @@ import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.SalaryTextField
 
-
-/*
-        var readyForTravelling: Boolean,
-* */
 @Composable
 fun VacancyComponent(
     stackType: StackType?,
