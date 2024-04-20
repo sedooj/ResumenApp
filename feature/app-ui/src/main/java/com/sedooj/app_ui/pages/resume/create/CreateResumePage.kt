@@ -37,9 +37,12 @@ fun CreateResumePage(
             .padding(20.dp),
         alignment = Alignment.Top,
         topBar = {
-            SetupTabs(selectedTabId = tabsUiState.selectedTabId, onSelectTab = { index, tab ->
-                createResumeViewModel.setTab(tab = tab, id = index)
-            })
+            SetupTabs(
+                selectedTabId = tabsUiState.selectedTabId,
+                onSelectTab = { index, tab ->
+                    createResumeViewModel.setTab(tab = tab, id = index)
+                }
+            )
         }
     ) {
         TabContent(

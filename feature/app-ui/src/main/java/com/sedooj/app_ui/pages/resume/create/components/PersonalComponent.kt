@@ -1,90 +1,32 @@
 package com.sedooj.app_ui.pages.resume.create.components
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.app_ui.pages.resume.create.components.tabs.personal.PersonalTabContent
-import com.sedooj.app_ui.pages.resume.create.components.tabs.personal.SetupPersonalTabs
-import com.sedooj.arch.viewmodel.auth.model.TabsModel
-import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.MenuButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
-import com.sedooj.ui_kit.TabsScreen
-
-@Composable
-fun PersonalComponent(
-    firstName: String?,
-    secondName: String?,
-    thirdName: String?,
-    dateOfBirth: String?,
-    city: String?,
-    residenceCountry: String?,
-    genderType: GenderType?,
-    maritalStatus: MaritalStatus?,
-    education: List<Education>?,
-    hasChild: Boolean?,
-    socialMedia: List<SocialMedia>?,
-    aboutMe: String?,
-    personalQualities: String?,
-    onDate: (String?) -> Unit,
-    onGenderType: (GenderType) -> Unit,
-    onMaritalType: (MaritalStatus) -> Unit,
-    selectedTab: TabsModel.PersonalTabs,
-    createResumeViewModel: CreateResumeViewModel,
-) {
-    val tabsUiState = createResumeViewModel.tabsState.collectAsState().value
-    TabsScreen(
-        title = stringResource(id = tabsUiState.personalTab.title),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        alignment = Alignment.Top,
-        topBar = {
-            SetupPersonalTabs(selectedTabId = tabsUiState.selectedPersonalTabId, onSelectTab = { index, tab ->
-                createResumeViewModel.setPersonalTab(tab = tab, id = index)
-            })
-        }
-    ) {
-        PersonalTabContent(
-            selectedTab = tabsUiState.personalTab,
-            createResumeViewModel = createResumeViewModel,
-            firstName = firstName,
-            secondName = secondName,
-            thirdName = thirdName,
-            dateOfBirth = dateOfBirth,
-            city = city,
-            residenceCountry = residenceCountry,
-            genderType = genderType,
-            maritalStatus = maritalStatus,
-            onDate = onDate,
-            onGenderType = onGenderType,
-            onMaritalType = onMaritalType,
-        )
-    }
-}
 
 @Composable
 fun MainComponent(
@@ -147,6 +89,64 @@ fun MainComponent(
         onMaritalType = {
             onMaritalType(it)
         }
+    )
+}
+
+@Composable
+fun SecondComponent(
+    education: List<Education>,
+    hasChild: Boolean?,
+    socialMedia: List<SocialMedia>?,
+    aboutMe: String?,
+    personalQualities: String?,
+    onEducation: (Education) -> Unit,
+) {
+    EducationList(education = education) {  s ->
+        onEducation(s)
+    }
+}
+
+@Composable
+fun EducationList(
+    education: List<Education>,
+    onEducation: (Education) -> Unit
+) {
+    education.forEach { edu ->
+        EducationComponent(
+            onEducation = {
+                onEducation(it)
+            }
+        )
+    }
+}
+
+@Composable
+fun EducationComponent(
+    onEducation: (Education)-> Unit
+) {
+    val education by rememberSaveable { mutableStateOf(Education(
+        educationStage = EducationStage.COLLEGE,
+        title = "",
+        locationCity = "",
+        enterDate = "",
+        graduatedDate = "",
+        faculty = "",
+        speciality = ""
+    ))}
+    Text(
+        text = education.title.ifEmpty { stringResource(id = R.string.edu_organisation_name) },
+        maxLines = 1,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center,
+        overflow = TextOverflow.Ellipsis
+    )
+    HorizontalDivider(modifier = Modifier.fillMaxWidth())
+    NotNullableValueTextField(
+        label = R.string.edu_organisation_name,
+        onValueChange = {
+            education.title = it
+        },
+        value = education.title
     )
 }
 

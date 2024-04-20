@@ -2,10 +2,13 @@ package com.sedooj.app_ui.pages.resume.create.components.tabs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.sedooj.app_ui.pages.resume.create.components.PersonalComponent
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
+import com.sedooj.app_ui.pages.resume.create.components.MainComponent
 import com.sedooj.app_ui.pages.resume.create.components.ResumeOptionsComponent
+import com.sedooj.app_ui.pages.resume.create.components.SecondComponent
 import com.sedooj.app_ui.pages.resume.create.components.VacancyComponent
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
@@ -13,7 +16,7 @@ import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 @Composable
 fun TabContent(
     selectedTab: TabsModel.Tabs,
-    createResumeViewModel: CreateResumeViewModel,
+    createResumeViewModel: CreateResumeViewModel
 ) {
     // Resume Options
     val title = rememberSaveable { mutableStateOf("") }
@@ -36,12 +39,13 @@ fun TabContent(
     val residenceCountry = rememberSaveable { mutableStateOf(personal?.residenceCountry) }
     val genderType = rememberSaveable { mutableStateOf(personal?.genderType) }
     val maritalStatus = rememberSaveable { mutableStateOf(personal?.maritalStatus) }
-    val education = rememberSaveable { mutableStateOf(personal?.education) }
+        // TODO("app got crashed by using that list initialisation, gg")
+
+    val education = rememberSaveable { mutableStateListOf<Education>() }
     val hasChild = rememberSaveable { mutableStateOf(personal?.hasChild) }
     val socialMedia = rememberSaveable { mutableStateOf(personal?.socialMedia) }
     val aboutMe = rememberSaveable { mutableStateOf(personal?.aboutMe) }
     val personalQualities = rememberSaveable { mutableStateOf(personal?.personalQualities) }
-    val selectedPersonalTab = rememberSaveable { mutableStateOf(TabsModel.PersonalTabs.MAIN) }
     when (selectedTab) {
         TabsModel.Tabs.RESUME -> ResumeOptionsComponent(
             onValueChange = {
@@ -80,7 +84,7 @@ fun TabContent(
             }
         )
 
-        TabsModel.Tabs.PERSONAL -> PersonalComponent(
+        TabsModel.Tabs.PERSONAL_MAIN -> MainComponent(
             firstName = firstName.value,
             secondName = secondName.value,
             thirdName = thirdName.value,
@@ -89,11 +93,7 @@ fun TabContent(
             residenceCountry = residenceCountry.value,
             genderType = genderType.value,
             maritalStatus = maritalStatus.value,
-            education = education.value,
-            hasChild = hasChild.value,
-            socialMedia = socialMedia.value,
-            aboutMe = aboutMe.value,
-            personalQualities = personalQualities.value,
+
             onDate = {
                 dateOfBirth.value = it
             },
@@ -107,9 +107,18 @@ fun TabContent(
             },
             onMaritalType = {
                 maritalStatus.value = it
-            },
-            selectedTab = selectedPersonalTab.value,
-            createResumeViewModel = createResumeViewModel
+            }
+        )
+
+        TabsModel.Tabs.PERSONAL_SECONDARY -> SecondComponent(
+            education = education,
+            hasChild = hasChild.value,
+            socialMedia = socialMedia.value,
+            aboutMe = aboutMe.value,
+            personalQualities = personalQualities.value,
+            onEducation = { s ->
+                education += s
+            }
         )
 
         TabsModel.Tabs.WORK -> {

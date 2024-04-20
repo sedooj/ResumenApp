@@ -21,6 +21,8 @@
     <string name="personal_main">Основная</string>
     <string name="personal_secondary">Дополнительная</string>
     <string name="personal_information">Персональная информация</string>
+    <string name="education">Образование</string>
+    <string name="edu_organisation_name">Название учреждения</string>
     <string name="work_experience">Опыт работы</string>
     <string name="skills">Навыки</string>
     <string name="drop_down_item_icon">Иконка объекта в меню выбора</string>

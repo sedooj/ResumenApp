@@ -37,7 +37,7 @@ data class CreateResumeUseCase(
         var residenceCountry: String,
         var genderType: GenderType,
         var maritalStatus: MaritalStatus?,
-        var education: List<Education>?,
+        var education: List<Education>,
         var hasChild: Boolean,
         var socialMedia: List<SocialMedia>?,
         var aboutMe: String?,
