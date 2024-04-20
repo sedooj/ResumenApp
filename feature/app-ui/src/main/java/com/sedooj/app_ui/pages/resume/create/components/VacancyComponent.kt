@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.ui_kit.CheckButton
@@ -30,8 +31,6 @@ import com.sedooj.ui_kit.SalaryTextField
 
 
 /*
-        var desiredSalary: String?,
-        var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
 * */
@@ -41,10 +40,12 @@ fun VacancyComponent(
     platformType: PlatformType?,
     desiredRole: String,
     desiredSalary: String,
+    busynessType: BusynessType?,
     onStackSelect: (StackType) -> Unit,
     onPlatformSelect: (PlatformType) -> Unit,
     onRoleValueChange: (String) -> Unit,
     onSalaryValueChange: (String) -> Unit,
+    onBusynessSelect: (BusynessType) -> Unit,
 ) {
 
     StackTypeMenu(
@@ -66,6 +67,10 @@ fun VacancyComponent(
         },
         value = desiredRole
     )
+    BusynessTypeMenu(
+        onSelect = { onBusynessSelect(it) },
+        selectedType = busynessType
+    )
     SalaryTextField(
         label = R.string.desired_salary,
         onValueChange = {
@@ -73,6 +78,50 @@ fun VacancyComponent(
         },
         value = desiredSalary
     )
+}
+
+@Composable
+private fun BusynessTypeMenu(
+    onSelect: (BusynessType) -> Unit,
+    selectedType: BusynessType?,
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    CheckButton(
+        modifier = Modifier.fillMaxWidth(),
+        label = if (selectedType != null) "${
+            stringResource(
+                id = R.string.busyness_picked
+            )
+        }: ${stringResource(id = selectedType.title)}" else stringResource(
+            id = R.string.busyness_picker
+        ),
+        onClick = {
+            isExpanded = true
+        },
+        isChecked = selectedType != null
+    )
+    DropdownMenu(
+        expanded = isExpanded,
+        onDismissRequest = { isExpanded = false }
+    ) {
+        BusynessType.entries.forEach { busynessType ->
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = stringResource(id = busynessType.title),
+                        textAlign = TextAlign.Center,
+                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        maxLines = 1
+                    )
+                },
+                onClick = {
+                    onSelect(busynessType)
+                    isExpanded = false
+                },
+                enabled = selectedType != busynessType
+            )
+        }
+    }
 }
 
 @Composable
