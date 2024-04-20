@@ -26,6 +26,14 @@
     <string name="stack_picked">Выбранный тип стека</string>
     <string name="busyness_picker">Выберите тип занятости</string>
     <string name="busyness_picked">Выбранный тип занятости</string>
+    <string name="schedule_picker">Выберите расписание</string>
+    <string name="schedule_picked">Выбранное расписание</string>
+    <string name="schedule_full_day">Полный день</string>
+    <string name="schedule_shift_schedule">Сменный график</string>
+    <string name="schedule_flexible_schedule">Гибкий график</string>
+    <string name="schedule_remote">Удалённая работа</string>
+    <string name="schedule_shift_method">Вахтовый метод</string>
+    <string name="ready_for_travelling">Готов к переезду</string>
     <string name="platform_picked">Выбранная платформа разработки</string>
     <string name="field_must_not_be_empty">Поле не должно быть пустым</string>
     <string name="dont_want_to_enter">Не учитывать данный параметр</string>

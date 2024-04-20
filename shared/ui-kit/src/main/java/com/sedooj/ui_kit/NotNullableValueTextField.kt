@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,6 +40,9 @@ fun NotNullableValueTextField(
                     overflow = TextOverflow.Ellipsis,
                 )
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = if (!value.isNullOrBlank()) MaterialTheme.colorScheme.surfaceTint else MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
         shape = RoundedCornerShape(10.dp),
         isError = value.isNullOrBlank(),
         keyboardOptions = KeyboardOptions(

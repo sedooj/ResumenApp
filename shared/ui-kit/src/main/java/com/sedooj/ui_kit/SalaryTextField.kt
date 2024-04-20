@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +27,9 @@ fun SalaryTextField(
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = if (value.isNotBlank()) MaterialTheme.colorScheme.surfaceTint else MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
         onValueChange = {
             val newChar = it.removePrefix(value)
             if (newChar == "\b") {
@@ -79,7 +83,7 @@ fun SalaryTextField(
         shape = RoundedCornerShape(10.dp),
         isError = (value.isBlank()),
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next,
+            imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
         ),
     )

@@ -23,6 +23,8 @@ fun TabContent(
     val desiredRole = rememberSaveable { mutableStateOf("") }
     val desiredSalary = rememberSaveable { mutableStateOf("0") }
     val busynessType = rememberSaveable { mutableStateOf(vacancy?.busynessType) }
+    val scheduleType = rememberSaveable { mutableStateOf(vacancy?.scheduleType) }
+    val readyForTravelling = rememberSaveable { mutableStateOf(false) }
     when (selectedTab) {
         TabsModel.Tabs.RESUME -> ResumeOptionsComponent(
             onValueChange = {
@@ -50,6 +52,14 @@ fun TabContent(
             busynessType = busynessType.value,
             onBusynessSelect = {
                 busynessType.value = it
+            },
+            scheduleType = scheduleType.value,
+            onScheduleSelect = {
+                scheduleType.value = it
+            },
+            readyForTravelling = readyForTravelling.value,
+            onReadyTravelValueChange = {
+                readyForTravelling.value = !readyForTravelling.value
             }
         )
 
