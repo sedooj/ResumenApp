@@ -10,6 +10,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.WorkExperie
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.exceptions.NullInputException
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
+import com.sedooj.arch.viewmodel.auth.model.TabsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,12 +27,22 @@ data class CreateResumeUiState(
     var resumeOptions: ResumeOptionsComponent? = null,
 )
 
+data class TabsUiState(
+    var selectedTab: TabsModel.Tabs = TabsModel.Tabs.RESUME,
+    var selectedTabId: Int = 0,
+)
+
 @HiltViewModel
 class CreateResumeViewModel @Inject constructor(
     private val resumeNetworkRepository: ResumeNetworkRepository,
-) : ViewModel(), ResumeModel {
+) : ViewModel(), ResumeModel, TabsModel {
     private val _uiState = MutableStateFlow(CreateResumeUiState())
     val uiState: StateFlow<CreateResumeUiState> = _uiState.asStateFlow()
+
+    private val _tabsState = MutableStateFlow(TabsUiState())
+    val tabsState: StateFlow<TabsUiState> = _tabsState.asStateFlow()
+
+
 
     override fun updateResumeOptions(input: ResumeOptionsComponent) {
         _uiState.update {
@@ -162,6 +173,15 @@ class CreateResumeViewModel @Inject constructor(
 
     override fun save() {
         TODO("Not yet implemented")
+    }
+
+    override fun setTab(tab: TabsModel.Tabs, id: Int) {
+        _tabsState.update {
+            it.copy(
+                selectedTab = tab,
+                selectedTabId = id
+            )
+        }
     }
 
 

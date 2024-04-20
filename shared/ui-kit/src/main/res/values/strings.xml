@@ -16,6 +16,13 @@
     <string name="drop_resume">Удалить резюме</string>
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="personal_information">Персональная информация</string>
+    <string name="work_experience">Опыт работы</string>
+    <string name="skills">Навыки</string>
+    <string name="stack_icon">Иконка в меню выбора стека</string>
+    <string name="stack_picker">Выберите тип стека</string>
+    <string name="stack_picked">Выбранный тип стека</string>
     <string name="resume_name">Название резюме</string>
     <string name="resume_name_sample">Моё резюме</string>
     <string name="get_resume">Получить резюме</string>
