@@ -21,6 +21,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.app_ui.pages.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
+import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.Screen
 
@@ -47,12 +48,15 @@ fun CreateResumePage(
 
 @Composable
 fun ResumeOptionsComponent(
-    createResumeViewModel: CreateResumeViewModel,
+    createResumeViewModel: CreateResumeViewModel
 ) {
     val uiState = createResumeViewModel.uiState.collectAsState().value
     TitleTextField(onValueChange = {
         createResumeViewModel.updateTitle(input = it)
     }, value = uiState.title ?: "")
+    NextPageButton(label = "") {
+
+    }
 }
 
 @Composable
@@ -77,4 +81,14 @@ private fun TitleTextField(
             imeAction = ImeAction.Next
         )
     )
+}
+
+@Composable
+fun NextPageButton(
+    label: String,
+    onClick: () -> Unit,
+) {
+    FilledButton(label = label, onClick = {
+        onClick()
+    })
 }
