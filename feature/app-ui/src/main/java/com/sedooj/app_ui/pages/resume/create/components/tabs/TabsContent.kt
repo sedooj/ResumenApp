@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.pages.resume.create.components.MainComponent
@@ -16,7 +17,7 @@ import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 @Composable
 fun TabContent(
     selectedTab: TabsModel.Tabs,
-    createResumeViewModel: CreateResumeViewModel
+    createResumeViewModel: CreateResumeViewModel,
 ) {
     // Resume Options
     val title = rememberSaveable { mutableStateOf("") }
@@ -39,9 +40,7 @@ fun TabContent(
     val residenceCountry = rememberSaveable { mutableStateOf(personal?.residenceCountry) }
     val genderType = rememberSaveable { mutableStateOf(personal?.genderType) }
     val maritalStatus = rememberSaveable { mutableStateOf(personal?.maritalStatus) }
-        // TODO("app got crashed by using that list initialisation, gg")
-
-    val education = rememberSaveable { mutableStateListOf<Education>() }
+    val education = remember { mutableStateListOf<Education>() }
     val hasChild = rememberSaveable { mutableStateOf(personal?.hasChild) }
     val socialMedia = rememberSaveable { mutableStateOf(personal?.socialMedia) }
     val aboutMe = rememberSaveable { mutableStateOf(personal?.aboutMe) }
@@ -116,8 +115,11 @@ fun TabContent(
             socialMedia = socialMedia.value,
             aboutMe = aboutMe.value,
             personalQualities = personalQualities.value,
-            onEducation = { s ->
-                education += s
+            onEducation = { i, s ->
+                if (i >= education.size)
+                    education.add(s)
+                else
+                    education[i] = s
             }
         )
 

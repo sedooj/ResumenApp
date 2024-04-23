@@ -22,6 +22,8 @@
     <string name="personal_secondary">Дополнительная</string>
     <string name="personal_information">Персональная информация</string>
     <string name="education">Образование</string>
+    <string name="add_education_institution">Добавить образовательное учреждение</string>
+    <string name="remove_education_institution">Удалить образовательное учреждение</string>
     <string name="edu_organisation_name">Название учреждения</string>
     <string name="work_experience">Опыт работы</string>
     <string name="skills">Навыки</string>

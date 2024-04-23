@@ -5,5 +5,6 @@ enum class EducationStage(
 ) {
     COLLEGE(educationType = EducationType.SECONDARY_VOCATIONAL),
     UNIVERSITY(educationType = EducationType.HIGHER),
-    INSTITUTE(educationType = EducationType.HIGHER)
+    INSTITUTE(educationType = EducationType.HIGHER),
+    NOT_SPECIFIED(EducationType.NOT_SPECIFIED)
 }

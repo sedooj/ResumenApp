@@ -1,9 +1,12 @@
 package com.sedooj.api.domain.data.types
 
-enum class EducationType {
-    SECONDARY,
-    SECONDARY_INCOMPLETE,
-    SECONDARY_VOCATIONAL,
-    HIGHER,
-    HIGHER_INCOMPLETE,
+enum class EducationType(
+    val title: String
+) {
+    SECONDARY("Среднее"),
+    SECONDARY_INCOMPLETE("Неоконченное высшее"),
+    SECONDARY_VOCATIONAL("Среднее профессиональное"),
+    HIGHER("Высшее"),
+    HIGHER_INCOMPLETE("Неоконченное высшее"),
+    NOT_SPECIFIED("Не выбрано")
 }
