@@ -45,7 +45,8 @@ fun SetupTabs(
                         text = stringResource(id = tab.subTitle),
                         maxLines = 1,
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
                     )
                 }
             }

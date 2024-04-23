@@ -1,7 +1,6 @@
 package com.sedooj.app_ui.pages.resume.create.components
 
 import android.widget.Toast
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -26,13 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
@@ -129,38 +123,45 @@ fun EducationList(
     onEducation: (Int, Education) -> Unit,
 ) {
     education.forEachIndexed { i, edu ->
-        EducationComponent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .animateContentSize(),
+        EducationItemComponent(
             education = edu,
-            onEducation = { education ->
-                onEducation(i, education)
-            },
-            onRemove = {
-
-            }
+            onEditEducation = { /*TODO*/ },
+            onDropEducation = { /*TODO*/ },
+            modifier = Modifier.fillMaxSize()
         )
+//        EducationComponent(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .clip(RoundedCornerShape(10.dp))
+//                .animateContentSize(),
+//            education = edu,
+//            onEducation = { education ->
+//                onEducation(i, education)
+//            },
+//            onRemove = {
+//
+//            }
+//        )
     }
     FilledButton(
         modifier = Modifier.fillMaxWidth(),
-        label = stringResource(id = R.string.add_education_institution)
-    ) {
-        onEducation(
-            if (education.isEmpty()) 0 else education.size + 1,
-            Education(
-                educationStage = EducationStage.NOT_SPECIFIED,
-                title = "",
-                locationCity = "",
-                enterDate = "",
-                graduatedDate = "",
-                faculty = "",
-                speciality = ""
+        label = stringResource(id = R.string.add_education_institution),
+        onClick = {
+            onEducation(
+                if (education.isEmpty()) 0 else education.size + 1,
+                Education(
+                    educationStage = EducationStage.NOT_SPECIFIED,
+                    title = "",
+                    locationCity = "",
+                    enterDate = "",
+                    graduatedDate = "",
+                    faculty = "",
+                    speciality = ""
 
+                )
             )
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -187,12 +188,7 @@ fun EducationComponent(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = education.title.ifEmpty { stringResource(id = R.string.edu_organisation_name) },
-                        maxLines = 1,
-                        textAlign = TextAlign.Center,
-                        overflow = TextOverflow.Ellipsis
-                    )
+
                     IconButton(onClick = { onRemove() }) {
                         Icon(
                             painterResource(id = R.drawable.trash),

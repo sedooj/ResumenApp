@@ -1,14 +1,21 @@
 package com.sedooj.ui_kit
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -24,8 +31,9 @@ fun FilledButton(
         disabledContainerColor = Color.DarkGray,
         disabledContentColor = Color.LightGray
     ),
-    shape: RoundedCornerShape = RoundedCornerShape(10.dp),
     onClick: () -> Unit,
+    shape: RoundedCornerShape = RoundedCornerShape(10.dp),
+    icon: Painter? = null,
 ) {
     Button(
         onClick = {
@@ -37,7 +45,19 @@ fun FilledButton(
         colors = colors,
         contentPadding = contentPadding,
         content = {
-            Text(text = label, textAlign = TextAlign.Center)
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (icon != null) {
+                    Icon(painter = icon, contentDescription = label, modifier = Modifier.size(25.dp))
+                }
+                Text(text = label, textAlign = TextAlign.Center)
+            }
         }
     )
 }

@@ -144,7 +144,7 @@ private fun ResumeItemButtons(
                 .fillMaxWidth()
                 .weight(1f),
             onClick = { onEditResume() },
-            icon = painterResource(id = R.drawable.edit),
+            icon = painterResource(id = R.drawable.edit_resume),
             contentDescription = stringResource(id = R.string.edit_resume),
         )
         FilledIconButton(
