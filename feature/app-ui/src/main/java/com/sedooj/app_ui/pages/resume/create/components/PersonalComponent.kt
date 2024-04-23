@@ -5,10 +5,12 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -180,13 +182,26 @@ fun EducationComponent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = education.title.ifEmpty { stringResource(id = R.string.edu_organisation_name) },
-                    maxLines = 1,
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis
-                )
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = education.title.ifEmpty { stringResource(id = R.string.edu_organisation_name) },
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    IconButton(onClick = { onRemove() }) {
+                        Icon(
+                            painterResource(id = R.drawable.trash),
+                            contentDescription = stringResource(id = R.string.remove_education_institution),
+                            modifier = Modifier.size(30.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
                 NotNullableValueTextField(
                     label = R.string.edu_organisation_name,
@@ -210,14 +225,7 @@ fun EducationComponent(
             }
 
         }
-        IconButton(onClick = { onRemove() }, modifier = Modifier.align(Alignment.TopEnd)) {
-            Icon(
-                painterResource(id = R.drawable.trash),
-                contentDescription = stringResource(id = R.string.remove_education_institution),
-                modifier = Modifier.size(25.dp),
-                tint = MaterialTheme.colorScheme.error
-            )
-        }
+
     }
 
 
