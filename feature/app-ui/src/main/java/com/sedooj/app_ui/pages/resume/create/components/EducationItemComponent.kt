@@ -193,7 +193,7 @@ fun EducationItemComponent(
                             .weight(1f)
                             .height(35.dp),
                         onClick = {
-
+                            onDropEducation()
                         },
                         icon = painterResource(id = R.drawable.trash),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
@@ -205,7 +205,7 @@ fun EducationItemComponent(
                             .weight(1f)
                             .height(35.dp),
                         onClick = {
-
+                            onEditEducation()
                         })
                 }
                 if (educationCorrect != 0) {
@@ -243,7 +243,7 @@ fun EducationItemComponent(
                         .size(25.dp)
                         .align(Alignment.TopStart)
                         .background(
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = MaterialTheme.colorScheme.surfaceDim,
                             shape = CircleShape
                         ),
                     tint = MaterialTheme.colorScheme.error

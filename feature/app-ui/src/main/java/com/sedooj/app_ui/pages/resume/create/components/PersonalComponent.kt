@@ -1,14 +1,26 @@
 package com.sedooj.app_ui.pages.resume.create.components
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -23,8 +35,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -111,120 +123,118 @@ fun SecondComponent(
     aboutMe: String?,
     personalQualities: String?,
     onEducation: (Int, Education) -> Unit,
+    onDropEducation: (Int) -> Unit,
 ) {
-    EducationList(education = education) { i, s ->
-        onEducation(i, s)
-    }
+    EducationList(education = education,
+        onEducation = { i, s ->
+            onEducation(i, s)
+        },
+        onDropEducation = {
+            onDropEducation(it)
+        }
+    )
 }
 
 @Composable
 fun EducationList(
     education: List<Education>,
     onEducation: (Int, Education) -> Unit,
+    onDropEducation: (Int) -> Unit,
 ) {
-    education.forEachIndexed { i, edu ->
-        EducationItemComponent(
-            education = edu,
-            onEditEducation = { /*TODO*/ },
-            onDropEducation = { /*TODO*/ },
-            modifier = Modifier.fillMaxSize()
-        )
-//        EducationComponent(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .clip(RoundedCornerShape(10.dp))
-//                .animateContentSize(),
-//            education = edu,
-//            onEducation = { education ->
-//                onEducation(i, education)
-//            },
-//            onRemove = {
-//
-//            }
-//        )
+    var isExpanded by remember {
+        mutableStateOf(false)
     }
-    FilledButton(
-        modifier = Modifier.fillMaxWidth(),
-        label = stringResource(id = R.string.add_education_institution),
-        onClick = {
-            onEducation(
-                if (education.isEmpty()) 0 else education.size + 1,
-                Education(
-                    educationStage = EducationStage.NOT_SPECIFIED,
-                    title = "",
-                    locationCity = "",
-                    enterDate = "",
-                    graduatedDate = "",
-                    faculty = "",
-                    speciality = ""
-
-                )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceDim,
+                shape = RoundedCornerShape(10.dp)
             )
-        }
-    )
-}
-
-@Composable
-fun EducationComponent(
-    modifier: Modifier = Modifier,
-    education: Education,
-    onEducation: (Education) -> Unit,
-    onRemove: () -> Unit,
-) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            contentAlignment = Alignment.Center
+            .padding(10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize()
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Text(
+                    text = stringResource(id = R.string.education),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                )
 
-                    IconButton(onClick = { onRemove() }) {
-                        Icon(
-                            painterResource(id = R.drawable.trash),
-                            contentDescription = stringResource(id = R.string.remove_education_institution),
-                            modifier = Modifier.size(30.dp),
-                            tint = MaterialTheme.colorScheme.error
-                        )
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = education.isNotEmpty(),
+                        enter = scaleIn(tween(200)),
+                        exit = scaleOut(tween(150))
+                    ) {
+                        IconButton(
+                            onClick = { isExpanded = !isExpanded },
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .rotate(if (!isExpanded) 270f else 0f)
+                                .size(25.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.KeyboardArrowDown,
+                                contentDescription = "",
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                 }
-                HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                NotNullableValueTextField(
-                    label = R.string.edu_organisation_name,
-                    onValueChange = {
-                        onEducation(
-                            Education(
-                                educationStage = education.educationStage,
-                                title = it,
-                                locationCity = education.locationCity,
-                                enterDate = education.enterDate,
-                                graduatedDate = education.graduatedDate,
-                                faculty = education.faculty,
-                                speciality = education.speciality
 
-                            )
-                        )
-                        education.title = it
-                    },
-                    value = education.title
-                )
+            }
+            HorizontalDivider()
+            education.forEachIndexed { i, edu ->
+                AnimatedVisibility(
+                    visible = isExpanded,
+                    enter = fadeIn(tween(400)) + expandVertically(tween(200)),
+                    exit = fadeOut(tween(400)) + shrinkVertically(tween(200))
+                ) {
+                    EducationItemComponent(
+                        education = edu,
+                        onEditEducation = { },
+                        onDropEducation = {
+                            if (education.size < 2)
+                                isExpanded = false
+                            onDropEducation(i)
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
 
+            FilledButton(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(id = R.string.add_education_institution),
+                onClick = {
+                    onEducation(
+                        if (education.isEmpty()) 0 else education.size + 1,
+                        Education(
+                            educationStage = EducationStage.NOT_SPECIFIED,
+                            title = "",
+                            locationCity = "",
+                            enterDate = "",
+                            graduatedDate = "",
+                            faculty = "",
+                            speciality = ""
+
+                        )
+                    )
+                }
+            )
         }
-
     }
-
-
 }
 
 @Composable

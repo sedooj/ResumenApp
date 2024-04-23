@@ -8,5 +8,5 @@ enum class EducationType(
     SECONDARY_VOCATIONAL("Среднее профессиональное"),
     HIGHER("Высшее"),
     HIGHER_INCOMPLETE("Неоконченное высшее"),
-    NOT_SPECIFIED("Не выбрано")
+    NOT_SPECIFIED("Не указано")
 }

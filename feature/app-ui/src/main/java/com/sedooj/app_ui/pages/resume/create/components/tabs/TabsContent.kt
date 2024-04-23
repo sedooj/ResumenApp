@@ -120,6 +120,9 @@ fun TabContent(
                     education.add(s)
                 else
                     education[i] = s
+            },
+            onDropEducation = {
+                education.removeAt(it)
             }
         )
 
