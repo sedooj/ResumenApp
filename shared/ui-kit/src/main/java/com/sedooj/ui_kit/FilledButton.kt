@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +38,16 @@ fun FilledButton(
     onClick: () -> Unit,
     shape: RoundedCornerShape = RoundedCornerShape(10.dp),
     icon: Painter? = null,
+    isChecked: Boolean = false
 ) {
+    val notCheckedColors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+    contentColor = MaterialTheme.colorScheme.surfaceTint,
+    )
+    val checkedColors = ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.surfaceTint,
+        contentColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+    )
     Button(
         onClick = {
             onClick()
@@ -45,7 +55,7 @@ fun FilledButton(
         modifier = modifier,
         enabled = enabled,
         shape = shape,
-        colors = colors,
+        colors = if (isChecked) checkedColors else notCheckedColors,
         contentPadding = contentPadding,
         content = {
             Row(
