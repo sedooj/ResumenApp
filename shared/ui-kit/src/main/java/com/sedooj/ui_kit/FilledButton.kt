@@ -1,9 +1,12 @@
 package com.sedooj.ui_kit
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -54,9 +57,18 @@ fun FilledButton(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (icon != null) {
-                    Icon(painter = icon, contentDescription = label, modifier = Modifier.size(25.dp))
+                    Box(modifier = Modifier.fillMaxWidth().padding(start = 10.dp).weight(1f), contentAlignment = Alignment.CenterStart) {
+                        Icon(
+                            painter = icon,
+                            contentDescription = label,
+                            modifier = Modifier
+                                .size(25.dp)
+                        )
+                    }
                 }
-                Text(text = label, textAlign = TextAlign.Center)
+                Box(modifier = Modifier.fillMaxWidth().weight(4f), contentAlignment = if (icon != null) Alignment.CenterStart else Alignment.Center) {
+                    Text(text = label, textAlign = TextAlign.Center)
+                }
             }
         }
     )
