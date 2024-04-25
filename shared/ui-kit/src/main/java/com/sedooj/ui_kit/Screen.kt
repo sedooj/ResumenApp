@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +31,7 @@ fun Screen(
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     alignment: Alignment.Vertical = Alignment.CenterVertically,
+    paddingValues: Dp = 15.dp,
     content: @Composable () -> Unit
 ) {
     Scaffold(
@@ -58,7 +60,8 @@ fun Screen(
             ScaffoldContentComponent(
                 modifier = modifier.padding(it),
                 content = content,
-                alignment = alignment
+                alignment = alignment,
+                paddingValues = paddingValues
             )
         }
     )
@@ -69,7 +72,8 @@ fun Screen(
 private fun ScaffoldContentComponent(
     modifier: Modifier,
     content: @Composable () -> Unit,
-    alignment: Alignment.Vertical = Alignment.CenterVertically
+    alignment: Alignment.Vertical = Alignment.CenterVertically,
+    paddingValues: Dp
 ) {
     Surface(
         modifier = modifier
@@ -80,7 +84,7 @@ private fun ScaffoldContentComponent(
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
             verticalArrangement = Arrangement.spacedBy(
-                15.dp,
+                paddingValues,
                 alignment = alignment
             ),
             horizontalAlignment = Alignment.CenterHorizontally,

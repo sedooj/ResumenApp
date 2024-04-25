@@ -2,7 +2,6 @@ package com.sedooj.app_ui.pages.resume.create
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -13,16 +12,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.R
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.app_ui.pages.Routes
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
-import com.sedooj.app_ui.pages.resume.create.components.tabs.SetupTabs
-import com.sedooj.app_ui.pages.resume.create.components.tabs.TabContent
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.Screen
-import com.sedooj.ui_kit.TabsScreen
 
 @Destination<RootGraph>(
     start = false,
@@ -39,9 +34,9 @@ fun CreateResumePage(
     Screen(
         title = stringResource(id = string.create_resume),
         modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        alignment = Alignment.Top
+            .fillMaxSize(),
+        alignment = Alignment.Top,
+        paddingValues = 0.dp
     ) {
         CreateResumeComponentsPage(
             modifier = Modifier.fillMaxWidth()
