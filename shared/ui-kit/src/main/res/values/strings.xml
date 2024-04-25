@@ -21,9 +21,13 @@
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
     <string name="vacancy">Вакансия</string>
+    <string name="type_vacancy">Информация о должности</string>
     <string name="personal_main">Основная</string>
     <string name="personal_secondary">Дополнительная</string>
     <string name="personal_information">Персональная информация</string>
+    <string name="type_personal_information_main">Фамилия, имя, дата рождения</string>
+    <string name="type_personal_information_second">О себе, образование, контакты</string>
+    <string name="type_skills">Знания языков, soft, hard skills</string>
     <string name="education">Образование</string>
     <string name="faculty">Факультет</string>
     <string name="speciality">Специальность</string>

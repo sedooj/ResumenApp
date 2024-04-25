@@ -40,9 +40,9 @@ fun SetupTabs(
                         .size(45.dp)
                         .padding(10.dp)
                 )
-                if (tab.subTitle != -1337) {
+                if (tab.subTitle != null) {
                     Text(
-                        text = stringResource(id = tab.subTitle),
+                        text = stringResource(id = tab.subTitle!!),
                         maxLines = 1,
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
                         overflow = TextOverflow.Ellipsis,

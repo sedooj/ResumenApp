@@ -38,7 +38,7 @@ fun AnimatedBottomBar(
     AnimatedVisibility(
         visible = currentDestination == HOMEDestination || currentDestination == MYRESUMESDestination || currentDestination == PROFILEDestination,
         enter = slideInVertically(tween(200)) { it },
-        exit = slideOutVertically(tween(200)) { it }
+        exit = slideOutVertically(tween(100)) { it }
     ) {
         BottomBar(navController = navController)
     }

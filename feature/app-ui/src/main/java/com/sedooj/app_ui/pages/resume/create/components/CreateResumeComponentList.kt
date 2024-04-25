@@ -22,7 +22,8 @@ fun CreateResumeComponentsPage(
             headlineContent = {
                 Text(text = stringResource(id = it.title))
             }, supportingContent = {
-                Text(text = "${it.subTitle}")
+                if (it.subTitle != null)
+                    Text(text = stringResource(id = it.subTitle!!))
             }, leadingContent = {
                 Icon(
                     painter = painterResource(id = it.icon),
@@ -31,7 +32,8 @@ fun CreateResumeComponentsPage(
                 )
             }, modifier = modifier.clickable(onClick = {
                 onSelect()
-            }))
+            })
+        )
     }
 
 }
