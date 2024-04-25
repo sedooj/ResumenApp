@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.pages.resume.create.components.MainComponent
-import com.sedooj.app_ui.pages.resume.create.components.ResumeOptionsComponent
 import com.sedooj.app_ui.pages.resume.create.components.SecondComponent
 import com.sedooj.app_ui.pages.resume.create.components.VacancyComponent
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
@@ -46,12 +45,6 @@ fun TabContent(
     val aboutMe = rememberSaveable { mutableStateOf(personal?.aboutMe) }
     val personalQualities = rememberSaveable { mutableStateOf(personal?.personalQualities) }
     when (selectedTab) {
-        TabsModel.Tabs.RESUME -> ResumeOptionsComponent(
-            onValueChange = {
-                title.value = it
-            }, titleValue = title.value
-        )
-
         TabsModel.Tabs.VACANCY -> VacancyComponent(
             stackType = stackType.value,
             platformType = platformType.value,

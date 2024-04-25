@@ -28,6 +28,10 @@
     <string name="faculty">Факультет</string>
     <string name="speciality">Специальность</string>
     <string name="not_specified">Не указан</string>
+    <string name="type_name">Введите название</string>
+    <string name="type_name_only_latin">Введите название (только латинские символы)</string>
+    <string name="new_resume">New resume</string>
+    <string name="go_back">Вернуться назад</string>
     <string name="not_specified_femenine">Не указана</string>
     <string name="education_stage">Тип О.У.</string>
     <string name="has_errors_in_education">Имеются незаполненные поля в данных об образовательном учреждении</string>

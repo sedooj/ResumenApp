@@ -24,7 +24,7 @@ data class CreateResumeUiState(
 )
 
 data class TabsUiState(
-    var selectedTab: TabsModel.Tabs = TabsModel.Tabs.RESUME,
+    var selectedTab: TabsModel.Tabs = TabsModel.Tabs.PERSONAL_MAIN,
     var selectedTabId: Int = 0
 )
 

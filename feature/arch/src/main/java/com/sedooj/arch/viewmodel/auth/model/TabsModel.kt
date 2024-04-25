@@ -5,7 +5,6 @@ import com.sedooj.ui_kit.R
 interface TabsModel {
 
     enum class Tabs(val title: Int, val subTitle: Int, val icon: Int) {
-        RESUME(title = R.string.resume, -1337, icon = R.drawable.resume),
         VACANCY(title = R.string.vacancy,-1337, icon = R.drawable.bag),
         PERSONAL_MAIN(title = R.string.personal_information, subTitle = R.string.personal_main, icon = R.drawable.profile),
         PERSONAL_SECONDARY(title = R.string.personal_information, subTitle = R.string.personal_secondary, icon = R.drawable.profile),
