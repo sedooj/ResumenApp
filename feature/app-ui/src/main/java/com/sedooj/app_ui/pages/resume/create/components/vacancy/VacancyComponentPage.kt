@@ -105,19 +105,21 @@ fun VacancyComponentPage(
                 exit = scaleOut(tween(200))
             ) {
                 FloatingActionButton(onClick = {
-                    createResumeViewModel.updateVacancyInformation(
-                        CreateResumeUseCase.VacancyInformation(
-                            stackType = stackType!!,
-                            platformType = platformType!!,
-                            desiredRole = desiredRole,
-                            desiredSalary = desiredSalary,
-                            busynessType = busynessType,
-                            scheduleType = scheduleType!!,
-                            readyForTravelling = readyForTravelling,
-                            isChangesSaved = true
+                    if (stackType != null && platformType != null && scheduleType != null) {
+                        createResumeViewModel.updateVacancyInformation(
+                            CreateResumeUseCase.VacancyInformation(
+                                stackType = stackType!!,
+                                platformType = platformType!!,
+                                desiredRole = desiredRole,
+                                desiredSalary = desiredSalary,
+                                busynessType = busynessType,
+                                scheduleType = scheduleType!!,
+                                readyForTravelling = readyForTravelling,
+                                isChangesSaved = true
+                            )
                         )
-                    )
-                    isChangesSaved = true
+                        isChangesSaved = true
+                    }
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Done,

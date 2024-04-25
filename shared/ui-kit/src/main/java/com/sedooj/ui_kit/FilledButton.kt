@@ -31,7 +31,7 @@ fun FilledButton(
     contentPadding: PaddingValues = PaddingValues(10.dp),
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.surfaceTint,
-        contentColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.surfaceContainerLowest,
         disabledContainerColor = Color.DarkGray,
         disabledContentColor = Color.LightGray
     ),
