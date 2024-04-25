@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CreateResumeUiState(
-    var title: String? = null,
+    var title: String = "New resume",
     var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
     var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
     var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
@@ -130,7 +130,7 @@ class CreateResumeViewModel @Inject constructor(
     override fun dropUiState() {
         _uiState.update {
             it.copy(
-                title = null,
+                title = "New resume",
                 vacancyInformation = null,
                 personalInformation = null,
                 workExperienceInformation = null,

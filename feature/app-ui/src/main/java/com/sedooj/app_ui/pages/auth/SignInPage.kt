@@ -31,7 +31,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignInViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput

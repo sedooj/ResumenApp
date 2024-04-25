@@ -15,7 +15,7 @@ import com.sedooj.arch.viewmodel.auth.model.TabsModel
 @Composable
 fun CreateResumeComponentsPage(
     modifier: Modifier = Modifier,
-    onSelect: () -> Unit,
+    onSelect: (String) -> Unit,
 ) {
     TabsModel.Tabs.entries.forEach {
         ListItem(
@@ -31,7 +31,7 @@ fun CreateResumeComponentsPage(
                     modifier = Modifier.size(25.dp)
                 )
             }, modifier = modifier.clickable(onClick = {
-                onSelect()
+                onSelect(it.route)
             })
         )
     }

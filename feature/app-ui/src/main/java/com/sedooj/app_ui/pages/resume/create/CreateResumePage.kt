@@ -18,13 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
-import com.sedooj.app_ui.pages.Routes
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
+import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.EditableTitleScreen
 import com.sedooj.ui_kit.R.drawable
@@ -38,12 +37,12 @@ import com.sedooj.ui_kit.R.string
 @Composable
 fun CreateResumePage(
     destinationsNavigator: DestinationsNavigator,
-    createResumeViewModel: CreateResumeViewModel = hiltViewModel(),
+    createResumeViewModel: CreateResumeViewModel,
 ) {
-    val tabsUiState = createResumeViewModel.tabsState.collectAsState().value
+    val viewModel = createResumeViewModel.uiState.collectAsState().value
     val defaultTitle = stringResource(id = string.new_resume)
     val title = remember { mutableStateOf(TextFieldValue(
-        text = defaultTitle,
+        text = viewModel.title,
         selection = TextRange(0, defaultTitle.length)
     )) }
     val focusManager = LocalFocusManager.current
@@ -58,9 +57,10 @@ fun CreateResumePage(
                 text = it.text,
                 selection = TextRange(it.text.length)
             )
+            createResumeViewModel.updateTitle(it.text)
         },
         navigationButton = {
-            IconButton(onClick = { destinationsNavigator.navigateUp() }) {
+            IconButton(onClick = { destinationsNavigator.popBackStack() }) {
                 Icon(
                     painter = painterResource(id = drawable.arrow_back),
                     contentDescription = stringResource(
@@ -82,11 +82,23 @@ fun CreateResumePage(
             }
         }
     ) {
-        CreateResumeComponentsPage(
-            modifier = Modifier.fillMaxWidth(),
+        SetupComponentList(
             onSelect = {
-
+                destinationsNavigator.navigate(it)
+                createResumeViewModel.dropUiState()
             }
         )
     }
+}
+
+@Composable
+private fun SetupComponentList(
+    onSelect:(String) -> Unit
+) {
+    CreateResumeComponentsPage(
+        modifier = Modifier.fillMaxWidth(),
+        onSelect = {
+            onSelect(it)
+        }
+    )
 }

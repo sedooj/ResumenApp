@@ -1,4 +1,4 @@
-package com.sedooj.app_ui.pages.resume.create.components
+package com.sedooj.app_ui.pages.resume.create.components.vacancy
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size

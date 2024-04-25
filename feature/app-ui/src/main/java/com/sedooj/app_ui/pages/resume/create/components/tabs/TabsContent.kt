@@ -9,7 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.pages.resume.create.components.MainComponent
 import com.sedooj.app_ui.pages.resume.create.components.SecondComponent
-import com.sedooj.app_ui.pages.resume.create.components.VacancyComponent
+import com.sedooj.app_ui.pages.resume.create.components.vacancy.VacancyComponent
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 

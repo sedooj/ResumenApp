@@ -5,8 +5,7 @@ import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
 import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
 import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
-import com.sedooj.app_ui.R
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
 
