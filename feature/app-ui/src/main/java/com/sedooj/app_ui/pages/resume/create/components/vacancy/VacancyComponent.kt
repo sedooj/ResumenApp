@@ -2,6 +2,7 @@ package com.sedooj.app_ui.pages.resume.create.components.vacancy
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -13,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -44,6 +46,7 @@ fun VacancyComponent(
     onScheduleSelect: (ScheduleType) -> Unit,
     onReadyTravelValueChange: () -> Unit,
 ) {
+    val focus = LocalFocusManager.current
     StackTypeMenu(
         onSelect = {
             onStackSelect(it)
@@ -78,7 +81,10 @@ fun VacancyComponent(
         onValueChange = {
             onSalaryValueChange(it)
         },
-        value = desiredSalary
+        value = desiredSalary,
+        keyboardActions = KeyboardActions(onDone = {
+            focus.clearFocus()
+        })
     )
     CheckButton(
         label = stringResource(id = R.string.ready_for_travelling),
@@ -95,7 +101,7 @@ private fun ScheduleTypeMenu(
     var isExpanded by remember { mutableStateOf(false) }
     MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) stringResource(id = R.string.schedule_picker) else stringResource(
+        label = if (selectedType == null) stringResource(id = R.string.schedule_picker) else stringResource(
             id = R.string.schedule_picked
         ),
         onClick = {
@@ -138,7 +144,7 @@ private fun BusynessTypeMenu(
     var isExpanded by remember { mutableStateOf(false) }
     MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) stringResource(id = R.string.busyness_picker) else stringResource(
+        label = if (selectedType == null) stringResource(id = R.string.busyness_picker) else stringResource(
             id = R.string.busyness_picked
         ),
         onClick = {
@@ -182,7 +188,7 @@ private fun StackTypeMenu(
     var isExpanded by remember { mutableStateOf(false) }
     MenuButton(
         modifier = Modifier.fillMaxWidth(),
-        label = if (selectedType != null) stringResource(id = R.string.stack_picker) else stringResource(
+        label = if (selectedType == null) stringResource(id = R.string.stack_picker) else stringResource(
             id = R.string.stack_picked
         ),
         onClick = {

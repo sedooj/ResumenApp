@@ -26,6 +26,7 @@ data class CreateResumeUseCase(
         var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
+        var isChangesSaved: Boolean
     )
 
     data class PersonalInformation(

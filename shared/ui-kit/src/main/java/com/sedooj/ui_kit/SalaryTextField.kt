@@ -3,6 +3,7 @@ package com.sedooj.ui_kit
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +24,7 @@ fun SalaryTextField(
     label: Int,
     onValueChange: (String) -> Unit,
     value: String,
+    keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
@@ -86,5 +88,6 @@ fun SalaryTextField(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
         ),
+        keyboardActions = keyboardActions
     )
 }

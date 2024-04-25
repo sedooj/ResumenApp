@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,10 +31,10 @@ fun MenuButton(
     content: @Composable () -> Unit,
 ) {
     val notCheckedColors = OutlinedTextFieldDefaults.colors(
-        disabledBorderColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        disabledLabelColor = MaterialTheme.colorScheme.surfaceTint,
+        disabledBorderColor = MaterialTheme.colorScheme.error,
+        disabledLabelColor = MaterialTheme.colorScheme.error,
         disabledTextColor = MaterialTheme.colorScheme.surfaceTint,
-        disabledTrailingIconColor = MaterialTheme.colorScheme.surfaceTint
+        disabledTrailingIconColor = MaterialTheme.colorScheme.error
     )
     val checkedColors = OutlinedTextFieldDefaults.colors(
         disabledBorderColor = MaterialTheme.colorScheme.surfaceTint,
@@ -56,6 +57,15 @@ fun MenuButton(
             value = title,
             onValueChange = {},
             readOnly = false,
+            supportingText = {
+                if (!isChecked)
+                    Text(
+                        text = label,
+                        maxLines = 1,
+                        color = MaterialTheme.colorScheme.error,
+                        overflow = TextOverflow.Ellipsis
+                    )
+            },
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.KeyboardArrowDown,

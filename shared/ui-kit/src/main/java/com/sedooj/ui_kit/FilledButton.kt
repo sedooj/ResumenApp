@@ -30,24 +30,15 @@ fun FilledButton(
     enabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(10.dp),
     colors: ButtonColors = ButtonDefaults.buttonColors(
-        containerColor = Color.Black,
-        contentColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surfaceTint,
+        contentColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         disabledContainerColor = Color.DarkGray,
         disabledContentColor = Color.LightGray
     ),
     onClick: () -> Unit,
     shape: RoundedCornerShape = RoundedCornerShape(10.dp),
-    icon: Painter? = null,
-    isChecked: Boolean = false
+    icon: Painter? = null
 ) {
-    val notCheckedColors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-    contentColor = MaterialTheme.colorScheme.surfaceTint,
-    )
-    val checkedColors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.surfaceTint,
-        contentColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-    )
     Button(
         onClick = {
             onClick()
@@ -55,7 +46,7 @@ fun FilledButton(
         modifier = modifier,
         enabled = enabled,
         shape = shape,
-        colors = if (isChecked) checkedColors else notCheckedColors,
+        colors = colors,
         contentPadding = contentPadding,
         content = {
             Row(

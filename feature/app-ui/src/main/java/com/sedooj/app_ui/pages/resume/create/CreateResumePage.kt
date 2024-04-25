@@ -40,11 +40,15 @@ fun CreateResumePage(
     createResumeViewModel: CreateResumeViewModel,
 ) {
     val viewModel = createResumeViewModel.uiState.collectAsState().value
-    val defaultTitle = stringResource(id = string.new_resume)
-    val title = remember { mutableStateOf(TextFieldValue(
-        text = viewModel.title,
-        selection = TextRange(0, defaultTitle.length)
-    )) }
+    val defaultTitle = "New resume"
+    val title = remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = viewModel.title,
+                selection = if (viewModel.title == defaultTitle) TextRange(0, defaultTitle.length) else TextRange(0)
+            )
+        )
+    }
     val focusManager = LocalFocusManager.current
     EditableTitleScreen(
         title = title.value,
@@ -60,7 +64,10 @@ fun CreateResumePage(
             createResumeViewModel.updateTitle(it.text)
         },
         navigationButton = {
-            IconButton(onClick = { destinationsNavigator.popBackStack() }) {
+            IconButton(onClick = {
+                destinationsNavigator.navigateUp()
+                createResumeViewModel.dropUiState()
+            }) {
                 Icon(
                     painter = painterResource(id = drawable.arrow_back),
                     contentDescription = stringResource(
@@ -85,7 +92,6 @@ fun CreateResumePage(
         SetupComponentList(
             onSelect = {
                 destinationsNavigator.navigate(it)
-                createResumeViewModel.dropUiState()
             }
         )
     }
@@ -93,7 +99,7 @@ fun CreateResumePage(
 
 @Composable
 private fun SetupComponentList(
-    onSelect:(String) -> Unit
+    onSelect: (String) -> Unit,
 ) {
     CreateResumeComponentsPage(
         modifier = Modifier.fillMaxWidth(),
