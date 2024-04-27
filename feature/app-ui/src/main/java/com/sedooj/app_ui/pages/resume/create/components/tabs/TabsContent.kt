@@ -23,20 +23,7 @@
 //    // Vacancy information
 //
 //    // Personal information
-//    val personal = createResumeViewModel.uiState.collectAsState().value.personalInformation
-//    val firstName = rememberSaveable { mutableStateOf(personal?.firstName) }
-//    val secondName = rememberSaveable { mutableStateOf(personal?.secondName) }
-//    val thirdName = rememberSaveable { mutableStateOf(personal?.thirdName) }
-//    val dateOfBirth = rememberSaveable { mutableStateOf(personal?.dateOfBirth) }
-//    val city = rememberSaveable { mutableStateOf(personal?.city) }
-//    val residenceCountry = rememberSaveable { mutableStateOf(personal?.residenceCountry) }
-//    val genderType = rememberSaveable { mutableStateOf(personal?.genderType) }
-//    val maritalStatus = rememberSaveable { mutableStateOf(personal?.maritalStatus) }
-//    val education = remember { mutableStateListOf<Education>() }
-//    val hasChild = rememberSaveable { mutableStateOf(personal?.hasChild) }
-//    val socialMedia = rememberSaveable { mutableStateOf(personal?.socialMedia) }
-//    val aboutMe = rememberSaveable { mutableStateOf(personal?.aboutMe) }
-//    val personalQualities = rememberSaveable { mutableStateOf(personal?.personalQualities) }
+//
 //    when (selectedTab) {
 //        TabsModel.Tabs.PERSONAL_MAIN -> MainComponent(
 //            firstName = firstName.value,

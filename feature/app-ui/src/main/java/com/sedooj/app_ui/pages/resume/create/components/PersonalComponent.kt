@@ -45,6 +45,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInf
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.Field
 import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.MenuButton
@@ -52,7 +53,24 @@ import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 
 @Composable
+fun FieldField(
+    field: Field,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
+    NotNullableValueTextField(
+        label = field.label,
+        onValueChange = onValueChange,
+        value = value,
+        modifier = modifier,
+    )
+}
+
+@Composable
 fun MainComponent(
+    data: Map<Field, String>,
     firstName: String?,
     secondName: String?,
     thirdName: String?,
@@ -61,10 +79,24 @@ fun MainComponent(
     residenceCountry: String?,
     genderType: GenderType?,
     maritalStatus: MaritalStatus?,
+    onValueChange: (Field, String) -> Unit
     onDate: (String?) -> Unit,
     onGenderType: (GenderType) -> Unit,
     onMaritalType: (MaritalStatus) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    Column(
+        modifier = modifier,
+    ) {
+        data.forEach { (field, value) ->
+            FieldField(
+                field = field,
+                value = value,
+                onValueChange = { onValueChange(field, it) },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
     NotNullableValueTextField(
         label = R.string.firstname,
         onValueChange = {

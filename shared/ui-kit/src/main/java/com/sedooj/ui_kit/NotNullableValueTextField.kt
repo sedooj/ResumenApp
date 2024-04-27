@@ -1,6 +1,5 @@
 package com.sedooj.ui_kit
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -19,9 +18,10 @@ fun NotNullableValueTextField(
     label: Int,
     onValueChange: (String) -> Unit,
     value: String?,
+    modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         value = value ?: "",
         onValueChange = {
             onValueChange(it)
