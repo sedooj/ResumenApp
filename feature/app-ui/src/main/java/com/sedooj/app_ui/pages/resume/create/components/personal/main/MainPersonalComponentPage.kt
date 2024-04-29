@@ -25,9 +25,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.pages.resume.create.components.EducationConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.GenderConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.MainComponent
 import com.sedooj.app_ui.pages.resume.create.components.MaritalConvertibleContainer
@@ -45,6 +47,14 @@ enum class PageFields(
 ) {
     FIRST_NAME(fieldName = R.string.firstname, defaultValue = TextValue(""), readOnly = false),
     SECOND_NAME(fieldName = R.string.secondname, defaultValue = TextValue(""), readOnly = false),
+    THIRD_NAME(fieldName = R.string.thirdname, defaultValue = TextValue(""), readOnly = false),
+    CITY(fieldName = R.string.city, defaultValue = TextValue(""), readOnly = false),
+    RESIDENCE_COUNTRY(
+        fieldName = R.string.residence_country,
+        defaultValue = TextValue(""),
+        readOnly = false
+    ),
+    ABOUT_ME(fieldName = R.string.about_me, defaultValue = TextValue(""), readOnly = false),
     GENDER(
         fieldName = R.string.gender_picker,
         defaultValue = CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
@@ -70,6 +80,25 @@ enum class PageFields(
             CustomValue(MaritalConvertibleContainer(MaritalStatus.FEMALE_MARRIED))
         ),
         readOnly = true
+    ),
+    EDUCATION(
+        fieldName = R.string.education,
+        defaultValue = CustomValue(
+            EducationConvertibleContainer(
+                listOf(
+                    CreateResumeUseCase.PersonalInformation.Education(
+                        educationStage = EducationStage.NOT_SPECIFIED,
+                        title = "",
+                        locationCity = "",
+                        enterDate = "",
+                        graduatedDate = "",
+                        faculty = "",
+                        speciality = ""
+                    )
+                )
+            )
+        ),
+        readOnly = false
     )
 }
 
@@ -83,6 +112,20 @@ fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): Snapsho
             PageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(initInfo.secondName) else TextValue(
                 ""
             ),
+            PageFields.THIRD_NAME to if (initInfo?.thirdName != null) TextValue(initInfo.thirdName!!) else TextValue(
+                ""
+            ),
+            PageFields.CITY to if (initInfo?.city != null) TextValue(initInfo.city) else TextValue(
+                ""
+            ),
+            PageFields.RESIDENCE_COUNTRY to if (initInfo?.residenceCountry != null) TextValue(
+                initInfo.residenceCountry
+            ) else TextValue(
+                ""
+            ),
+            PageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
+                ""
+            ),
             PageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
                 GenderConvertibleContainer(initInfo.genderType)
             ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
@@ -90,6 +133,35 @@ fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): Snapsho
                 MaritalConvertibleContainer(initInfo.maritalStatus)
             ) else CustomValue(
                 MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
+            ),
+            PageFields.EDUCATION to if (initInfo?.education == null) CustomValue(
+                EducationConvertibleContainer(
+                    listOf(
+                        CreateResumeUseCase.PersonalInformation.Education(
+                            educationStage = EducationStage.NOT_SPECIFIED,
+                            title = "",
+                            locationCity = "",
+                            enterDate = "",
+                            graduatedDate = "",
+                            faculty = "",
+                            speciality = ""
+                        )
+                    )
+                )
+            ) else CustomValue(
+                EducationConvertibleContainer(
+                    initInfo.education.map {
+                        CreateResumeUseCase.PersonalInformation.Education(
+                            educationStage = it.educationStage,
+                            title = it.title,
+                            locationCity = it.locationCity,
+                            enterDate = it.enterDate,
+                            graduatedDate = it.graduatedDate,
+                            faculty = it.faculty,
+                            speciality = it.speciality
+                        )
+                    }
+                )
             )
         )
     }

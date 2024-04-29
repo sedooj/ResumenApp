@@ -77,13 +77,21 @@ value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleV
     }
 }
 
+@JvmInline
+value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue {
+    @Composable
+    override fun asStringValue(): String {
+        return "todo"
+    }
+}
+
 @Composable
 fun InputTextField(
     field: PageFields,
     value: String,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
-    readOnly: Boolean = false
+    readOnly: Boolean = false,
 ) {
     NotNullableValueTextField(label = field.fieldName, onValueChange = {
         onValueChange(TextValue(it))
@@ -98,7 +106,7 @@ fun Field(
     value: FieldValue,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
-    readOnly: Boolean
+    readOnly: Boolean,
 ) {
     var isFocused by remember { mutableStateOf(false) }
     Column {
@@ -130,7 +138,7 @@ fun Field(
                                 overflow = TextOverflow.Ellipsis
                             )
                         },
-                        enabled = value.asStringValue() !=  it.value.asStringValue()
+                        enabled = value.asStringValue() != it.value.asStringValue()
                     )
                 }
             }
@@ -155,7 +163,7 @@ fun MainComponent(
     Column(
         modifier = modifier,
     ) {
-        data.forEach { (field, value) ->
+        data.toSortedMap().forEach { (field, value) ->
             Field(
                 field = field,
                 value = value,
