@@ -182,7 +182,7 @@ fun SecondPersonalComponentPage(
         modifier = Modifier
             .fillMaxSize()
             .padding(15.dp),
-        title = stringResource(id = R.string.vacancy),
+        title = stringResource(id = R.string.personal_information),
         navigationButton = {
             IconButton(onClick = {
 //                if (!isChangesSaved)
