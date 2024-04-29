@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Resumen</string>
+    <string name="social_media">Контакты</string>
     <string name="about_me">О себе</string>
     <string name="has_children">Есть дети</string>
     <string name="has_children_yes">Есть дети</string>
-    <string name="has_children_no">Есть дети</string>
+    <string name="has_children_no">Нет детей</string>
     <string name="save">Сохранить</string>
     <string name="yes">Да</string>
     <string name="cancel">Назад</string>
@@ -70,6 +71,7 @@
     <string name="female_married">Замужем</string>
     <string name="city">Город</string>
     <string name="residence_country">Страна проживания</string>
+    <string name="personal_qualities">Личные качества</string>
     <string name="gender_picker">Пол</string>
     <string name="marital_picker">Семейное положение</string>
     <string name="birth_date">Дата рождения</string>

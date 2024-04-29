@@ -25,15 +25,17 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
-import com.sedooj.app_ui.pages.resume.create.components.EducationConvertibleContainer
-import com.sedooj.app_ui.pages.resume.create.components.GenderConvertibleContainer
-import com.sedooj.app_ui.pages.resume.create.components.HasChildConvertibleContainer
-import com.sedooj.app_ui.pages.resume.create.components.MainComponent
-import com.sedooj.app_ui.pages.resume.create.components.MaritalConvertibleContainer
+import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.GenderConvertibleContainer
+import com.sedooj.app_ui.pages.resume.create.components.generic.HasChildConvertibleContainer
+import com.sedooj.app_ui.pages.resume.create.components.generic.MaritalConvertibleContainer
+import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.content.MainComponent
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -55,7 +57,6 @@ enum class PageFields(
         defaultValue = TextValue(""),
         readOnly = false
     ),
-    ABOUT_ME(fieldName = R.string.about_me, defaultValue = TextValue(""), readOnly = false),
     GENDER(
         fieldName = R.string.gender_picker,
         defaultValue = CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
@@ -87,31 +88,16 @@ enum class PageFields(
         defaultValue = CustomValue(
             HasChildConvertibleContainer(false)
         ),
-        readOnly = true
-    ),
-    EDUCATION(
-        fieldName = R.string.education,
-        defaultValue = CustomValue(
-            EducationConvertibleContainer(
-                listOf(
-                    CreateResumeUseCase.PersonalInformation.Education(
-                        educationStage = EducationStage.NOT_SPECIFIED,
-                        title = "",
-                        locationCity = "",
-                        enterDate = "",
-                        graduatedDate = "",
-                        faculty = "",
-                        speciality = ""
-                    )
-                )
-            )
+        suggestions = listOf(
+            CustomValue(HasChildConvertibleContainer(false)),
+            CustomValue(HasChildConvertibleContainer(true)),
         ),
-        readOnly = false
+        readOnly = true
     )
 }
 
 @Composable
-fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<PageFields, FieldValue> {
+private fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<PageFields, FieldValue> {
     return remember {
         mutableStateMapOf(
             PageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(initInfo.firstName) else TextValue(
@@ -131,8 +117,13 @@ fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): Snapsho
             ) else TextValue(
                 ""
             ),
-            PageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
-                ""
+
+            PageFields.HAS_CHILD to if (initInfo?.hasChild != null) CustomValue(
+                HasChildConvertibleContainer(initInfo.hasChild)
+            ) else CustomValue(
+                HasChildConvertibleContainer(
+                    false
+                )
             ),
             PageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
                 GenderConvertibleContainer(initInfo.genderType)
@@ -142,35 +133,6 @@ fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): Snapsho
             ) else CustomValue(
                 MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
             ),
-            PageFields.EDUCATION to if (initInfo?.education == null) CustomValue(
-                EducationConvertibleContainer(
-                    listOf(
-                        CreateResumeUseCase.PersonalInformation.Education(
-                            educationStage = EducationStage.NOT_SPECIFIED,
-                            title = "",
-                            locationCity = "",
-                            enterDate = "",
-                            graduatedDate = "",
-                            faculty = "",
-                            speciality = ""
-                        )
-                    )
-                )
-            ) else CustomValue(
-                EducationConvertibleContainer(
-                    initInfo.education.map {
-                        CreateResumeUseCase.PersonalInformation.Education(
-                            educationStage = it.educationStage,
-                            title = it.title,
-                            locationCity = it.locationCity,
-                            enterDate = it.enterDate,
-                            graduatedDate = it.graduatedDate,
-                            faculty = it.faculty,
-                            speciality = it.speciality
-                        )
-                    }
-                )
-            )
         )
     }
 }

@@ -1,4 +1,5 @@
-package com.sedooj.app_ui.pages.resume.create.components
+package com.sedooj.app_ui.pages.resume.create.components.personal.main.content
+
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -46,55 +47,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.ConvertibleValue
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.CustomValue
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.EducationItemComponent
+import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.app_ui.pages.resume.create.components.personal.main.PageFields
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.TextValue
 import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.MenuButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 
-@JvmInline
-value class GenderConvertibleContainer(val value: GenderType) : ConvertibleValue {
-    @Composable
-    override fun asStringValue(): String {
-        return stringResource(id = value.title)
-    }
-}
-
-@JvmInline
-value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleValue {
-    @Composable
-    override fun asStringValue(): String {
-        return stringResource(id = value.title)
-    }
-}
-
-@JvmInline
-value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue {
-    @Composable
-    override fun asStringValue(): String {
-        return "todo"
-    }
-}
-
-@JvmInline
-value class HasChildConvertibleContainer(val value: Boolean) : ConvertibleValue {
-    @Composable
-    override fun asStringValue(): String {
-        return if (value) stringResource(id = R.string.has_children_yes) else stringResource(id = R.string.has_children_no)
-    }
-}
-
 @Composable
-fun InputTextField(
+private fun InputTextField(
     field: PageFields,
     value: String,
     onValueChange: (FieldValue) -> Unit,
@@ -105,7 +73,6 @@ fun InputTextField(
         onValueChange(TextValue(it))
     }, value = value, modifier = modifier, readOnly = readOnly)
 }
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -143,7 +110,8 @@ fun Field(
                             Text(
                                 text = it.value.asStringValue(),
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
                             )
                         },
                         enabled = value.asStringValue() != it.value.asStringValue()
@@ -154,13 +122,6 @@ fun Field(
     }
 }
 
-@Composable
-fun FieldValue.asStringValue(): String {
-    return when (this) {
-        is CustomValue<*> -> value.asStringValue()
-        is TextValue -> text
-    }
-}
 
 @Composable
 fun MainComponent(
@@ -183,22 +144,6 @@ fun MainComponent(
     }
 }
 
-@Composable
-fun SecondComponent(
-    education: List<Education>,
-    hasChild: Boolean?,
-    socialMedia: List<SocialMedia>?,
-    aboutMe: String?,
-    personalQualities: String?,
-    onEducation: (Int, Education) -> Unit,
-    onDropEducation: (Int) -> Unit,
-) {
-    EducationList(education = education, onEducation = { i, s ->
-        onEducation(i, s)
-    }, onDropEducation = {
-        onDropEducation(it)
-    })
-}
 
 @Composable
 fun EducationList(
