@@ -14,6 +14,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,6 +29,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,115 +39,121 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.Field
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.ConvertibleValue
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.CustomValue
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.PageFields
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.TextValue
 import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.MenuButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 
+@JvmInline
+value class GenderConvertibleContainer(val value: GenderType) : ConvertibleValue {
+    @Composable
+    override fun asStringValue(): String {
+        return stringResource(id = value.title)
+    }
+}
+
+@JvmInline
+value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleValue {
+    @Composable
+    override fun asStringValue(): String {
+        return stringResource(id = value.title)
+    }
+}
+
 @Composable
-fun FieldField(
-    field: Field,
+fun InputTextField(
+    field: PageFields,
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier)
+}
 
-    NotNullableValueTextField(
-        label = field.label,
-        onValueChange = onValueChange,
-        value = value,
-        modifier = modifier,
-    )
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun Field(
+    field: PageFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    Column {
+        InputTextField(
+            field = field,
+            value = value.asStringValue(),
+            onValueChange = onValueChange,
+            modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+        )
+        AnimatedVisibility(visible = isFocused) {
+            FlowRow {
+                field.suggestions.forEach {
+                    SuggestionChip(
+                        onClick = {
+                            onValueChange(it)
+                        },
+                        label = {
+                            Text(
+                                text = it.value.asStringValue(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FieldValue.asStringValue(): String {
+    return when (this) {
+        is CustomValue<*> -> value.asStringValue()
+        is TextValue -> text
+    }
 }
 
 @Composable
 fun MainComponent(
-    data: Map<Field, String>,
-    firstName: String?,
-    secondName: String?,
-    thirdName: String?,
-    dateOfBirth: String?,
-    city: String?,
-    residenceCountry: String?,
-    genderType: GenderType?,
-    maritalStatus: MaritalStatus?,
-    onValueChange: (Field, String) -> Unit
-    onDate: (String?) -> Unit,
-    onGenderType: (GenderType) -> Unit,
-    onMaritalType: (MaritalStatus) -> Unit,
+    data: Map<PageFields, FieldValue>,
+    onValueChange: (PageFields, FieldValue) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
         data.forEach { (field, value) ->
-            FieldField(
+            Field(
                 field = field,
                 value = value,
-                onValueChange = { onValueChange(field, it) },
+                onValueChange = { },
                 modifier = Modifier.fillMaxWidth(),
             )
+
         }
     }
-    NotNullableValueTextField(
-        label = R.string.firstname,
-        onValueChange = {
-            TODO()
-        }, value = firstName
-    )
-    NotNullableValueTextField(
-        label = R.string.secondname,
-        onValueChange = {
-            TODO()
-        }, value = secondName
-    )
-    NotNullableValueTextField(
-        label = R.string.thirdname,
-        onValueChange = {
-            TODO()
-        }, value = thirdName
-    )
-    DatePickerComponent(
-        dateOfBirth = dateOfBirth,
-        onDate = {
-            onDate(it)
-        }
-    )
-    NotNullableValueTextField(
-        label = R.string.city,
-        onValueChange = {
-            TODO()
-        }, value = city
-    )
-    NotNullableValueTextField(
-        label = R.string.residence_country,
-        onValueChange = {
-            TODO()
-        }, value = residenceCountry
-    )
-    GenderComponent(genderType = genderType,
-        onGenderType = {
-            onGenderType(it)
-        }
-    )
-    MaritalComponent(
-        maritalType = maritalStatus,
-        genderType = genderType,
-        onMaritalType = {
-            onMaritalType(it)
-        }
-    )
 }
 
 @Composable
@@ -157,14 +166,11 @@ fun SecondComponent(
     onEducation: (Int, Education) -> Unit,
     onDropEducation: (Int) -> Unit,
 ) {
-    EducationList(education = education,
-        onEducation = { i, s ->
-            onEducation(i, s)
-        },
-        onDropEducation = {
-            onDropEducation(it)
-        }
-    )
+    EducationList(education = education, onEducation = { i, s ->
+        onEducation(i, s)
+    }, onDropEducation = {
+        onDropEducation(it)
+    })
 }
 
 @Composable
@@ -180,11 +186,9 @@ fun EducationList(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.surfaceDim,
-                shape = RoundedCornerShape(10.dp)
+                color = MaterialTheme.colorScheme.surfaceDim, shape = RoundedCornerShape(10.dp)
             )
-            .padding(10.dp),
-        contentAlignment = Alignment.Center
+            .padding(10.dp), contentAlignment = Alignment.Center
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
@@ -237,8 +241,7 @@ fun EducationList(
                         education = edu,
                         onEditEducation = { },
                         onDropEducation = {
-                            if (education.size < 2)
-                                isExpanded = false
+                            if (education.size < 2) isExpanded = false
                             onDropEducation(i)
                         },
                         modifier = Modifier.fillMaxSize(),
@@ -246,13 +249,11 @@ fun EducationList(
                 }
             }
 
-            FilledButton(
-                modifier = Modifier.fillMaxWidth(),
+            FilledButton(modifier = Modifier.fillMaxWidth(),
                 label = stringResource(id = R.string.add_education_institution),
                 onClick = {
                     onEducation(
-                        if (education.isEmpty()) 0 else education.size + 1,
-                        Education(
+                        if (education.isEmpty()) 0 else education.size + 1, Education(
                             educationStage = EducationStage.NOT_SPECIFIED,
                             title = "",
                             locationCity = "",
@@ -263,114 +264,69 @@ fun EducationList(
 
                         )
                     )
-                }
-            )
+                })
         }
     }
 }
 
-@Composable
-private fun GenderComponent(
-    genderType: GenderType?,
-    onGenderType: (GenderType) -> Unit,
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-    MenuButton(
-        modifier = Modifier.fillMaxWidth(),
-        title = if (genderType != null) stringResource(id = genderType.title) else "",
-        label = stringResource(id = R.string.gender_picker),
-        onClick = { isExpanded = true },
-        isChecked = genderType != null,
-        isExpanded = isExpanded
-    ) {
-        DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
-        ) {
-            GenderType.entries.forEach { gender ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = gender.title),
-                            textAlign = TextAlign.Center,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                            maxLines = 1
-                        )
-                    },
-                    onClick = {
-                        onGenderType(gender)
-                        isExpanded = false
-                    },
-                    enabled = genderType != gender
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun MaritalComponent(
     maritalType: MaritalStatus?,
     onMaritalType: (MaritalStatus) -> Unit,
     genderType: GenderType?,
+    modifier: Modifier = Modifier,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     MenuButton(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         title = if (maritalType != null) stringResource(id = maritalType.title) else "",
         label = stringResource(id = R.string.marital_picker),
         onClick = {
             if (genderType != null) isExpanded = true else Toast.makeText(
-                context,
-                "Выберите пол",
-                Toast.LENGTH_SHORT
+                context, "Выберите пол", Toast.LENGTH_SHORT
             ).show()
         },
         isChecked = maritalType != null,
         isExpanded = isExpanded
     ) {
 
-        DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
-        ) {
+        DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             MaritalStatus.entries.forEach { marital ->
                 if (genderType != null) {
                     if (genderType == GenderType.MALE) {
-                        if (marital == MaritalStatus.MARRIED || marital == MaritalStatus.NOT_MARRIED)
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = stringResource(id = marital.title),
-                                        textAlign = TextAlign.Center,
-                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                                        maxLines = 1
-                                    )
-                                },
-                                onClick = {
-                                    onMaritalType(marital)
-                                    isExpanded = false
-                                },
-                                enabled = maritalType != marital
-                            )
+                        if (marital == MaritalStatus.MARRIED || marital == MaritalStatus.NOT_MARRIED) DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(id = marital.title),
+                                    textAlign = TextAlign.Center,
+                                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                    maxLines = 1
+                                )
+                            },
+                            onClick = {
+                                onMaritalType(marital)
+                                isExpanded = false
+                            },
+                            enabled = maritalType != marital
+                        )
                     } else if (genderType == GenderType.FEMALE) {
-                        if (marital == MaritalStatus.FEMALE_MARRIED || marital == MaritalStatus.FEMALE_NOT_MARRIED)
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = stringResource(id = marital.title),
-                                        textAlign = TextAlign.Center,
-                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                                        maxLines = 1
-                                    )
-                                },
-                                onClick = {
-                                    onMaritalType(marital)
-                                    isExpanded = false
-                                },
-                                enabled = maritalType != marital
-                            )
+                        if (marital == MaritalStatus.FEMALE_MARRIED || marital == MaritalStatus.FEMALE_NOT_MARRIED) DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(id = marital.title),
+                                    textAlign = TextAlign.Center,
+                                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                    maxLines = 1
+                                )
+                            },
+                            onClick = {
+                                onMaritalType(marital)
+                                isExpanded = false
+                            },
+                            enabled = maritalType != marital
+                        )
                     }
                 }
             }
@@ -383,12 +339,10 @@ private fun DatePickerComponent(
     dateOfBirth: String?,
     onDate: (String?) -> Unit,
 ) {
-    DateButton(
-        modifier = Modifier.fillMaxWidth(),
+    DateButton(modifier = Modifier.fillMaxWidth(),
         title = dateOfBirth ?: "",
         label = stringResource(id = R.string.birth_date),
         onEnterDate = {
             onDate(it)
-        }
-    )
+        })
 }

@@ -3,6 +3,7 @@ package com.sedooj.api.domain.data.types
 import com.sedooj.ui_kit.R
 
 enum class MaritalStatus(val title: Int, val genderType: GenderType) {
+    NOT_SELECTED(title = R.string.not_selected, genderType = GenderType.NOT_SELECTED),
     MARRIED(title = R.string.married, GenderType.MALE),
     NOT_MARRIED(title = R.string.not_married, GenderType.MALE),
     FEMALE_NOT_MARRIED(title = R.string.female_not_married, GenderType.FEMALE),

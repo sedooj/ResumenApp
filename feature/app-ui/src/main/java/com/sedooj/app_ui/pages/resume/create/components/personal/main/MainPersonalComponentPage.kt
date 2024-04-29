@@ -11,11 +11,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
@@ -27,30 +25,69 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.pages.resume.create.components.GenderConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.MainComponent
+import com.sedooj.app_ui.pages.resume.create.components.MaritalConvertibleContainer
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.Screen
 
-enum class Field(
+enum class PageFields(
     @StringRes
-    val label: Int,
-    val suggestions: List<Int> = emptyList(),
+    val fieldName: Int,
+    val defaultValue: FieldValue,
+    val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
 ) {
-    FIRSTNAME(R.string.firstname), SECONDNAME(R.string.secondname), GENDER(
-        R.string.gender_picker,
-        listOf(R.string.)
+    FIRST_NAME(fieldName = R.string.firstname, defaultValue = TextValue("")),
+    SECOND_NAME(fieldName = R.string.secondname, defaultValue = TextValue("")),
+    GENDER(
+        fieldName = R.string.gender_picker,
+        defaultValue = CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
+        suggestions = listOf(
+            CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
+            CustomValue(GenderConvertibleContainer(GenderType.MALE)),
+            CustomValue(GenderConvertibleContainer(GenderType.FEMALE))
+        ),
+    ),
+    MARITAL(
+        fieldName = R.string.marital_picker,
+        defaultValue = CustomValue(
+            MaritalConvertibleContainer(
+                MaritalStatus.NOT_SELECTED
+            )
+        ),
+        suggestions = listOf(
+            CustomValue(MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)),
+            CustomValue(MaritalConvertibleContainer(MaritalStatus.NOT_MARRIED)),
+            CustomValue(MaritalConvertibleContainer(MaritalStatus.MARRIED)),
+            CustomValue(MaritalConvertibleContainer(MaritalStatus.FEMALE_NOT_MARRIED)),
+            CustomValue(MaritalConvertibleContainer(MaritalStatus.FEMALE_MARRIED))
+        )
     )
 }
 
 @Composable
-fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<Field, String> {
+fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<PageFields, FieldValue> {
     return remember {
         mutableStateMapOf(
-            Field.FIRSTNAME to (initInfo?.firstName ?: ""),
-            Field.SECONDNAME to (initInfo?.secondName ?: ""),
+            PageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(initInfo.firstName) else TextValue(
+                ""
+            ),
+            PageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(initInfo.secondName) else TextValue(
+                ""
+            ),
+            PageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
+                GenderConvertibleContainer(initInfo.genderType)
+            ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
+            PageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
+                MaritalConvertibleContainer(initInfo.maritalStatus)
+            ) else CustomValue(
+                MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
+            )
         )
     }
 }
@@ -74,20 +111,7 @@ fun MainPersonalComponentPage(
     }
     val personal = createResumeViewModel.uiState.collectAsState().value.personalInformation
     val data = rememberDataMap(personal)
-    var firstName by rememberSaveable { mutableStateOf(personal?.firstName) }
-    val secondName = rememberSaveable { mutableStateOf(personal?.secondName) }
-    val thirdName = rememberSaveable { mutableStateOf(personal?.thirdName) }
-    val dateOfBirth = rememberSaveable { mutableStateOf(personal?.dateOfBirth) }
-    val city = rememberSaveable { mutableStateOf(personal?.city) }
-    val residenceCountry = rememberSaveable { mutableStateOf(personal?.residenceCountry) }
-    val genderType = rememberSaveable { mutableStateOf(personal?.genderType) }
-    val maritalStatus = rememberSaveable { mutableStateOf(personal?.maritalStatus) }
-    val education =
-        remember { mutableStateListOf<CreateResumeUseCase.PersonalInformation.Education>() }
-    val hasChild = rememberSaveable { mutableStateOf(personal?.hasChild) }
-    val socialMedia = rememberSaveable { mutableStateOf(personal?.socialMedia) }
-    val aboutMe = rememberSaveable { mutableStateOf(personal?.aboutMe) }
-    val personalQualities = rememberSaveable { mutableStateOf(personal?.personalQualities) }
+
     Screen(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +159,7 @@ fun MainPersonalComponentPage(
             onValueChange = { field, value ->
                 data[field] = value
             },
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
         )
         //TODO()
     }

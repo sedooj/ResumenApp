@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDestination
+import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALMAINDestination
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.destination
@@ -35,6 +36,9 @@ fun MainScreen() {
                     dependency(createResumeViewModel)
                 }
                 destination(CREATERESUMEVACANCYDestination) {
+                    dependency(createResumeViewModel)
+                }
+                destination(CREATERESUMEPERSONALMAINDestination) {
                     dependency(createResumeViewModel)
                 }
             }

@@ -59,6 +59,7 @@
     <string name="thirdname">Отчество</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
+    <string name="not_selected">Не выбран</string>
     <string name="married">Женат</string>
     <string name="not_married">Не женат</string>
     <string name="female_not_married">Не замужем</string>
