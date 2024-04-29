@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Resumen</string>
+    <string name="about_me">О себе</string>
+    <string name="has_children">Есть дети</string>
+    <string name="has_children_yes">Есть дети</string>
+    <string name="has_children_no">Есть дети</string>
     <string name="save">Сохранить</string>
     <string name="yes">Да</string>
     <string name="cancel">Назад</string>
