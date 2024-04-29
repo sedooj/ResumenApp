@@ -83,10 +83,11 @@ fun InputTextField(
     value: String,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false
 ) {
     NotNullableValueTextField(label = field.fieldName, onValueChange = {
         onValueChange(TextValue(it))
-    }, value = value, modifier = modifier)
+    }, value = value, modifier = modifier, readOnly = readOnly)
 }
 
 
@@ -97,6 +98,7 @@ fun Field(
     value: FieldValue,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
+    readOnly: Boolean
 ) {
     var isFocused by remember { mutableStateOf(false) }
     Column {
@@ -105,9 +107,17 @@ fun Field(
             value = value.asStringValue(),
             onValueChange = onValueChange,
             modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+            readOnly = readOnly
         )
-        AnimatedVisibility(visible = isFocused) {
-            FlowRow {
+        AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 field.suggestions.forEach {
                     SuggestionChip(
                         onClick = {
@@ -120,6 +130,7 @@ fun Field(
                                 overflow = TextOverflow.Ellipsis
                             )
                         },
+                        enabled = value.asStringValue() !=  it.value.asStringValue()
                     )
                 }
             }
@@ -148,10 +159,10 @@ fun MainComponent(
             Field(
                 field = field,
                 value = value,
-                onValueChange = { },
+                onValueChange = { onValueChange(field, it) },
                 modifier = Modifier.fillMaxWidth(),
+                readOnly = field.readOnly
             )
-
         }
     }
 }

@@ -19,9 +19,11 @@ fun NotNullableValueTextField(
     onValueChange: (String) -> Unit,
     value: String?,
     modifier: Modifier = Modifier,
+    readOnly: Boolean
 ) {
     OutlinedTextField(
         modifier = modifier,
+        readOnly = readOnly,
         value = value ?: "",
         onValueChange = {
             onValueChange(it)

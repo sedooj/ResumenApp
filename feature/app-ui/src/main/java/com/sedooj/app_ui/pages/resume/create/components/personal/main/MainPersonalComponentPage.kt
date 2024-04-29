@@ -40,10 +40,11 @@ enum class PageFields(
     @StringRes
     val fieldName: Int,
     val defaultValue: FieldValue,
+    val readOnly: Boolean,
     val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
 ) {
-    FIRST_NAME(fieldName = R.string.firstname, defaultValue = TextValue("")),
-    SECOND_NAME(fieldName = R.string.secondname, defaultValue = TextValue("")),
+    FIRST_NAME(fieldName = R.string.firstname, defaultValue = TextValue(""), readOnly = false),
+    SECOND_NAME(fieldName = R.string.secondname, defaultValue = TextValue(""), readOnly = false),
     GENDER(
         fieldName = R.string.gender_picker,
         defaultValue = CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
@@ -52,6 +53,7 @@ enum class PageFields(
             CustomValue(GenderConvertibleContainer(GenderType.MALE)),
             CustomValue(GenderConvertibleContainer(GenderType.FEMALE))
         ),
+        readOnly = true
     ),
     MARITAL(
         fieldName = R.string.marital_picker,
@@ -66,7 +68,8 @@ enum class PageFields(
             CustomValue(MaritalConvertibleContainer(MaritalStatus.MARRIED)),
             CustomValue(MaritalConvertibleContainer(MaritalStatus.FEMALE_NOT_MARRIED)),
             CustomValue(MaritalConvertibleContainer(MaritalStatus.FEMALE_MARRIED))
-        )
+        ),
+        readOnly = true
     )
 }
 
