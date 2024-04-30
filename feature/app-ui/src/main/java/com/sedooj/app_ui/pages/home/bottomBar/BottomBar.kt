@@ -1,7 +1,6 @@
 package com.sedooj.app_ui.pages.home.bottomBar
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -58,7 +57,9 @@ fun BottomBar(
     ) {
         BottomBarDestination.entries.forEach { destination ->
             NavigationBarItem(
-                modifier = Modifier.fillMaxWidth().weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 selected = currentDestination == destination.direction,
                 onClick = {
                     if (currentDestination != destination.direction) {
@@ -66,15 +67,21 @@ fun BottomBar(
 //                        if (findDestination == null) {
                         when (destination.direction) {
                             HOMEDestination -> {
-                                navController.navigate(HOMEDestination())
+                                navController.navigate(HOMEDestination()) {
+                                    launchSingleTop = true
+                                }
                             }
 
                             MYRESUMESDestination -> {
-                                navController.navigate(MYRESUMESDestination())
+                                navController.navigate(MYRESUMESDestination()) {
+                                    launchSingleTop = true
+                                }
                             }
 
                             PROFILEDestination -> {
-                                navController.navigate(PROFILEDestination())
+                                navController.navigate(PROFILEDestination()) {
+                                    launchSingleTop = true
+                                }
                             }
                         }
 //                        navController.navigate(
@@ -87,7 +94,6 @@ fun BottomBar(
 //                                launchSingleTop = true
 //                            }
 //                        } else {
-                        Log.d("TESSST", "${findDestination?.id}")
 //                        findDestination?.let { navController.navigateTo(findDestination.id) }
 //                        }
                     }
