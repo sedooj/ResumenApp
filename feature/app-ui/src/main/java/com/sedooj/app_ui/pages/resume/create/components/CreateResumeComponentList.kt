@@ -10,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.sedooj.arch.viewmodel.auth.model.TabsModel
+import com.ramcosta.composedestinations.spec.Direction
 
 @Composable
 fun CreateResumeComponentsPage(
     modifier: Modifier = Modifier,
-    onSelect: (String) -> Unit,
+    onSelect: (Direction) -> Unit,
 ) {
-    TabsModel.Tabs.entries.forEach {
+    ComponentList.entries.forEach {
         ListItem(
             headlineContent = {
                 Text(text = stringResource(id = it.title))
@@ -31,7 +31,7 @@ fun CreateResumeComponentsPage(
                     modifier = Modifier.size(25.dp)
                 )
             }, modifier = modifier.clickable(onClick = {
-                onSelect(it.route)
+                onSelect(it.direction)
             })
         )
     }

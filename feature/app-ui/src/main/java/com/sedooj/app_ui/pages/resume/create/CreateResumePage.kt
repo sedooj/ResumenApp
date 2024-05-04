@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
 import com.sedooj.arch.Routes
@@ -108,7 +109,9 @@ fun CreateResumePage(
     ) {
         SetupComponentList(
             onSelect = {
-                destinationsNavigator.navigate(it)
+                destinationsNavigator.navigate(it) {
+                    launchSingleTop = true
+                }
             }
         )
     }
@@ -166,7 +169,7 @@ private fun ShowAlert(setVisible: (Boolean) -> Unit, visible: Boolean, onConfirm
 
 @Composable
 private fun SetupComponentList(
-    onSelect: (String) -> Unit,
+    onSelect: (Direction) -> Unit,
 ) {
     CreateResumeComponentsPage(
         modifier = Modifier.fillMaxWidth(),

@@ -59,7 +59,7 @@ value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleV
 value class EducationConvertibleContainer(val value: List<CreateResumeUseCase.PersonalInformation.Education>) : ConvertibleValue {
     @Composable
     override fun asStringValue(): String {
-        return "todo"
+        return "todo" // TODO()
     }
 }
 

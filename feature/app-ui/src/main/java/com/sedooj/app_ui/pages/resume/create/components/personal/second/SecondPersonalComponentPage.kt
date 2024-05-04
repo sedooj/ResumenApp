@@ -46,6 +46,16 @@ enum class SecondPageFields(
     val readOnly: Boolean,
     val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
 ) {
+    ABOUT_ME(
+        fieldName = R.string.about_me,
+        defaultValue = TextValue(""),
+        readOnly = false
+    ),
+    PERSONAL_QUALITIES(
+        fieldName = R.string.personal_qualities,
+        defaultValue = TextValue(""),
+        readOnly = false
+    ),
     SOCIAL_MEDIA(
         fieldName = R.string.social_media,
         defaultValue = CustomValue(
@@ -59,16 +69,6 @@ enum class SecondPageFields(
             )
         ),
         readOnly = true
-    ),
-    ABOUT_ME(
-        fieldName = R.string.about_me,
-        defaultValue = TextValue(""),
-        readOnly = false
-    ),
-    PERSONAL_QUALITIES(
-        fieldName = R.string.personal_qualities,
-        defaultValue = TextValue(""),
-        readOnly = false
     ),
     EDUCATION(
         fieldName = R.string.education,

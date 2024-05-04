@@ -54,7 +54,7 @@ import com.sedooj.app_ui.pages.resume.create.components.EducationItemComponent
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.PageFields
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.MainPersonalPageFields
 import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.MenuButton
@@ -63,7 +63,7 @@ import com.sedooj.ui_kit.R
 
 @Composable
 private fun InputTextField(
-    field: PageFields,
+    field: MainPersonalPageFields,
     value: String,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
@@ -77,7 +77,7 @@ private fun InputTextField(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Field(
-    field: PageFields,
+    field: MainPersonalPageFields,
     value: FieldValue,
     onValueChange: (FieldValue) -> Unit,
     modifier: Modifier = Modifier,
@@ -125,8 +125,8 @@ fun Field(
 
 @Composable
 fun MainComponent(
-    data: Map<PageFields, FieldValue>,
-    onValueChange: (PageFields, FieldValue) -> Unit,
+    data: Map<MainPersonalPageFields, FieldValue>,
+    onValueChange: (MainPersonalPageFields, FieldValue) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(

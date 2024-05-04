@@ -41,7 +41,7 @@ import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.Screen
 
-enum class PageFields(
+enum class MainPersonalPageFields(
     @StringRes
     val fieldName: Int,
     val defaultValue: FieldValue,
@@ -97,38 +97,38 @@ enum class PageFields(
 }
 
 @Composable
-private fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<PageFields, FieldValue> {
+private fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<MainPersonalPageFields, FieldValue> {
     return remember {
         mutableStateMapOf(
-            PageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(initInfo.firstName) else TextValue(
+            MainPersonalPageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(initInfo.firstName) else TextValue(
                 ""
             ),
-            PageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(initInfo.secondName) else TextValue(
+            MainPersonalPageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(initInfo.secondName) else TextValue(
                 ""
             ),
-            PageFields.THIRD_NAME to if (initInfo?.thirdName != null) TextValue(initInfo.thirdName!!) else TextValue(
+            MainPersonalPageFields.THIRD_NAME to if (initInfo?.thirdName != null) TextValue(initInfo.thirdName!!) else TextValue(
                 ""
             ),
-            PageFields.CITY to if (initInfo?.city != null) TextValue(initInfo.city) else TextValue(
+            MainPersonalPageFields.CITY to if (initInfo?.city != null) TextValue(initInfo.city) else TextValue(
                 ""
             ),
-            PageFields.RESIDENCE_COUNTRY to if (initInfo?.residenceCountry != null) TextValue(
+            MainPersonalPageFields.RESIDENCE_COUNTRY to if (initInfo?.residenceCountry != null) TextValue(
                 initInfo.residenceCountry
             ) else TextValue(
                 ""
             ),
 
-            PageFields.HAS_CHILD to if (initInfo?.hasChild != null) CustomValue(
+            MainPersonalPageFields.HAS_CHILD to if (initInfo?.hasChild != null) CustomValue(
                 HasChildConvertibleContainer(initInfo.hasChild)
             ) else CustomValue(
                 HasChildConvertibleContainer(
                     false
                 )
             ),
-            PageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
+            MainPersonalPageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
                 GenderConvertibleContainer(initInfo.genderType)
             ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
-            PageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
+            MainPersonalPageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
                 MaritalConvertibleContainer(initInfo.maritalStatus)
             ) else CustomValue(
                 MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)

@@ -37,6 +37,8 @@
     <string name="type_personal_information_second">О себе, образование, контакты</string>
     <string name="type_skills">Знания языков, soft, hard skills</string>
     <string name="education">Образование</string>
+    <string name="type_education">Добавьте информацию об образовании</string>
+    <string name="education_editor_title">Образовательное учреждение</string>
     <string name="faculty">Факультет</string>
     <string name="speciality">Специальность</string>
     <string name="not_specified">Не указан</string>
@@ -105,6 +107,7 @@
     <string name="edit_education">Изменить данные об образовательном учреждении</string>
     <string name="edit">Изменить</string>
     <string name="no_content_here_now">Здесь пока ничего нет</string>
+    <string name="put_information_about_education">Добавьте информацию об образовательном учреждении</string>
     <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
     <string name="wrong_username_length">Имя пользователя должно быть не меньше 6 символов</string>
     <string name="wrong_password_length">Пароль должен быть не меньше 8 символов</string>

@@ -101,7 +101,8 @@ fun SecondComponent(
                 field = field,
                 value = value,
                 onValueChange = { onValueChange(field, it) },
-                readOnly = field.readOnly
+                readOnly = field.readOnly,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
