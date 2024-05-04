@@ -12,6 +12,9 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
@@ -61,6 +65,32 @@ enum class EducationComponentPageFields(
     )
 }
 
+@Composable
+private fun rememberDataMap(initInfo: List<Education>?): SnapshotStateMap<EducationComponentPageFields, CustomValue<EducationConvertibleContainer>> {
+    return remember {
+        mutableStateMapOf(
+            EducationComponentPageFields.EDUCATION to if (initInfo == null) CustomValue(
+                EducationConvertibleContainer(
+                    emptyList()
+                )
+            ) else CustomValue(
+                EducationConvertibleContainer(
+                    initInfo.map {
+                        Education(
+                            educationStage = it.educationStage,
+                            title = it.title,
+                            locationCity = it.locationCity,
+                            enterDate = it.enterDate,
+                            graduatedDate = it.graduatedDate,
+                            faculty = it.faculty,
+                            speciality = it.speciality
+                        )
+                    }
+                )
+            )
+        )
+    }
+}
 
 @Destination<RootGraph>(start = false, style = ScreensTransitions::class, route = Routes.EDUCATION)
 @Composable
@@ -82,18 +112,19 @@ fun EducationComponentPage(
 @Composable
 fun EduList(
     createResumeViewModel: CreateResumeViewModel,
-    onEdit: (Int, Education) -> Unit,
+    onEdit: (EducationComponentPageFields, Education) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val education =
         createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
             ?: emptyList()
+    val data = rememberDataMap(initInfo = education)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (education.isEmpty())
+        if (data.isEmpty())
             Box(modifier = modifier, contentAlignment = Alignment.Center, content = {
                 Text(
                     text = stringResource(id = R.string.put_information_about_education),
@@ -104,7 +135,7 @@ fun EduList(
             education.forEachIndexed { i, edu ->
                 ListItem(
                     headlineContent = {
-                        Text(text = edu.title)
+                        Text(text = value.title)
                     }, supportingContent = {
 
                     }, leadingContent = {
@@ -115,7 +146,6 @@ fun EduList(
                         )
                     }, modifier = modifier.clickable(onClick = {
                         onEdit(
-                            i,
                             Education(
                                 educationStage = edu.educationStage,
                                 title = edu.title,
