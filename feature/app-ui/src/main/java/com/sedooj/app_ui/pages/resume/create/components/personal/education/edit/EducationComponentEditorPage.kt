@@ -13,6 +13,7 @@ import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.Screen
+import java.io.Serializable
 
 @Destination<RootGraph>(
     start = false,
@@ -52,7 +53,8 @@ fun EducationComponentEditorPage(
                         enterDate = "quidam",
                         graduatedDate = "labores",
                         faculty = "omnesque",
-                        speciality = "posidonium"
+                        speciality = "posidonium",
+                        id = id
                     )
                 )
             }
@@ -61,6 +63,7 @@ fun EducationComponentEditorPage(
 }
 
 data class EditorEducation(
+    var id: Int,
     var educationStage: EducationStage,
     var title: String,
     var locationCity: String,
@@ -68,4 +71,4 @@ data class EditorEducation(
     var graduatedDate: String,
     var faculty: String,
     var speciality: String,
-): java.io.Serializable
+) : Serializable

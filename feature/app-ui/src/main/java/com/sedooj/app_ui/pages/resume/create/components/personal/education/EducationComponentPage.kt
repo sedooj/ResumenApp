@@ -31,6 +31,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
@@ -94,44 +95,10 @@ private fun rememberDataMap(initInfo: List<Education>?): SnapshotStateMap<Educat
 fun EducationComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EditorEducation>
+    resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EditorEducation>,
 ) {
-    Screen(
-        title = stringResource(id = R.string.education),
-        modifier = Modifier.fillMaxSize(),
-        alignment = Alignment.Top,
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-
-            }) {
-                Icon(imageVector = Icons.Outlined.Add, contentDescription = "add edu")
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
-    ) {
-        EduList(createResumeViewModel = createResumeViewModel, onEdit = { i, edu ->
-            navigator.navigate(EDUCATIONEDITORDestination(
-                id = i,
-                educationStage = edu.educationStage,
-                title = edu.title,
-                locationCity = edu.locationCity,
-                enterDate = edu.enterDate,
-                graduatedDate = edu.graduatedDate,
-                faculty = edu.faculty,
-                speciality = edu.speciality
-            ))
-        })
-    }
-}
-
-@Composable
-fun EduList(
-    createResumeViewModel: CreateResumeViewModel,
-    onEdit: (Int, Education) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val education =
-        createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
+    val educationList =
+        (createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
             ?: listOf(
                 Education(
                     educationStage = EducationStage.NOT_SPECIFIED,
@@ -151,48 +118,96 @@ fun EduList(
                     faculty = "pellentesque",
                     speciality = "partiendo"
                 ),
-            )
-    if (education.isEmpty()) {
-        Box(modifier = modifier, contentAlignment = Alignment.Center, content = {
-            Text(
-                text = stringResource(id = R.string.put_information_about_education),
-                textAlign = TextAlign.Center
-            )
-        })
-    } else {
-        val data = rememberDataMap(initInfo = education)
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            data.toSortedMap().forEach { (key, value) ->
-                val eduAsValue = value.value.asEducationList()
-                eduAsValue.forEachIndexed { index, edu ->
-                    ListItem(
-                        headlineContent = {
-                            Text(
-                                text = edu.title,
-                                textAlign = TextAlign.Center,
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize
-                            )
-                        }, supportingContent = {
+            )).toMutableList()
 
-                        }, leadingContent = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.education),
-                                contentDescription = edu.title,
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }, modifier = modifier.clickable(onClick = {
-                            onEdit(
-                                index, edu
-                            )
-                        })
-                    )
-                }
+    resultRecipient.onResult {
+        educationList[it.id] = Education(
+            educationStage = it.educationStage,
+            title = it.title,
+            locationCity = it.locationCity,
+            enterDate = it.enterDate,
+            graduatedDate = it.graduatedDate,
+            faculty = it.faculty,
+            speciality = it.speciality
+        )
+    }
 
+    Screen(
+        title = stringResource(id = R.string.education),
+        modifier = Modifier.fillMaxSize(),
+        alignment = Alignment.Top,
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+
+            }) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = "add edu")
             }
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) {
+        if (educationList.isNotEmpty())
+            EduList(educationList = educationList, onEdit = { i, edu ->
+                navigator.navigate(
+                    EDUCATIONEDITORDestination(
+                        id = i,
+                        educationStage = edu.educationStage,
+                        title = edu.title,
+                        locationCity = edu.locationCity,
+                        enterDate = edu.enterDate,
+                        graduatedDate = edu.graduatedDate,
+                        faculty = edu.faculty,
+                        speciality = edu.speciality
+                    )
+                )
+            })
+        else
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
+                Text(
+                    text = stringResource(id = R.string.put_information_about_education),
+                    textAlign = TextAlign.Center
+                )
+            })
+    }
+}
+
+@Composable
+fun EduList(
+    educationList: List<Education>,
+    onEdit: (Int, Education) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val data = rememberDataMap(initInfo = educationList)
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        data.toSortedMap().forEach { (key, value) ->
+            val eduAsValue = value.value.asEducationList()
+            eduAsValue.forEachIndexed { index, edu ->
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = edu.title,
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                        )
+                    }, supportingContent = {
+
+                    }, leadingContent = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.education),
+                            contentDescription = edu.title,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }, modifier = modifier.clickable(onClick = {
+                        onEdit(
+                            index, edu
+                        )
+                    })
+                )
+            }
+
         }
     }
 }
