@@ -7,8 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
@@ -48,17 +52,7 @@ enum class EducationComponentPageFields(
         fieldName = R.string.education,
         defaultValue = CustomValue(
             EducationConvertibleContainer(
-                listOf(
-                    Education(
-                        educationStage = EducationStage.NOT_SPECIFIED,
-                        title = "",
-                        locationCity = "",
-                        enterDate = "",
-                        graduatedDate = "",
-                        faculty = "",
-                        speciality = ""
-                    )
-                )
+                emptyList()
             )
         ),
         readOnly = false
@@ -101,7 +95,15 @@ fun EducationComponentPage(
     Screen(
         title = stringResource(id = R.string.education),
         modifier = Modifier.fillMaxSize(),
-        alignment = Alignment.Top
+        alignment = Alignment.Top,
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                createResumeViewModel
+            }) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = "add edu")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) {
         EduList(createResumeViewModel = createResumeViewModel, onEdit = { i, edu ->
 
@@ -118,48 +120,47 @@ fun EduList(
     val education =
         createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
             ?: emptyList()
-    val data = rememberDataMap(initInfo = education)
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (data.isEmpty())
-            Box(modifier = modifier, contentAlignment = Alignment.Center, content = {
-                Text(
-                    text = stringResource(id = R.string.put_information_about_education),
-                    textAlign = TextAlign.Center
-                )
-            })
-        else {
-            data.toSortedMap().forEach { key, value ->
-                ListItem(
-                    headlineContent = {
-                        Text(text = edu.title)
-                    }, supportingContent = {
-
-                    }, leadingContent = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.education),
-                            contentDescription = edu.title,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    }, modifier = modifier.clickable(onClick = {
-                        onEdit(
-                            Education(
-                                educationStage = edu.educationStage,
-                                title = edu.title,
-                                locationCity = edu.locationCity,
-                                enterDate = edu.enterDate,
-                                graduatedDate = edu.graduatedDate,
-                                faculty = edu.faculty,
-                                speciality = edu.speciality
+    if (education.isEmpty()) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center, content = {
+            Text(
+                text = stringResource(id = R.string.put_information_about_education),
+                textAlign = TextAlign.Center
+            )
+        })
+    } else {
+        val data = rememberDataMap(initInfo = education)
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            data.toSortedMap().forEach { (key, value) ->
+                val eduAsValue = value.value.asEducationList()
+                eduAsValue.forEach {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = it.title,
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.bodyLarge.fontSize
                             )
-                        )
-                    })
-                )
+                        }, supportingContent = {
+
+                        }, leadingContent = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.education),
+                                contentDescription = it.title,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }, modifier = modifier.clickable(onClick = {
+                            onEdit(
+                                key, it
+                            )
+                        })
+                    )
+                }
+
             }
         }
-
     }
 }

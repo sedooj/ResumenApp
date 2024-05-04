@@ -21,12 +21,6 @@ class ConvertibleStringResValue(
     override fun asStringValue(): String {
         return stringResource(id = value)
     }
-
-    @Composable
-    override fun asValue(): List<Any> {
-        TODO("Not yet implemented")
-    }
-
 }
 
 interface ConvertibleValue {
@@ -34,10 +28,8 @@ interface ConvertibleValue {
     @Composable
     fun asStringValue(): String
 
-    @Composable
-    fun asValue() : Any
-
 }
+
 interface ConvertibleEducationValue {
 
     @Composable
@@ -60,10 +52,6 @@ value class GenderConvertibleContainer(val value: GenderType) : ConvertibleValue
         return stringResource(id = value.title)
     }
 
-    @Composable
-    override fun asValue(): List<Any> {
-        TODO("Not yet implemented")
-    }
 }
 
 @JvmInline
@@ -73,22 +61,17 @@ value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleV
         return stringResource(id = value.title)
     }
 
-    @Composable
-    override fun asValue(): List<Any> {
-        TODO("Not yet implemented")
-    }
 }
 
 @JvmInline
-value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue {
+value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue, ConvertibleEducationValue {
 
     @Composable
     override fun asStringValue(): String {
         TODO("Not yet implemented")
     }
-
     @Composable
-    override fun asValue(): Any {
+    override fun asEducationList(): List<Education> {
         return value.map {
             Education(
                 educationStage = it.educationStage,
@@ -98,7 +81,6 @@ value class EducationConvertibleContainer(val value: List<Education>) : Converti
                 graduatedDate = it.graduatedDate,
                 faculty = it.faculty,
                 speciality = it.speciality
-
             )
         }
     }
@@ -111,10 +93,6 @@ value class HasChildConvertibleContainer(val value: Boolean) : ConvertibleValue 
         return if (value) stringResource(id = R.string.has_children_yes) else stringResource(id = R.string.has_children_no)
     }
 
-    @Composable
-    override fun asValue(): List<Any> {
-        TODO("Not yet implemented")
-    }
 }
 
 @JvmInline
@@ -122,10 +100,5 @@ value class SocialMediaConvertibleContainer(val value: List<SocialMedia>) : Conv
     @Composable
     override fun asStringValue(): String {
         return "tododo" // TODO()
-    }
-
-    @Composable
-    override fun asValue(): List<Any> {
-        TODO("Not yet implemented")
     }
 }

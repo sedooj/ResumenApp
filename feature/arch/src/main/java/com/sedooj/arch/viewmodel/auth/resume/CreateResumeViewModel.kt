@@ -3,6 +3,7 @@ package com.sedooj.arch.viewmodel.auth.resume
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
@@ -25,7 +26,7 @@ data class CreateResumeUiState(
 
 data class TabsUiState(
     var selectedTab: TabsModel.Tabs = TabsModel.Tabs.PERSONAL_MAIN,
-    var selectedTabId: Int = 0
+    var selectedTabId: Int = 0,
 )
 
 @HiltViewModel
@@ -37,7 +38,6 @@ class CreateResumeViewModel @Inject constructor(
 
     private val _tabsState = MutableStateFlow(TabsUiState())
     val tabsState: StateFlow<TabsUiState> = _tabsState.asStateFlow()
-
 
     override fun updateResumeOptions(input: CreateResumeUseCase.ResumeOptionsComponent) {
         _uiState.update {
@@ -149,7 +149,6 @@ class CreateResumeViewModel @Inject constructor(
 //            )
         }
     }
-
 
 
     override fun save() {
