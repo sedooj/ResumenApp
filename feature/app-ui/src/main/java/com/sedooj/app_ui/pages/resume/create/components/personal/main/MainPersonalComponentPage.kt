@@ -27,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
@@ -140,7 +140,7 @@ private fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?):
 @Destination<RootGraph>(
     start = false,
     route = Routes.CREATE_RESUME_PERSONAL_MAIN,
-    style = ScreensTransitions::class
+    style = FadeScreensTransitions::class
 )
 @Composable
 fun MainPersonalComponentPage(

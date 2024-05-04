@@ -23,6 +23,7 @@ interface ResumeModel {
     fun updateSkillsInformation(input: CreateResumeUseCase.SkillsInformation)
 
     fun updateWorkExperienceInformation(input: List<CreateResumeUseCase.WorkExperienceInformation>)
+    fun saveEducation(index: Int, input: CreateResumeUseCase.PersonalInformation.Education)
 
     fun dropUiState()
 

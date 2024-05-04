@@ -10,34 +10,24 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.api.domain.data.types.EducationStage
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.Screen
 import java.io.Serializable
 
 @Destination<RootGraph>(
     start = false,
-    style = ScreensTransitions::class,
+    style = SlideScreenTransitions::class,
     route = Routes.EDUCATION_EDITOR,
 )
 @Composable
 fun EducationComponentEditorPage(
-    id: Int,
-    educationStage: EducationStage,
-    title: String,
-    locationCity: String,
-    enterDate: String,
-    graduatedDate: String,
-    faculty: String,
-    speciality: String,
+    education: EditorEducation,
     resultNavigator: ResultBackNavigator<EditorEducation>,
 ) {
-
-//    val title =
-//        education.title.ifBlank { stringResource(id = com.sedooj.ui_kit.R.string.education) }
     Screen(
         modifier = Modifier.fillMaxSize(),
-        title = title,
+        title = education.title,
         alignment = Alignment.Top,
         navigationButton = {
 
@@ -54,7 +44,7 @@ fun EducationComponentEditorPage(
                         graduatedDate = "labores",
                         faculty = "omnesque",
                         speciality = "posidonium",
-                        id = id
+                        id = education.id
                     )
                 )
             }

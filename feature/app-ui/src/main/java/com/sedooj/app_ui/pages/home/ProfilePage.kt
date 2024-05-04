@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.Screen
 
-@Destination<RootGraph>(start = false, route = Routes.PROFILE, style = ScreensTransitions::class)
+@Destination<RootGraph>(start = false, route = Routes.PROFILE, style = FadeScreensTransitions::class)
 @Composable
 fun ProfileScreen(
     destinationsNavigator: DestinationsNavigator,
