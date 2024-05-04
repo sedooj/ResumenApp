@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.HomeViewModel
 import com.sedooj.ui_kit.R.string
@@ -24,7 +24,7 @@ import com.sedooj.ui_kit.ResumeItemState
 import com.sedooj.ui_kit.Screen
 import kotlinx.coroutines.launch
 
-@Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = ScreensTransitions::class)
+@Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = FadeScreensTransitions::class)
 @Composable
 fun MyResumesScreen(
     destinationsNavigator: DestinationsNavigator,

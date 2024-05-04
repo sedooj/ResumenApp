@@ -30,7 +30,7 @@ import com.ramcosta.composedestinations.generated.destinations.SIGNINDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignUpViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_UP,
-    style = ScreensTransitions::class
+    style = FadeScreensTransitions::class
 )
 @Composable
 fun SignUpPage(

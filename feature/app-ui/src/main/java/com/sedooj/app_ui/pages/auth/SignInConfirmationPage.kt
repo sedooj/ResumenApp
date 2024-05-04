@@ -26,7 +26,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.navigation.config.ConfirmationScreenTransitions
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.ConfirmationState
 import com.sedooj.arch.viewmodel.auth.SignInConfirmationViewModel
@@ -38,7 +38,7 @@ import com.sedooj.ui_kit.Screen
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_IN_CONFIRMATION,
-    style = ConfirmationScreenTransitions::class
+    style = SlideScreenTransitions::class
 )
 @Composable
 fun SignInConfirmationPage(

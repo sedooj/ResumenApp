@@ -3,7 +3,8 @@ package com.sedooj.arch.viewmodel.auth.resume
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.types.EducationStage
+import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
@@ -124,6 +125,39 @@ class CreateResumeViewModel @Inject constructor(
                         isCurrentlyWorking = work.isCurrentlyWorking
                     )
                 }
+            )
+        }
+    }
+
+    override fun saveEducation(
+        index: Int,
+        input: CreateResumeUseCase.PersonalInformation.Education,
+    ) {
+        val newEducationList =
+            (_uiState.value.personalInformation?.education ?: emptyList()).toMutableList()
+        if (newEducationList.size <= index || newEducationList.isEmpty())
+            newEducationList.add(input)
+        else
+            newEducationList[index] = input
+        _uiState.update {
+            it.copy(
+                personalInformation = CreateResumeUseCase.PersonalInformation(
+                    firstName = _uiState.value.personalInformation?.firstName ?: "",
+                    secondName = _uiState.value.personalInformation?.secondName ?: "",
+                    thirdName = _uiState.value.personalInformation?.thirdName ?: "",
+                    dateOfBirth = _uiState.value.personalInformation?.dateOfBirth ?: "",
+                    city = _uiState.value.personalInformation?.city ?: "",
+                    residenceCountry = _uiState.value.personalInformation?.residenceCountry ?: "",
+                    genderType = _uiState.value.personalInformation?.genderType
+                        ?: GenderType.NOT_SELECTED,
+                    maritalStatus = _uiState.value.personalInformation?.maritalStatus
+                        ?: MaritalStatus.NOT_SELECTED,
+                    education = newEducationList.toList(),
+                    hasChild = _uiState.value.personalInformation?.hasChild ?: false,
+                    socialMedia = _uiState.value.personalInformation?.socialMedia ?: emptyList(),
+                    aboutMe = _uiState.value.personalInformation?.aboutMe,
+                    personalQualities = _uiState.value.personalInformation?.personalQualities ?: ""
+                )
             )
         }
     }

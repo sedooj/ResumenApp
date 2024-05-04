@@ -2,7 +2,8 @@ package com.sedooj.app_ui.pages.resume.create.components.generic
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.*
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.ui_kit.R
@@ -32,8 +33,7 @@ interface ConvertibleValue {
 
 interface ConvertibleEducationValue {
 
-    @Composable
-    fun asEducationList(): List<Education>
+    fun asMutableEducationList(): MutableList<Education>
 
 }
 
@@ -70,8 +70,8 @@ value class EducationConvertibleContainer(val value: List<Education>) : Converti
     override fun asStringValue(): String {
         TODO("Not yet implemented")
     }
-    @Composable
-    override fun asEducationList(): List<Education> {
+
+    override fun asMutableEducationList(): MutableList<Education> {
         return value.map {
             Education(
                 educationStage = it.educationStage,
@@ -82,7 +82,7 @@ value class EducationConvertibleContainer(val value: List<Education>) : Converti
                 faculty = it.faculty,
                 speciality = it.speciality
             )
-        }
+        }.toMutableList()
     }
 }
 

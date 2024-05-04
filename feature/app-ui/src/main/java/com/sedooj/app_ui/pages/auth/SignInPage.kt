@@ -32,7 +32,7 @@ import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignInViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
@@ -46,7 +46,7 @@ import com.sedooj.ui_kit.textField.UsernameTextField
 @Destination<RootGraph>(
     start = true,
     route = Routes.SIGN_IN,
-    style = ScreensTransitions::class
+    style = FadeScreensTransitions::class
 )
 @Composable
 fun SignInPage(
