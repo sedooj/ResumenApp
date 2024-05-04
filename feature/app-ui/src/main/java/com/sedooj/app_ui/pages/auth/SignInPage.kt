@@ -104,11 +104,11 @@ fun SignInPage(
                     passwordState.value = it
                 })
             SignInComponent(
-                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
+                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && (errorState == null || errorState == string.no_connection),
                 toSignUp = {
                     destinationsNavigator.navigate(SIGNUPDestination)
                 },
-                register = {
+                login = {
                     signInViewModel.auth(
                         input = AuthorizationInput(
                             username = usernameState.value,
@@ -151,14 +151,14 @@ private fun TextComponents(
 private fun SignInComponent(
     enabled: Boolean,
     toSignUp: () -> Unit,
-    register: () -> Unit,
+    login: () -> Unit,
 ) {
     FilledButton(
         modifier = Modifier.fillMaxWidth(),
         label = stringResource(id = string.sign_in),
         enabled = enabled,
         onClick = {
-            register()
+            login()
         })
     Row(
         horizontalArrangement = Arrangement.spacedBy(5.dp)
