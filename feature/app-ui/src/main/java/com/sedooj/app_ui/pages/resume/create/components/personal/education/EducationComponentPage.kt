@@ -132,10 +132,10 @@ fun EduList(
                 )
             })
         else {
-            education.forEachIndexed { i, edu ->
+            data.toSortedMap().forEach { key, value ->
                 ListItem(
                     headlineContent = {
-                        Text(text = value.title)
+                        Text(text = edu.title)
                     }, supportingContent = {
 
                     }, leadingContent = {

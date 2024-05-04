@@ -2,8 +2,6 @@ package com.sedooj.app_ui.pages.resume.create.components.generic
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.*
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
@@ -25,7 +23,7 @@ class ConvertibleStringResValue(
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): List<Any> {
         TODO("Not yet implemented")
     }
 
@@ -37,7 +35,7 @@ interface ConvertibleValue {
     fun asStringValue(): String
 
     @Composable
-    fun asListValue() : List<Any>
+    fun asValue() : Any
 
 }
 interface ConvertibleEducationValue {
@@ -63,7 +61,7 @@ value class GenderConvertibleContainer(val value: GenderType) : ConvertibleValue
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): List<Any> {
         TODO("Not yet implemented")
     }
 }
@@ -76,7 +74,7 @@ value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleV
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): List<Any> {
         TODO("Not yet implemented")
     }
 }
@@ -90,7 +88,7 @@ value class EducationConvertibleContainer(val value: List<Education>) : Converti
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): Any {
         return value.map {
             Education(
                 educationStage = it.educationStage,
@@ -114,7 +112,7 @@ value class HasChildConvertibleContainer(val value: Boolean) : ConvertibleValue 
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): List<Any> {
         TODO("Not yet implemented")
     }
 }
@@ -127,7 +125,7 @@ value class SocialMediaConvertibleContainer(val value: List<SocialMedia>) : Conv
     }
 
     @Composable
-    override fun asListValue(): List<Any> {
+    override fun asValue(): List<Any> {
         TODO("Not yet implemented")
     }
 }
