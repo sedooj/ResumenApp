@@ -28,7 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.ScreensTransitions
@@ -36,6 +38,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.EducationConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.EditorEducation
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -91,6 +94,7 @@ private fun rememberDataMap(initInfo: List<Education>?): SnapshotStateMap<Educat
 fun EducationComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
+    resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EditorEducation>
 ) {
     Screen(
         title = stringResource(id = R.string.education),
@@ -98,7 +102,7 @@ fun EducationComponentPage(
         alignment = Alignment.Top,
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                createResumeViewModel
+
             }) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = "add edu")
             }
@@ -106,7 +110,16 @@ fun EducationComponentPage(
         floatingActionButtonPosition = FabPosition.End
     ) {
         EduList(createResumeViewModel = createResumeViewModel, onEdit = { i, edu ->
-
+            navigator.navigate(EDUCATIONEDITORDestination(
+                id = i,
+                educationStage = edu.educationStage,
+                title = edu.title,
+                locationCity = edu.locationCity,
+                enterDate = edu.enterDate,
+                graduatedDate = edu.graduatedDate,
+                faculty = edu.faculty,
+                speciality = edu.speciality
+            ))
         })
     }
 }
@@ -114,12 +127,31 @@ fun EducationComponentPage(
 @Composable
 fun EduList(
     createResumeViewModel: CreateResumeViewModel,
-    onEdit: (EducationComponentPageFields, Education) -> Unit,
+    onEdit: (Int, Education) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val education =
         createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
-            ?: emptyList()
+            ?: listOf(
+                Education(
+                    educationStage = EducationStage.NOT_SPECIFIED,
+                    title = "accommodare",
+                    locationCity = "Bonus",
+                    enterDate = "hendrerit",
+                    graduatedDate = "scripserit",
+                    faculty = "malorum",
+                    speciality = "tamquam"
+                ),
+                Education(
+                    educationStage = EducationStage.NOT_SPECIFIED,
+                    title = "mauris",
+                    locationCity = "Noordeloos",
+                    enterDate = "pri",
+                    graduatedDate = "noster",
+                    faculty = "pellentesque",
+                    speciality = "partiendo"
+                ),
+            )
     if (education.isEmpty()) {
         Box(modifier = modifier, contentAlignment = Alignment.Center, content = {
             Text(
@@ -136,11 +168,11 @@ fun EduList(
         ) {
             data.toSortedMap().forEach { (key, value) ->
                 val eduAsValue = value.value.asEducationList()
-                eduAsValue.forEach {
+                eduAsValue.forEachIndexed { index, edu ->
                     ListItem(
                         headlineContent = {
                             Text(
-                                text = it.title,
+                                text = edu.title,
                                 textAlign = TextAlign.Center,
                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize
                             )
@@ -149,12 +181,12 @@ fun EduList(
                         }, leadingContent = {
                             Icon(
                                 painter = painterResource(id = R.drawable.education),
-                                contentDescription = it.title,
+                                contentDescription = edu.title,
                                 modifier = Modifier.size(40.dp)
                             )
                         }, modifier = modifier.clickable(onClick = {
                             onEdit(
-                                key, it
+                                index, edu
                             )
                         })
                     )

@@ -14,10 +14,12 @@ import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSO
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALSECONDARYDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
+import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
 //import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.destination
 import com.sedooj.app_ui.pages.home.bottomBar.AnimatedBottomBar
+import com.sedooj.arch.viewmodel.auth.HomeViewModel
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 
 @Composable
@@ -30,6 +32,7 @@ fun MainScreen() {
         }
     ) {
         val createResumeViewModel : CreateResumeViewModel = hiltViewModel()
+        val myResumesViewModel : HomeViewModel = hiltViewModel()
         DestinationsNavHost(
             navGraph = NavGraphs.root,
             navController = navController,
@@ -52,6 +55,9 @@ fun MainScreen() {
                 }
                 destination(EDUCATIONEDITORDestination) {
                     dependency(createResumeViewModel)
+                }
+                destination(MYRESUMESDestination) {
+                    dependency(myResumesViewModel)
                 }
             }
         )

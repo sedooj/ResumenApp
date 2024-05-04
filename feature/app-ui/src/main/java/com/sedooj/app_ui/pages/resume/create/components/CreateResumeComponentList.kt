@@ -23,7 +23,7 @@ fun CreateResumeComponentsPage(
                 Text(text = stringResource(id = it.title))
             }, supportingContent = {
                 if (it.subTitle != null)
-                    Text(text = stringResource(id = it.subTitle!!))
+                    Text(text = stringResource(id = it.subTitle))
             }, leadingContent = {
                 Icon(
                     painter = painterResource(id = it.icon),

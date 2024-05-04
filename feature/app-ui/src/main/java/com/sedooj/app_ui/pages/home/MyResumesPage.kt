@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -25,15 +24,14 @@ import com.sedooj.ui_kit.ResumeItemState
 import com.sedooj.ui_kit.Screen
 import kotlinx.coroutines.launch
 
-
 @Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = ScreensTransitions::class)
 @Composable
 fun MyResumesScreen(
     destinationsNavigator: DestinationsNavigator,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel,
 ) {
     val uiState = homeViewModel.uiState.collectAsState().value.resumeList
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(uiState.isNullOrEmpty()) {
         homeViewModel.getResumeList()
     }
     val scope = rememberCoroutineScope()

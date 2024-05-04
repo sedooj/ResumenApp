@@ -19,18 +19,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.ExperimentalSafeArgsApi
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
 import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
 import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
-import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.startDestination
 
 @Composable
 fun AnimatedBottomBar(
-    navController: NavController,
+    navController: NavController
 ) {
     val currentDestination =
         navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
@@ -43,10 +43,11 @@ fun AnimatedBottomBar(
     }
 }
 
+@OptIn(ExperimentalSafeArgsApi::class)
 @SuppressLint("RestrictedApi")
 @Composable
 fun BottomBar(
-    navController: NavController,
+    navController: NavController
 ) {
     val currentDestination =
         navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
@@ -63,27 +64,16 @@ fun BottomBar(
                 selected = currentDestination == destination.direction,
                 onClick = {
                     if (currentDestination != destination.direction) {
-                        val findDestination = navController.findDestination(destination.route)
-//                        if (findDestination == null) {
-                        when (destination.direction) {
-                            HOMEDestination -> {
-                                navController.navigate(HOMEDestination()) {
-                                    launchSingleTop = true
-                                }
-                            }
-
-                            MYRESUMESDestination -> {
-                                navController.navigate(MYRESUMESDestination()) {
-                                    launchSingleTop = true
-                                }
-                            }
-
-                            PROFILEDestination -> {
-                                navController.navigate(PROFILEDestination()) {
-                                    launchSingleTop = true
-                                }
-                            }
+                        val findDestination = navController.findDestination(destination.direction.route)?.id ?: destination.route
+                        navController.navigate(
+                            findDestination
+                        ) {
+                            launchSingleTop = true
                         }
+                    }
+//                        if (findDestination == null) {
+
+
 //                        navController.navigate(
 //                            HOMEDestination()
 //                        )
@@ -96,7 +86,7 @@ fun BottomBar(
 //                        } else {
 //                        findDestination?.let { navController.navigateTo(findDestination.id) }
 //                        }
-                    }
+
                 },
                 icon = {
                     Icon(
