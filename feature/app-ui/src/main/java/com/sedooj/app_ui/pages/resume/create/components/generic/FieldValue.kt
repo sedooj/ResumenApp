@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.SocialMedia
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.ui_kit.R
@@ -15,8 +16,8 @@ class TextValue(val text: String) : FieldValue()
 class CustomValue<T : ConvertibleValue>(val value: T) : FieldValue()
 
 class ConvertibleStringResValue(
-    private val value: Int
-): ConvertibleValue {
+    private val value: Int,
+) : ConvertibleValue {
 
     @Composable
     override fun asStringValue(): String {
@@ -46,6 +47,20 @@ fun FieldValue.asStringValue(): String {
 }
 
 @JvmInline
+value class EducationStageConvertibleContainer(val value: EducationStage) : ConvertibleValue {
+    @Composable
+    override fun asStringValue(): String {
+        return when (value) {
+            EducationStage.COLLEGE -> stringResource(id = R.string.education_college)
+            EducationStage.UNIVERSITY -> stringResource(id = R.string.education_university)
+            EducationStage.INSTITUTE -> stringResource(id = R.string.education_institute)
+            EducationStage.NOT_SPECIFIED -> stringResource(id = R.string.not_specified)
+        }
+    }
+
+}
+
+@JvmInline
 value class GenderConvertibleContainer(val value: GenderType) : ConvertibleValue {
     @Composable
     override fun asStringValue(): String {
@@ -64,7 +79,8 @@ value class MaritalConvertibleContainer(val value: MaritalStatus) : ConvertibleV
 }
 
 @JvmInline
-value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue, ConvertibleEducationValue {
+value class EducationConvertibleContainer(val value: List<Education>) : ConvertibleValue,
+    ConvertibleEducationValue {
 
     @Composable
     override fun asStringValue(): String {

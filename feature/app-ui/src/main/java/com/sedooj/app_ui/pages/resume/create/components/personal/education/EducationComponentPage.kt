@@ -39,7 +39,11 @@ import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.Screen
 
-@Destination<RootGraph>(start = false, style = SlideScreenTransitions::class, route = Routes.EDUCATION)
+@Destination<RootGraph>(
+    start = false,
+    style = SlideScreenTransitions::class,
+    route = Routes.EDUCATION
+)
 @Composable
 fun EducationComponentPage(
     navigator: DestinationsNavigator,
@@ -81,7 +85,9 @@ fun EducationComponentPage(
                             speciality = ""
                         )
                     )
-                )
+                ) {
+                    launchSingleTop = true
+                }
             }) {
                 Icon(imageVector = Icons.Outlined.Add, contentDescription = "add edu")
             }
