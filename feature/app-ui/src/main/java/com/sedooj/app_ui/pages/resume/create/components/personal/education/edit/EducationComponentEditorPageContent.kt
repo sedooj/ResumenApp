@@ -1,11 +1,16 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,13 +21,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
+import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.ui_kit.NotNullableValueTextField
+import com.sedooj.ui_kit.R
 
 
 @Composable
@@ -44,7 +56,7 @@ fun Field(
     field: EducationComponentEditorPageFields,
     value: FieldValue,
     onValueChange: (FieldValue) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var isFocused by remember { mutableStateOf(false) }
     Column {
@@ -100,9 +112,89 @@ fun EducationComponentEditorPageContent(
             Field(
                 field = key,
                 value = value,
-                onValueChange = { onEdit(key, it)},
+                onValueChange = { onEdit(key, it) },
                 modifier = modifier,
             )
         }
     }
+}
+
+
+@Composable
+fun EducationEditorPageContent(
+    educationList: List<CreateResumeUseCase.PersonalInformation.Education>,
+    onEdit: (Int, CreateResumeUseCase.PersonalInformation.Education) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        educationList.forEachIndexed { index, education ->
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = education.title,
+                        textAlign = TextAlign.Center,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                    )
+                }, supportingContent = {
+
+                }, leadingContent = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.education),
+                        contentDescription = education.title,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }, modifier = modifier.clickable(onClick = dropUnlessResumed {
+                    onEdit(
+                        index, education
+                    )
+                })
+            )
+        }
+    }
+}
+
+fun createOrEdit(
+    navigator: DestinationsNavigator,
+    id: Int,
+    education: CreateResumeUseCase.PersonalInformation.Education? = null,
+) {
+    if (education == null)
+        navigator.navigate(
+            EDUCATIONEDITORDestination(
+                EditorEducation(
+                    id = id,
+                    educationStage = EducationStage.NOT_SPECIFIED,
+                    title = "",
+                    locationCity = "",
+                    enterDate = "",
+                    graduatedDate = "",
+                    faculty = "",
+                    speciality = ""
+                )
+            )
+        ) {
+            launchSingleTop = true
+        }
+    else
+        navigator.navigate(
+            EDUCATIONEDITORDestination(
+                EditorEducation(
+                    id = id,
+                    educationStage = education.educationStage,
+                    title = education.title,
+                    locationCity = education.locationCity,
+                    enterDate = education.enterDate,
+                    graduatedDate = education.graduatedDate,
+                    faculty = education.faculty,
+                    speciality = education.speciality,
+                    isEdit = true
+                )
+            )
+        ) {
+            launchSingleTop = true
+        }
 }

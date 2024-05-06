@@ -3,6 +3,10 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -84,15 +88,27 @@ enum class EducationComponentEditorPageFields(
 private fun rememberEducationDataMap(initInfo: EditorEducation): SnapshotStateMap<EducationComponentEditorPageFields, FieldValue> {
     return remember {
         mutableStateMapOf(
-            EducationComponentEditorPageFields.TITLE to if (initInfo.title.isEmpty()) TextValue("") else TextValue(initInfo.title),
-            EducationComponentEditorPageFields.LocationCity to if (initInfo.locationCity.isEmpty()) TextValue("") else TextValue(initInfo.locationCity),
-            EducationComponentEditorPageFields.FACULTY to if (initInfo.faculty.isBlank()) TextValue("") else TextValue(initInfo.faculty),
-            EducationComponentEditorPageFields.SPECIALITY to if (initInfo.speciality.isBlank()) TextValue("") else TextValue(initInfo.speciality),
+            EducationComponentEditorPageFields.TITLE to if (initInfo.title.isEmpty()) TextValue("") else TextValue(
+                initInfo.title
+            ),
+            EducationComponentEditorPageFields.LocationCity to if (initInfo.locationCity.isEmpty()) TextValue(
+                ""
+            ) else TextValue(initInfo.locationCity),
+            EducationComponentEditorPageFields.FACULTY to if (initInfo.faculty.isBlank()) TextValue(
+                ""
+            ) else TextValue(initInfo.faculty),
+            EducationComponentEditorPageFields.SPECIALITY to if (initInfo.speciality.isBlank()) TextValue(
+                ""
+            ) else TextValue(initInfo.speciality),
             EducationComponentEditorPageFields.EDUCATION_STAGE to if (initInfo.educationStage == EducationStage.NOT_SPECIFIED) CustomValue(
                 EducationStageConvertibleContainer(EducationStage.NOT_SPECIFIED)
             ) else CustomValue(EducationStageConvertibleContainer(initInfo.educationStage)),
-            EducationComponentEditorPageFields.ENTER_DATE to if (initInfo.enterDate.isBlank()) TextValue("") else TextValue(initInfo.enterDate),
-            EducationComponentEditorPageFields.GRADUATE_DATE to if (initInfo.graduatedDate.isBlank()) TextValue("") else TextValue(initInfo.graduatedDate)
+            EducationComponentEditorPageFields.ENTER_DATE to if (initInfo.enterDate.isBlank()) TextValue(
+                ""
+            ) else TextValue(initInfo.enterDate),
+            EducationComponentEditorPageFields.GRADUATE_DATE to if (initInfo.graduatedDate.isBlank()) TextValue(
+                ""
+            ) else TextValue(initInfo.graduatedDate)
         )
     }
 }
@@ -110,28 +126,25 @@ fun EducationComponentEditorPage(
     val data = rememberEducationDataMap(initInfo = education)
     Screen(
         modifier = Modifier.fillMaxSize(),
-        title = education.title,
+        title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
         alignment = Alignment.Top,
-        navigationButton = {
-            val title = data[EducationComponentEditorPageFields.TITLE]?.asStringValue() ?: "Empty field"
-            val locationCity = data[EducationComponentEditorPageFields.LocationCity]?.asStringValue() ?: "Empty field"
-            val enterDate = data[EducationComponentEditorPageFields.ENTER_DATE]?.asStringValue() ?: "Empty field"
-            val graduatedDate = data[EducationComponentEditorPageFields.GRADUATE_DATE]?.asStringValue() ?: "Empty field"
-            val faculty = data[EducationComponentEditorPageFields.FACULTY]?.asStringValue() ?: "Empty field"
-            val speciality = data[EducationComponentEditorPageFields.FACULTY]?.asStringValue() ?: "Empty field"
-            IconButton(onClick = {
+        floatingActionButtonPosition = FabPosition.EndOverlay,
+        floatingActionButton = {
+            val editedData = parseData(initInfo = education, data = data)
+            FloatingActionButton(onClick = {
                 resultNavigator.navigateBack(
-                    result = EditorEducation(
-                        educationStage = EducationStage.NOT_SPECIFIED,
-                        title = title,
-                        locationCity = locationCity,
-                        enterDate = enterDate,
-                        graduatedDate = graduatedDate,
-                        faculty = faculty,
-                        speciality = speciality,
-                        id = education.id
-                    )
+                    result = editedData
                 )
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Done,
+                    contentDescription = stringResource(id = R.string.done)
+                )
+            }
+        },
+        navigationButton = {
+            IconButton(onClick = {
+                resultNavigator.navigateBack()
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_back),
@@ -153,6 +166,37 @@ fun EducationComponentEditorPage(
     }
 }
 
+@Composable
+private fun parseData(
+    data: Map<EducationComponentEditorPageFields, FieldValue>,
+    initInfo: EditorEducation,
+): EditorEducation {
+    val title =
+        data[EducationComponentEditorPageFields.TITLE]?.asStringValue() ?: initInfo.title
+    val locationCity =
+        data[EducationComponentEditorPageFields.LocationCity]?.asStringValue()
+            ?: initInfo.locationCity
+    val enterDate = data[EducationComponentEditorPageFields.ENTER_DATE]?.asStringValue()
+        ?: initInfo.enterDate
+    val graduatedDate =
+        data[EducationComponentEditorPageFields.GRADUATE_DATE]?.asStringValue()
+            ?: initInfo.graduatedDate
+    val faculty =
+        data[EducationComponentEditorPageFields.FACULTY]?.asStringValue() ?: initInfo.faculty
+    val speciality = data[EducationComponentEditorPageFields.SPECIALITY]?.asStringValue()
+        ?: initInfo.speciality
+    return EditorEducation(
+        educationStage = EducationStage.NOT_SPECIFIED,
+        title = title,
+        locationCity = locationCity,
+        enterDate = enterDate,
+        graduatedDate = graduatedDate,
+        faculty = faculty,
+        speciality = speciality,
+        id = initInfo.id
+    )
+}
+
 data class EditorEducation(
     var id: Int,
     var educationStage: EducationStage,
@@ -162,4 +206,5 @@ data class EditorEducation(
     var graduatedDate: String,
     var faculty: String,
     var speciality: String,
+    var isEdit: Boolean = false,
 ) : Serializable
