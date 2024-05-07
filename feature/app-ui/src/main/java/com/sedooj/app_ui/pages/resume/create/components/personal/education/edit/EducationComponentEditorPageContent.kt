@@ -117,7 +117,7 @@ fun EducationComponentEditorPageContent(
                 field = key,
                 value = value,
                 onValueChange = { onEdit(key, it) },
-                modifier = modifier,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

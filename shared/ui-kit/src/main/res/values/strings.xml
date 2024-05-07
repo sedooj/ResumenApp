@@ -51,6 +51,8 @@
     <string name="type_name_only_latin">Введите название (только латинские символы)</string>
     <string name="new_resume">New resume</string>
     <string name="go_back">Вернуться назад</string>
+    <string name="back">Назад</string>
+    <string name="continue_edit">Продолжить редактирование</string>
     <string name="not_specified_femenine">Не указана</string>
     <string name="education_stage">Тип О.У.</string>
     <string name="has_errors_in_education">Имеются незаполненные поля в данных об образовательном учреждении</string>
@@ -94,6 +96,8 @@
     <string name="field_must_not_be_empty">Поле не должно быть пустым</string>
     <string name="dont_want_to_enter">Не учитывать данный параметр</string>
     <string name="warning">Внимание</string>
+    <string name="undo_changes">Отменить изменения?</string>
+    <string name="undo">Отменить</string>
     <string name="done">Готово</string>
     <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
     <string name="resume_name">Название резюме</string>

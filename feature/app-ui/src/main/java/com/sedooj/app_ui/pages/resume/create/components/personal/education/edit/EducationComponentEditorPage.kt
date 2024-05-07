@@ -1,11 +1,15 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -13,14 +17,21 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
@@ -35,6 +46,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.arch.Routes
+import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.Screen
 import java.io.Serializable
@@ -129,6 +141,10 @@ fun EducationComponentEditorPage(
     resultNavigator: ResultBackNavigator<EditorEducation>,
 ) {
     val data = rememberEducationDataMap(initInfo = education)
+    var isLostDataAlertShow by remember { mutableStateOf(false) }
+    val blur by animateDpAsState(
+        targetValue = if (isLostDataAlertShow) 5.dp else 0.dp
+    )
     Screen(
         modifier = Modifier.fillMaxSize(),
         title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
@@ -149,7 +165,7 @@ fun EducationComponentEditorPage(
         },
         navigationButton = {
             IconButton(onClick = {
-                resultNavigator.navigateBack()
+                isLostDataAlertShow = true
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_back),
@@ -162,18 +178,36 @@ fun EducationComponentEditorPage(
         }
     ) {
         EducationComponentEditorPageContent(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .then(
+                    Modifier.blur(
+                        radius = blur,
+                        edgeTreatment = BlurredEdgeTreatment.Unbounded
+                    )
+                ),
             onEdit = { key, value ->
                 data[key] = value
             },
             data = data
         )
+        if (isLostDataAlertShow)
+            LostDataAlert(
+                onDismiss = { isLostDataAlertShow = false },
+                onConfirm = {
+                    isLostDataAlertShow = false
+                    resultNavigator.navigateBack()
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
     }
 }
 
 @Composable
 fun LostDataAlert(
-    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     AlertDialog(
         icon = {
@@ -181,7 +215,9 @@ fun LostDataAlert(
                 painter = painterResource(id = R.drawable.warning),
                 contentDescription = stringResource(
                     id = R.string.warning
-                )
+                ),
+                modifier = Modifier.size(25.dp),
+                tint = MaterialTheme.colorScheme.error
             )
         },
         title = {
@@ -190,14 +226,42 @@ fun LostDataAlert(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold,
-                fontSize = MaterialTheme.typography.labelMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                textAlign = TextAlign.Center
             )
         },
         text = {
-
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(id = R.string.undo_changes),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    textAlign = TextAlign.Center
+                )
+            }
         },
-        onDismissRequest = { /*TODO*/ },
-        confirmButton = { /*TODO*/ },
+        onDismissRequest = {
+            onDismiss()
+        },
+        dismissButton = {
+            FilledButton(
+                label = stringResource(id = R.string.undo),
+                onClick = { onConfirm() },
+                colors = ButtonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.Gray
+                )
+            )
+        },
+        confirmButton = {
+            FilledButton(
+                label = stringResource(id = R.string.continue_edit),
+                onClick = { onDismiss() }
+            )
+        },
         modifier = modifier
     )
 }
