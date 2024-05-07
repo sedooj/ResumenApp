@@ -1,10 +1,9 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
@@ -25,8 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,7 +45,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.ScreenWithAlert
 import java.io.Serializable
 
 enum class EducationComponentEditorPageFields(
@@ -141,11 +138,10 @@ fun EducationComponentEditorPage(
     resultNavigator: ResultBackNavigator<EditorEducation>,
 ) {
     val data = rememberEducationDataMap(initInfo = education)
+    var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
-    val blur by animateDpAsState(
-        targetValue = if (isLostDataAlertShow) 5.dp else 0.dp
-    )
-    Screen(
+
+    ScreenWithAlert(
         modifier = Modifier.fillMaxSize(),
         title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
         alignment = Alignment.Top,
@@ -165,7 +161,10 @@ fun EducationComponentEditorPage(
         },
         navigationButton = {
             IconButton(onClick = {
-                isLostDataAlertShow = true
+                if (isDataEdited)
+                    isLostDataAlertShow = true
+                else
+                    resultNavigator.navigateBack()
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_back),
@@ -175,23 +174,8 @@ fun EducationComponentEditorPage(
                     Modifier.size(15.dp)
                 )
             }
-        }
-    ) {
-        EducationComponentEditorPageContent(
-            modifier = Modifier
-                .fillMaxSize()
-                .then(
-                    Modifier.blur(
-                        radius = blur,
-                        edgeTreatment = BlurredEdgeTreatment.Unbounded
-                    )
-                ),
-            onEdit = { key, value ->
-                data[key] = value
-            },
-            data = data
-        )
-        if (isLostDataAlertShow)
+        },
+        alertDialog = {
             LostDataAlert(
                 onDismiss = { isLostDataAlertShow = false },
                 onConfirm = {
@@ -200,14 +184,27 @@ fun EducationComponentEditorPage(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+        },
+        showAlert = isLostDataAlertShow
+    ) {
+        EducationComponentEditorPageContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(15.dp),
+            onEdit = { key, value ->
+                data[key] = value
+                isDataEdited = true
+            },
+            data = data
+        )
     }
 }
 
 @Composable
-fun LostDataAlert(
+private fun LostDataAlert(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     AlertDialog(
         icon = {
@@ -222,31 +219,19 @@ fun LostDataAlert(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.warning),
-                maxLines = 1,
+                text = stringResource(id = R.string.changes_is_not_saved),
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold,
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                 textAlign = TextAlign.Center
             )
-        },
-        text = {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(id = R.string.undo_changes),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    textAlign = TextAlign.Center
-                )
-            }
         },
         onDismissRequest = {
             onDismiss()
         },
         dismissButton = {
             FilledButton(
-                label = stringResource(id = R.string.undo),
+                label = stringResource(id = R.string.quit),
                 onClick = { onConfirm() },
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.error,

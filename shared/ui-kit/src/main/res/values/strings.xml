@@ -9,6 +9,8 @@
     <string name="yes">Да</string>
     <string name="cancel">Назад</string>
     <string name="no">Нет</string>
+    <string name="dont_save">Не сохранять</string>
+    <string name="quit">Выйти</string>
     <string name="home">Главная</string>
     <string name="my_resumes">Мои резюме</string>
     <string name="profile">Профиль</string>
@@ -84,7 +86,7 @@
     <string name="gender_picker">Пол</string>
     <string name="marital_picker">Семейное положение</string>
     <string name="birth_date">Дата рождения</string>
-    <string name="changes_is_not_saved">Изменения не были сохранены, вернуться?</string>
+    <string name="changes_is_not_saved">Изменения не были сохранены</string>
     <string name="schedule_picked">Выбранное расписание</string>
     <string name="schedule_full_day">Полный день</string>
     <string name="schedule_shift_schedule">Сменный график</string>
@@ -97,6 +99,7 @@
     <string name="dont_want_to_enter">Не учитывать данный параметр</string>
     <string name="warning">Внимание</string>
     <string name="undo_changes">Отменить изменения?</string>
+    <string name="save_changes_question">Сохранить изменения?</string>
     <string name="undo">Отменить</string>
     <string name="done">Готово</string>
     <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
