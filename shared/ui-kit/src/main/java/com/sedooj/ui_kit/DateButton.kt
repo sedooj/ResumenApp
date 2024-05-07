@@ -37,8 +37,8 @@ fun DateButton(
     val datePicker = rememberDatePickerState()
     var isAlertDialogVisible by remember { mutableStateOf(false) }
     datePicker.displayMode = DisplayMode.Input
-    val formatter = remember { DatePickerDefaults.dateFormatter() }
     val defaultLocale = CalendarLocale.getDefault()
+    val formatter = remember { DatePickerDefaults.dateFormatter() }
 
     val checkedColors = OutlinedTextFieldDefaults.colors(
         disabledBorderColor = MaterialTheme.colorScheme.surfaceTint,
@@ -77,18 +77,25 @@ fun DateButton(
                 confirmButton = {
                     FilledButton(label = stringResource(id = R.string.save), onClick = {
                         isAlertDialogVisible = false
-                        onEnterDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
+                        onEnterDate(
+                            formatter.formatDate(
+                                datePicker.selectedDateMillis,
+                                defaultLocale
+                            )
+                        )
                     })
                 },
                 text = {
-                    DatePicker(state = datePicker, title = {
-                        Text(
-                            text = stringResource(id = R.string.birth_date),
-                            color = MaterialTheme.colorScheme.surfaceTint,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    })
+                    DatePicker(
+                        state = datePicker,
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.birth_date),
+                                color = MaterialTheme.colorScheme.surfaceTint,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        })
                 })
     }
 

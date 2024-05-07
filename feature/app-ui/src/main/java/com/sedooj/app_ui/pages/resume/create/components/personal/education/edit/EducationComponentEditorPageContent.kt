@@ -1,5 +1,6 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +10,11 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CalendarLocale
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -18,6 +23,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,12 +49,11 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.DateValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 import kotlinx.coroutines.launch
-
+import java.util.Locale
 
 @Composable
 private fun InputTextField(
@@ -96,11 +101,12 @@ fun Field(
                 },
                 showBottomSheet = showBottomSheet,
                 content = {
-                    Text(text = value.date)
-                    FilledButton(
-                        label = stringResource(id = R.string.birth_date),
-                        onClick = {
-                            onValueChange(DateValue("01.07.2005"))
+                    DatePickerComponent(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        onDate = {
+                            onValueChange(DateValue(it ?: ""))
                             isFocused = false
                             scope.launch {
                                 sheetState.hide()
@@ -109,7 +115,9 @@ fun Field(
                                     showBottomSheet = false
                                 }
                             }
-                        })
+                        },
+                        title = field.fieldName,
+                    )
                 },
                 modifier = Modifier.fillMaxSize(),
                 sheetState = sheetState
@@ -165,17 +173,41 @@ fun DatePicker(
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DatePickerComponent(
-    dateOfBirth: String?,
+    modifier: Modifier = Modifier,
     onDate: (String?) -> Unit,
+    @StringRes
+    title: Int,
 ) {
-    DateButton(modifier = Modifier.fillMaxWidth(),
-        title = dateOfBirth ?: "",
-        label = stringResource(id = R.string.birth_date),
-        onEnterDate = {
-            onDate(it)
+    val datePicker = rememberDatePickerState()
+    datePicker.displayMode = DisplayMode.Input
+    val defaultLocale = CalendarLocale.getDefault(Locale.Category.FORMAT)
+    val formatter = remember { DatePickerDefaults.dateFormatter() }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        androidx.compose.material3.DatePicker(
+            state = datePicker,
+            title = {
+                Text(
+                    text = stringResource(id = title),
+                    color = MaterialTheme.colorScheme.surfaceTint,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            dateFormatter = formatter,
+            showModeToggle = false
+        )
+        FilledButton(label = stringResource(id = R.string.save), onClick = {
+            onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
         })
+    }
 }
 
 @Composable
