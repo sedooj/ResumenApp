@@ -179,7 +179,7 @@ private fun DatePickerComponent(
     modifier: Modifier = Modifier,
     onDate: (String?) -> Unit,
     @StringRes
-    title: Int,
+    title: Int
 ) {
     val datePicker = rememberDatePickerState()
     datePicker.displayMode = DisplayMode.Input

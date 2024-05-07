@@ -1,5 +1,6 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -151,7 +152,12 @@ fun EducationComponentEditorPage(
     val data = rememberEducationDataMap(initInfo = education)
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
-
+    BackHandler {
+        if (isDataEdited)
+            isLostDataAlertShow = true
+        else
+            resultNavigator.navigateBack()
+    }
     ScreenWithAlert(
         modifier = Modifier.fillMaxSize(),
         title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
