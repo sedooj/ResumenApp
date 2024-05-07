@@ -38,9 +38,11 @@ import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.DateValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.EducationStageConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.FilledButton
@@ -88,13 +90,13 @@ enum class EducationComponentEditorPageFields(
     ),
     ENTER_DATE(
         fieldName = R.string.education_enter_date,
-        defaultValue = TextValue(text = ""),
-        readOnly = false
+        defaultValue = DateValue(date = ""),
+        readOnly = true
     ),
     GRADUATE_DATE(
         fieldName = R.string.education_graduation_date,
-        defaultValue = TextValue(text = ""),
-        readOnly = false
+        defaultValue = DateValue(date = ""),
+        readOnly = true
     ),
 }
 
@@ -114,15 +116,24 @@ private fun rememberEducationDataMap(initInfo: EditorEducation): SnapshotStateMa
             EducationComponentEditorPageFields.SPECIALITY to if (initInfo.speciality.isBlank()) TextValue(
                 ""
             ) else TextValue(initInfo.speciality),
-            EducationComponentEditorPageFields.EDUCATION_STAGE to if (initInfo.educationStage == EducationStage.NOT_SPECIFIED) CustomValue(
-                EducationStageConvertibleContainer(EducationStage.NOT_SPECIFIED)
-            ) else CustomValue(EducationStageConvertibleContainer(initInfo.educationStage)),
-            EducationComponentEditorPageFields.ENTER_DATE to if (initInfo.enterDate.isBlank()) TextValue(
+            EducationComponentEditorPageFields.EDUCATION_STAGE to
+                    if (initInfo.educationStage == EducationStage.NOT_SPECIFIED)
+                        CustomValue(
+                            EducationStageConvertibleContainer(
+                                EducationStage.NOT_SPECIFIED
+                            )
+                        ) else
+                        CustomValue(
+                            EducationStageConvertibleContainer(
+                                initInfo.educationStage
+                            )
+                        ),
+            EducationComponentEditorPageFields.ENTER_DATE to if (initInfo.enterDate.isBlank()) DateValue(
                 ""
-            ) else TextValue(initInfo.enterDate),
-            EducationComponentEditorPageFields.GRADUATE_DATE to if (initInfo.graduatedDate.isBlank()) TextValue(
+            ) else DateValue(initInfo.enterDate),
+            EducationComponentEditorPageFields.GRADUATE_DATE to if (initInfo.graduatedDate.isBlank()) DateValue(
                 ""
-            ) else TextValue(initInfo.graduatedDate)
+            ) else DateValue(initInfo.graduatedDate)
         )
     }
 }
@@ -270,8 +281,11 @@ private fun parseData(
         data[EducationComponentEditorPageFields.FACULTY]?.asStringValue() ?: initInfo.faculty
     val speciality = data[EducationComponentEditorPageFields.SPECIALITY]?.asStringValue()
         ?: initInfo.speciality
+    val educationStage =
+        (data[EducationComponentEditorPageFields.EDUCATION_STAGE]?.asInitialValue() as EducationStageConvertibleContainer?)?.value
+            ?: initInfo.educationStage
     return EditorEducation(
-        educationStage = EducationStage.NOT_SPECIFIED,
+        educationStage = educationStage,
         title = title,
         locationCity = locationCity,
         enterDate = enterDate,

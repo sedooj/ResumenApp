@@ -12,6 +12,7 @@ import com.sedooj.ui_kit.R
 sealed class FieldValue
 
 class TextValue(val text: String) : FieldValue()
+class DateValue(val date: String) : FieldValue()
 
 class CustomValue<T : ConvertibleValue>(val value: T) : FieldValue()
 
@@ -43,6 +44,15 @@ fun FieldValue.asStringValue(): String {
     return when (this) {
         is CustomValue<*> -> value.asStringValue()
         is TextValue -> text
+        is DateValue -> date
+    }
+}
+
+fun FieldValue.asInitialValue(): Any {
+    return when(this) {
+        is CustomValue<*> -> value
+        is DateValue -> date
+        is TextValue -> text
     }
 }
 
@@ -54,8 +64,12 @@ value class EducationStageConvertibleContainer(val value: EducationStage) : Conv
             EducationStage.COLLEGE -> stringResource(id = R.string.education_college)
             EducationStage.UNIVERSITY -> stringResource(id = R.string.education_university)
             EducationStage.INSTITUTE -> stringResource(id = R.string.education_institute)
-            EducationStage.NOT_SPECIFIED -> stringResource(id = R.string.not_specified)
+            EducationStage.NOT_SPECIFIED -> stringResource(id = R.string.edu_not_specified)
         }
+    }
+
+    fun asEnumValue(): EducationStage {
+        return value
     }
 
 }

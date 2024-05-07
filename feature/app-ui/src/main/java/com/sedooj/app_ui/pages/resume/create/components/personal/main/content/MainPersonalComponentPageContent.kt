@@ -55,7 +55,6 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.app_ui.pages.resume.create.components.personal.main.MainPersonalPageFields
-import com.sedooj.ui_kit.DateButton
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.MenuButton
 import com.sedooj.ui_kit.NotNullableValueTextField
@@ -306,15 +305,3 @@ private fun MaritalComponent(
     }
 }
 
-@Composable
-private fun DatePickerComponent(
-    dateOfBirth: String?,
-    onDate: (String?) -> Unit,
-) {
-    DateButton(modifier = Modifier.fillMaxWidth(),
-        title = dateOfBirth ?: "",
-        label = stringResource(id = R.string.birth_date),
-        onEnterDate = {
-            onDate(it)
-        })
-}

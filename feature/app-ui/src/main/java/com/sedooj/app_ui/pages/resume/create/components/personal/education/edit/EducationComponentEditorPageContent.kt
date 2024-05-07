@@ -10,15 +10,20 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,11 +39,15 @@ import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDe
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.EducationStage
+import com.sedooj.app_ui.pages.resume.create.components.generic.DateValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
+import com.sedooj.ui_kit.DateButton
+import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -54,7 +63,7 @@ private fun InputTextField(
     }, value = value, modifier = modifier, readOnly = readOnly)
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Field(
     field: EducationComponentEditorPageFields,
@@ -63,14 +72,50 @@ fun Field(
     modifier: Modifier = Modifier,
 ) {
     var isFocused by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
     Column {
         InputTextField(
             field = field,
             value = value.asStringValue(),
             onValueChange = onValueChange,
-            modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+            modifier = modifier.onFocusChanged {
+                isFocused = it.isFocused && !showBottomSheet
+                if (field.readOnly && value is DateValue && it.isFocused) {
+                    showBottomSheet = true
+                }
+            },
             readOnly = field.readOnly
         )
+        if (field.readOnly && value is DateValue) {
+            DatePicker(
+                onDismiss = {
+                    showBottomSheet = false
+                    isFocused = false
+                },
+                showBottomSheet = showBottomSheet,
+                content = {
+                    Text(text = value.date)
+                    FilledButton(
+                        label = stringResource(id = R.string.birth_date),
+                        onClick = {
+                            onValueChange(DateValue("01.07.2005"))
+                            isFocused = false
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        })
+                },
+                modifier = Modifier.fillMaxSize(),
+                sheetState = sheetState
+            )
+        }
+
         AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(
@@ -99,6 +144,38 @@ fun Field(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePicker(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    showBottomSheet: Boolean,
+    sheetState: SheetState,
+    content: @Composable () -> Unit,
+) {
+    if (showBottomSheet)
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+            modifier = modifier
+        ) {
+            content()
+        }
+}
+
+@Composable
+private fun DatePickerComponent(
+    dateOfBirth: String?,
+    onDate: (String?) -> Unit,
+) {
+    DateButton(modifier = Modifier.fillMaxWidth(),
+        title = dateOfBirth ?: "",
+        label = stringResource(id = R.string.birth_date),
+        onEnterDate = {
+            onDate(it)
+        })
 }
 
 @Composable

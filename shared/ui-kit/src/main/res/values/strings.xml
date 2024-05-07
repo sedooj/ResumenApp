@@ -49,6 +49,7 @@
     <string name="faculty">Факультет</string>
     <string name="speciality">Специальность</string>
     <string name="not_specified">Не указан</string>
+    <string name="edu_not_specified">Не указано</string>
     <string name="type_name">Введите название</string>
     <string name="type_name_only_latin">Введите название (только латинские символы)</string>
     <string name="new_resume">New resume</string>
@@ -56,7 +57,7 @@
     <string name="back">Назад</string>
     <string name="continue_edit">Продолжить редактирование</string>
     <string name="not_specified_femenine">Не указана</string>
-    <string name="education_stage">Тип О.У.</string>
+    <string name="education_stage">Образовательное учреждение</string>
     <string name="has_errors_in_education">Имеются незаполненные поля в данных об образовательном учреждении</string>
     <string name="add_education_institution">Добавить образовательное учреждение</string>
     <string name="remove_education_institution">Удалить образовательное учреждение</string>
