@@ -2,6 +2,7 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CalendarLocale
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DisplayMode
@@ -19,8 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -101,26 +102,31 @@ fun Field(
                 },
                 showBottomSheet = showBottomSheet,
                 content = {
-                    DatePickerComponent(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(20.dp),
-                        onDate = {
-                            onValueChange(DateValue(it ?: ""))
-                            isFocused = false
-                            scope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    showBottomSheet = false
+                    Box(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DatePickerComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            onDate = {
+                                onValueChange(DateValue(it ?: ""))
+                                isFocused = false
+                                scope.launch {
+                                    sheetState.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetState.isVisible) {
+                                        showBottomSheet = false
+                                    }
                                 }
-                            }
-                        },
-                        title = field.fieldName,
-                    )
-                },
-                modifier = Modifier.fillMaxSize(),
-                sheetState = sheetState
+                            },
+                            title = field.fieldName,
+                        )
+                    }
+                }
             )
         }
 
@@ -154,21 +160,15 @@ fun Field(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePicker(
-    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     showBottomSheet: Boolean,
-    sheetState: SheetState,
     content: @Composable () -> Unit,
 ) {
+
     if (showBottomSheet)
-        ModalBottomSheet(
-            onDismissRequest = onDismiss,
-            sheetState = sheetState,
-            modifier = modifier
-        ) {
+        Dialog(onDismissRequest = onDismiss) {
             content()
         }
 }
@@ -179,7 +179,7 @@ private fun DatePickerComponent(
     modifier: Modifier = Modifier,
     onDate: (String?) -> Unit,
     @StringRes
-    title: Int
+    title: Int,
 ) {
     val datePicker = rememberDatePickerState()
     datePicker.displayMode = DisplayMode.Input
@@ -202,7 +202,7 @@ private fun DatePickerComponent(
                 )
             },
             dateFormatter = formatter,
-            showModeToggle = false
+            showModeToggle = true
         )
         FilledButton(label = stringResource(id = R.string.save), onClick = {
             onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
