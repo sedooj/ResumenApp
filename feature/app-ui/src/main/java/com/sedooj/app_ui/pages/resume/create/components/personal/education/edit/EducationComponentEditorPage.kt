@@ -251,8 +251,8 @@ private fun LostDataAlert(
                 label = stringResource(id = R.string.quit),
                 onClick = { onConfirm() },
                 colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.Gray
                 )
@@ -261,7 +261,13 @@ private fun LostDataAlert(
         confirmButton = {
             FilledButton(
                 label = stringResource(id = R.string.continue_edit),
-                onClick = { onDismiss() }
+                onClick = { onDismiss() },
+                colors = ButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.Gray
+                )
             )
         },
         modifier = modifier

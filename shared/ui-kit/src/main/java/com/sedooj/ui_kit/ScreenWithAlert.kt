@@ -38,8 +38,16 @@ fun ScreenWithAlert(
     showAlert: Boolean,
     content: @Composable () -> Unit,
 ) {
+    val blurRadius by animateDpAsState(
+        targetValue = if (showAlert) 5.dp else 0.dp, label = ""
+    )
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.then(
+            Modifier.blur(
+                radius = blurRadius,
+                edgeTreatment = BlurredEdgeTreatment.Unbounded
+            )
+        ),
         topBar = {
             if (title != null)
                 CenterAlignedTopAppBar(title = {
@@ -56,7 +64,7 @@ fun ScreenWithAlert(
         floatingActionButtonPosition = floatingActionButtonPosition,
         content = {
             ScaffoldContentComponent(
-                modifier = modifier.padding(it),
+                modifier = Modifier.fillMaxSize().padding(it),
                 content = content,
                 alignment = alignment,
                 paddingValues = paddingValues,
@@ -77,9 +85,7 @@ private fun ScaffoldContentComponent(
     alertDialog: @Composable () -> Unit,
     showAlert: Boolean,
 ) {
-    val blurRadius by animateDpAsState(
-        targetValue = if (showAlert) 5.dp else 0.dp, label = ""
-    )
+
     Surface(
         modifier = modifier
     ) {
@@ -87,13 +93,7 @@ private fun ScaffoldContentComponent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(state = scrollState)
-                .then(
-                    Modifier.blur(
-                        radius = blurRadius,
-                        edgeTreatment = BlurredEdgeTreatment.Unbounded
-                    )
-                ),
+                .verticalScroll(state = scrollState),
             verticalArrangement = Arrangement.spacedBy(
                 paddingValues,
                 alignment = alignment
