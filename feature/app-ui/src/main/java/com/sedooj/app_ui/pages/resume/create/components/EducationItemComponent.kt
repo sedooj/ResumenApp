@@ -37,6 +37,7 @@ import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R
 
+@Deprecated("Old version of EducationItem", level = DeprecationLevel.WARNING)
 @Composable
 fun EducationItemComponent(
     modifier: Modifier = Modifier,

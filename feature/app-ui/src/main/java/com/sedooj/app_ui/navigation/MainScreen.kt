@@ -12,6 +12,7 @@ import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDestination
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALMAINDestination
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALSECONDARYDestination
+import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
 import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
@@ -41,9 +42,6 @@ fun MainScreen() {
                 destination(CREATERESUMEDestination) {
                     dependency(createResumeViewModel)
                 }
-//                destination(CREATERESUMEVACANCYDestination) {
-//                    dependency(createResumeViewModel)
-//                }
                 destination(CREATERESUMEPERSONALMAINDestination) {
                     dependency(createResumeViewModel)
                 }
@@ -57,6 +55,9 @@ fun MainScreen() {
                     dependency(createResumeViewModel)
                 }
                 destination(MYRESUMESDestination) {
+                    dependency(myResumesViewModel)
+                }
+                destination(CREATERESUMEVACANCYDestination) {
                     dependency(myResumesViewModel)
                 }
             }

@@ -106,7 +106,10 @@ fun Field(
                         modifier =
                         Modifier
                             .fillMaxWidth()
-                            .background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = RoundedCornerShape(8.dp)
+                            )
                             .padding(10.dp),
                         contentAlignment = Alignment.Center
                     ) {
