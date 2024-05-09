@@ -2,8 +2,8 @@ package com.sedooj.app_ui.pages.resume.create.components
 
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALMAINDestination
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALSECONDARYDestination
+import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONDestination
-import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
 import com.ramcosta.composedestinations.spec.Direction
 import com.sedooj.ui_kit.R
 
@@ -12,7 +12,7 @@ enum class ComponentList(val title: Int, val subTitle: Int?, val icon: Int, val 
         title = R.string.vacancy,
         R.string.type_vacancy,
         icon = R.drawable.bag,
-        direction = HOMEDestination
+        direction = CREATERESUMEVACANCYDestination
     ),
     PERSONAL_MAIN(
         title = R.string.personal_information,

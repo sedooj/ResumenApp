@@ -58,7 +58,7 @@ fun MainScreen() {
                     dependency(myResumesViewModel)
                 }
                 destination(CREATERESUMEVACANCYDestination) {
-                    dependency(myResumesViewModel)
+                    dependency(createResumeViewModel)
                 }
             }
         )

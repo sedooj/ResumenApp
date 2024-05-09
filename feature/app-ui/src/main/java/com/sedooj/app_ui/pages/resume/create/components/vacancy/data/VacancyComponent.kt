@@ -1,10 +1,27 @@
 package com.sedooj.app_ui.pages.resume.create.components.vacancy.data
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.PlatformType
@@ -19,6 +36,8 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.PlatformTypeConv
 import com.sedooj.app_ui.pages.resume.create.components.generic.ScheduleTypeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.StackTypeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
+import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 
 enum class VacancyComponentFields(
@@ -89,39 +108,148 @@ enum class VacancyComponentFields(
     )
 }
 
+class VacancyComponent {
+
+    @Composable
+    fun dataMap(initInfo: CreateResumeUseCase.VacancyInformation?): SnapshotStateMap<VacancyComponentFields, FieldValue> {
+        return VacancyComponentData().rememberDataMap(initInfo = initInfo)
+    }
+
+    @Composable
+    fun lostDataAlert(modifier: Modifier = Modifier) {
+
+    }
+
+    @Composable
+    fun content(
+        data: Map<VacancyComponentFields, FieldValue>,
+        onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        VacancyComponentContent().content(data = data, onValueChange = onValueChange, modifier = modifier)
+    }
+}
+
+class VacancyComponentContent {
+
+    @Composable
+    private fun InputTextField(
+        field: VacancyComponentFields,
+        value: String,
+        onValueChange: (FieldValue) -> Unit,
+        modifier: Modifier = Modifier,
+        readOnly: Boolean = false,
+    ) {
+        NotNullableValueTextField(label = field.fieldName, onValueChange = {
+            onValueChange(TextValue(it))
+        }, value = value, modifier = modifier, readOnly = readOnly)
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
+    @Composable
+    private fun Field(
+        field: VacancyComponentFields,
+        value: FieldValue,
+        onValueChange: (FieldValue) -> Unit,
+        modifier: Modifier = Modifier,
+        readOnly: Boolean,
+    ) {
+        var isFocused by remember { mutableStateOf(false) }
+        Column {
+            InputTextField(
+                field = field,
+                value = value.asStringValue(),
+                onValueChange = onValueChange,
+                modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+                readOnly = readOnly
+            )
+            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        alignment = Alignment.CenterHorizontally
+                    ),
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    field.suggestions.forEach {
+                        SuggestionChip(
+                            onClick = {
+                                onValueChange(it)
+                            },
+                            label = {
+                                Text(
+                                    text = it.value.asStringValue(),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.Center
+                                )
+                            },
+                            enabled = value.asStringValue() != it.value.asStringValue()
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Composable
+    fun content(
+        data: Map<VacancyComponentFields, FieldValue>,
+        onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(
+            modifier = modifier,
+        ) {
+            data.toSortedMap().forEach { (field, value) ->
+                Field(
+                    field = field,
+                    value = value,
+                    onValueChange = { onValueChange(field, it) },
+                    modifier = Modifier.fillMaxWidth(),
+                    readOnly = field.readOnly
+                )
+            }
+        }
+    }
+
+}
+
 class VacancyComponentData {
     @Composable
     fun rememberDataMap(initInfo: CreateResumeUseCase.VacancyInformation?): SnapshotStateMap<VacancyComponentFields, FieldValue> {
         return remember {
             mutableStateMapOf(
-                VacancyComponentFields.STACK_TYPE to if (initInfo?.stackType == StackType.NOT_SELECTED) CustomValue(
+                VacancyComponentFields.STACK_TYPE to if (initInfo?.stackType == null) CustomValue(
                     StackTypeConvertibleContainer(StackType.NOT_SELECTED)
-                ) else CustomValue(StackTypeConvertibleContainer(initInfo!!.stackType)),
+                ) else CustomValue(StackTypeConvertibleContainer(initInfo.stackType)),
 
-                VacancyComponentFields.PLATFORM_TYPE to if (initInfo.platformType == PlatformType.NOT_SELECTED)
+                VacancyComponentFields.PLATFORM_TYPE to if (initInfo?.platformType == null)
                     CustomValue(PlatformTypeConvertibleContainer(PlatformType.NOT_SELECTED))
                 else CustomValue(PlatformTypeConvertibleContainer(initInfo.platformType)),
 
-                VacancyComponentFields.ROLE to if (initInfo.desiredRole.isEmpty())
+                VacancyComponentFields.ROLE to if (initInfo?.desiredRole == null)
                     TextValue("")
                 else TextValue(initInfo.desiredRole),
 
-                VacancyComponentFields.SALARY to if (initInfo.desiredSalary.isNullOrEmpty())
+                VacancyComponentFields.SALARY to if (initInfo?.desiredSalary == null)
                     TextValue("")
                 else TextValue(initInfo.desiredSalary ?: "Null"),
 
-                VacancyComponentFields.BUSYNESS to if (initInfo.busynessType == BusynessType.NOT_SELECTED)
+                VacancyComponentFields.BUSYNESS to if (initInfo?.busynessType == null)
                     CustomValue(BusynessTypeConvertibleContainer(BusynessType.NOT_SELECTED))
                 else
                     CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType!!)),
 
-                VacancyComponentFields.SCHEDULE to if (initInfo.scheduleType == ScheduleType.NOT_SELECTED)
+                VacancyComponentFields.SCHEDULE to if (initInfo?.scheduleType == null)
                     CustomValue(ScheduleTypeConvertibleContainer(ScheduleType.NOT_SELECTED))
                 else
                     CustomValue(ScheduleTypeConvertibleContainer(initInfo.scheduleType)),
 
                 VacancyComponentFields.READY_FOR_TRAVELLING to CustomValue(
-                    BooleanConvertibleContainer(initInfo.readyForTravelling)
+                    BooleanConvertibleContainer(initInfo?.readyForTravelling ?: false)
                 )
             )
         }
