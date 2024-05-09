@@ -1,16 +1,21 @@
 package com.sedooj.app_ui.pages.resume.create.components.personal.education
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -39,6 +44,7 @@ fun EducationComponentPage(
     createResumeViewModel: CreateResumeViewModel,
     resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EditorEducation>,
 ) {
+    BackHandler {}
     val educationList =
         createResumeViewModel.uiState.collectAsState().value.personalInformation?.education
     resultRecipient.onResult {
@@ -54,11 +60,23 @@ fun EducationComponentPage(
             )
         )
     }
-
     Screen(
         title = stringResource(id = R.string.education),
         modifier = Modifier.fillMaxSize(),
         alignment = if (educationList != null) Alignment.Top else Alignment.CenterVertically,
+        navigationButton = {
+            IconButton(onClick = {
+                navigator.navigateUp()
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_back),
+                    contentDescription = stringResource(
+                        id = R.string.go_back
+                    ),
+                    Modifier.size(15.dp)
+                )
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = dropUnlessResumed {
                 createOrEdit(

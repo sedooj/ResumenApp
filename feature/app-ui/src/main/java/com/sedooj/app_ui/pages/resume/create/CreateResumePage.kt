@@ -32,7 +32,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
-import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
@@ -44,7 +44,7 @@ import com.sedooj.ui_kit.R.string
 @Destination<RootGraph>(
     start = false,
     route = Routes.CREATE_RESUME,
-    style = FadeScreensTransitions::class
+    style = SlideScreenTransitions::class
 )
 @Composable
 fun CreateResumePage(
@@ -67,6 +67,7 @@ fun CreateResumePage(
     }
     val focusManager = LocalFocusManager.current
     BackHandler {
+//        destinationsNavigator.navigateUp()
         isAlertDialogVisible = true
     }
     EditableTitleScreen(
@@ -109,9 +110,7 @@ fun CreateResumePage(
     ) {
         SetupComponentList(
             onSelect = {
-                destinationsNavigator.navigate(it) {
-                    launchSingleTop = true
-                }
+                destinationsNavigator.navigate(it)
             }
         )
     }
