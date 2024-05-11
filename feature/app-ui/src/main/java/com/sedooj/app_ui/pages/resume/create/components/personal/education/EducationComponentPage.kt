@@ -2,20 +2,16 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.education
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -31,7 +27,7 @@ import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
     start = false,
@@ -64,18 +60,9 @@ fun EducationComponentPage(
         title = stringResource(id = R.string.education),
         modifier = Modifier.fillMaxSize(),
         alignment = if (educationList != null) Alignment.Top else Alignment.CenterVertically,
-        navigationButton = {
-            IconButton(onClick = {
-                navigator.navigateUp()
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_back),
-                    contentDescription = stringResource(
-                        id = R.string.go_back
-                    ),
-                    Modifier.size(15.dp)
-                )
-            }
+        hasBackButton = true,
+        onBack = {
+            navigator.navigateUp()
         },
         floatingActionButton = {
             FloatingActionButton(onClick = dropUnlessResumed {
@@ -84,7 +71,10 @@ fun EducationComponentPage(
                     id = educationList?.lastIndex?.plus(1) ?: 0
                 )
             }) {
-                Icon(imageVector = Icons.Outlined.Add, contentDescription = stringResource(id = R.string.new_education))
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = stringResource(id = R.string.new_education)
+                )
             }
         },
         floatingActionButtonPosition = FabPosition.End

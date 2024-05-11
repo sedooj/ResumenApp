@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.fields
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sedooj.ui_kit.R
 
 @Composable
 fun SalaryTextField(

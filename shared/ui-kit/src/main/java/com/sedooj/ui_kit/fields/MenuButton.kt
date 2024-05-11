@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.fields
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sedooj.ui_kit.R
 
 @Composable
 fun MenuButton(

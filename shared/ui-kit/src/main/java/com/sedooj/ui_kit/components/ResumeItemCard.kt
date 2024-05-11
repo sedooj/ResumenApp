@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.fields.FilledIconButton
 
 data class ResumeItemState(
     var resumeId: Long,

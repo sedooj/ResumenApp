@@ -16,9 +16,9 @@ import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDesti
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
-import com.sedooj.ui_kit.FilledButton
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.screens.Screen
 import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(start = false, route = Routes.HOME, style = FadeScreensTransitions::class)

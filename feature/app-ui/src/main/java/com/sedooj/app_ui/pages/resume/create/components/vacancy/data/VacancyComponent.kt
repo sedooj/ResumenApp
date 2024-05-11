@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +24,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,8 +46,9 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.ScheduleTypeConv
 import com.sedooj.app_ui.pages.resume.create.components.generic.StackTypeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.ui_kit.NotNullableValueTextField
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.fields.FilledButton
+import com.sedooj.ui_kit.fields.NotNullableValueTextField
 
 enum class VacancyComponentFields(
     @StringRes
@@ -115,9 +125,108 @@ class VacancyComponent {
         return VacancyComponentData().rememberDataMap(initInfo = initInfo)
     }
 
-    @Composable
-    fun lostDataAlert(modifier: Modifier = Modifier) {
+    data class EditorVacancy(
+        var stackType: StackType,
+        var platformType: PlatformType,
+        var desiredRole: String,
+        var desiredSalary: String,
+        var busynessType: BusynessType,
+        var scheduleType: ScheduleType,
+        var readyForTravelling: Boolean,
+    ) : java.io.Serializable
 
+    @Composable
+    fun parseData(
+        data: Map<VacancyComponentFields, FieldValue>,
+        initInfo: CreateResumeUseCase.VacancyInformation,
+    ): EditorVacancy {
+        val stackType =
+            (data[VacancyComponentFields.STACK_TYPE] as StackTypeConvertibleContainer?)?.value
+                ?: initInfo.stackType
+        val platformType =
+            (data[VacancyComponentFields.PLATFORM_TYPE] as PlatformTypeConvertibleContainer?)?.value
+                ?: initInfo.platformType
+        val desiredRole = data[VacancyComponentFields.ROLE]?.asStringValue()
+            ?: initInfo.desiredRole
+        val desiredSalary =
+            data[VacancyComponentFields.SALARY]?.asStringValue()
+                ?: initInfo.desiredSalary
+        val busynessType =
+            (data[VacancyComponentFields.BUSYNESS] as BusynessTypeConvertibleContainer?)?.value
+                ?: initInfo.busynessType
+        val scheduleType =
+            (data[VacancyComponentFields.SCHEDULE] as ScheduleTypeConvertibleContainer?)?.value
+                ?: initInfo.scheduleType
+        val readyForTravelling =
+            (data[VacancyComponentFields.READY_FOR_TRAVELLING] as BooleanConvertibleContainer?)?.value
+        ?: initInfo.readyForTravelling
+        return EditorVacancy(
+            stackType = stackType,
+            platformType = platformType,
+            desiredRole = desiredRole,
+            desiredSalary = desiredSalary,
+            busynessType = busynessType,
+            scheduleType = scheduleType,
+            readyForTravelling = readyForTravelling
+
+        )
+    }
+
+    @Composable
+    fun LostDataAlert(
+        onDismiss: () -> Unit,
+        onConfirm: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        AlertDialog(
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.warning),
+                    contentDescription = stringResource(
+                        id = R.string.warning
+                    ),
+                    modifier = Modifier.size(25.dp),
+                    tint = MaterialTheme.colorScheme.error
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.changes_is_not_saved),
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                    textAlign = TextAlign.Center
+                )
+            },
+            onDismissRequest = {
+                onDismiss()
+            },
+            dismissButton = {
+                FilledButton(
+                    label = stringResource(id = R.string.quit),
+                    onClick = { onConfirm() },
+                    colors = ButtonColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Gray
+                    )
+                )
+            },
+            confirmButton = {
+                FilledButton(
+                    label = stringResource(id = R.string.continue_edit),
+                    onClick = { onDismiss() },
+                    colors = ButtonColors(
+                        containerColor = MaterialTheme.colorScheme.inversePrimary,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Gray
+                    )
+                )
+            },
+            modifier = modifier
+        )
     }
 
     @Composable
@@ -126,7 +235,11 @@ class VacancyComponent {
         onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
         modifier: Modifier = Modifier,
     ) {
-        VacancyComponentContent().content(data = data, onValueChange = onValueChange, modifier = modifier)
+        VacancyComponentContent().content(
+            data = data,
+            onValueChange = onValueChange,
+            modifier = modifier
+        )
     }
 }
 

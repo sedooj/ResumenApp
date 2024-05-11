@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.fields
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sedooj.ui_kit.R
 
 @Composable
 fun CheckButton(

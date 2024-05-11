@@ -37,7 +37,7 @@ import com.sedooj.app_ui.pages.resume.create.components.personal.second.content.
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.screens.Screen
 
 enum class SecondPageFields(
     @StringRes
@@ -183,21 +183,12 @@ fun SecondPersonalComponentPage(
             .fillMaxSize()
             .padding(15.dp),
         title = stringResource(id = R.string.personal_information),
-        navigationButton = {
-            IconButton(onClick = {
-//                if (!isChangesSaved)
-                isAlertDialogVisible = true
+        hasBackButton = true,
+        onBack = {
+            //                if (!isChangesSaved)
+            isAlertDialogVisible = true
 //                else
 //                    destinationsNavigator.navigateUp()
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_back),
-                    contentDescription = stringResource(
-                        id = R.string.go_back
-                    ),
-                    Modifier.size(15.dp)
-                )
-            }
         },
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.End,

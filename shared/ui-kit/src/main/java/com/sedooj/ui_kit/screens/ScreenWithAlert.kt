@@ -1,11 +1,9 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.screens
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,17 +13,19 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Screen(
+fun ScreenWithAlert(
     modifier: Modifier = Modifier,
     title: String? = null,
     navigationButton: @Composable () -> Unit = {},
@@ -34,10 +34,20 @@ fun Screen(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     alignment: Alignment.Vertical = Alignment.CenterVertically,
     paddingValues: Dp = 15.dp,
-    content: @Composable () -> Unit
+    alertDialog: @Composable () -> Unit,
+    showAlert: Boolean,
+    content: @Composable () -> Unit,
 ) {
+    val blurRadius by animateDpAsState(
+        targetValue = if (showAlert) 5.dp else 0.dp, label = ""
+    )
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.then(
+            Modifier.blur(
+                radius = blurRadius,
+                edgeTreatment = BlurredEdgeTreatment.Unbounded
+            )
+        ),
         topBar = {
             if (title != null)
                 CenterAlignedTopAppBar(title = {
@@ -54,10 +64,12 @@ fun Screen(
         floatingActionButtonPosition = floatingActionButtonPosition,
         content = {
             ScaffoldContentComponent(
-                modifier = modifier.padding(it),
+                modifier = Modifier.fillMaxSize().padding(it),
                 content = content,
                 alignment = alignment,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                showAlert = showAlert,
+                alertDialog = alertDialog
             )
         }
     )
@@ -69,7 +81,9 @@ private fun ScaffoldContentComponent(
     modifier: Modifier,
     content: @Composable () -> Unit,
     alignment: Alignment.Vertical = Alignment.CenterVertically,
-    paddingValues: Dp
+    paddingValues: Dp,
+    alertDialog: @Composable () -> Unit,
+    showAlert: Boolean,
 ) {
     Surface(
         modifier = modifier
@@ -87,5 +101,7 @@ private fun ScaffoldContentComponent(
         ) {
             content()
         }
+        if (showAlert)
+            alertDialog()
     }
 }

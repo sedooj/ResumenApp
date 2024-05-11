@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.fields
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape

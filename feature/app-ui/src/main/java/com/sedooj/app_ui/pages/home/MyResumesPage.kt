@@ -19,9 +19,9 @@ import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.HomeViewModel
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.ResumeItemCard
-import com.sedooj.ui_kit.ResumeItemState
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.components.ResumeItemCard
+import com.sedooj.ui_kit.components.ResumeItemState
+import com.sedooj.ui_kit.screens.Screen
 import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = FadeScreensTransitions::class)

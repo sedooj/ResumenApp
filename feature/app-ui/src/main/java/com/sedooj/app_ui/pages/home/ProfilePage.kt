@@ -13,7 +13,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(start = false, route = Routes.PROFILE, style = FadeScreensTransitions::class)
 @Composable

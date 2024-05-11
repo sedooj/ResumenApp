@@ -35,9 +35,9 @@ import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignUpViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
-import com.sedooj.ui_kit.FilledButton
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.screens.Screen
 import com.sedooj.ui_kit.textField.PasswordTextField
 import com.sedooj.ui_kit.textField.UsernameTextField
 import kotlinx.coroutines.launch

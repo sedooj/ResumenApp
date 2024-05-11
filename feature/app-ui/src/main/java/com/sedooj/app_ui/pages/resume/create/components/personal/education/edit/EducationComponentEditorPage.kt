@@ -46,9 +46,10 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.arch.Routes
-import com.sedooj.ui_kit.FilledButton
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R
-import com.sedooj.ui_kit.ScreenWithAlert
+import com.sedooj.ui_kit.screens.Screen
+import com.sedooj.ui_kit.screens.ScreenWithAlert
 import java.io.Serializable
 
 enum class EducationComponentEditorPageFields(
@@ -158,7 +159,7 @@ fun EducationComponentEditorPage(
         else
             resultNavigator.navigateBack()
     }
-    ScreenWithAlert(
+    Screen(
         modifier = Modifier.fillMaxSize(),
         title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
         alignment = Alignment.Top,
@@ -176,21 +177,12 @@ fun EducationComponentEditorPage(
                 )
             }
         },
-        navigationButton = {
-            IconButton(onClick = {
-                if (isDataEdited)
-                    isLostDataAlertShow = true
-                else
-                    resultNavigator.navigateBack()
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_back),
-                    contentDescription = stringResource(
-                        id = R.string.go_back
-                    ),
-                    Modifier.size(15.dp)
-                )
-            }
+        hasBackButton = true,
+        onBack = {
+            if (isDataEdited)
+                isLostDataAlertShow = true
+            else
+                resultNavigator.navigateBack()
         },
         alertDialog = {
             LostDataAlert(
@@ -251,7 +243,7 @@ private fun LostDataAlert(
                 label = stringResource(id = R.string.quit),
                 onClick = { onConfirm() },
                 colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                    containerColor = MaterialTheme.colorScheme.background,
                     contentColor = MaterialTheme.colorScheme.primary,
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.Gray
@@ -263,8 +255,8 @@ private fun LostDataAlert(
                 label = stringResource(id = R.string.continue_edit),
                 onClick = { onDismiss() },
                 colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.Gray
                 )

@@ -1,7 +1,7 @@
 package com.sedooj.app_ui.pages.resume.create.components
 
 import androidx.compose.runtime.Composable
-import com.sedooj.ui_kit.NotNullableValueLatinTextField
+import com.sedooj.ui_kit.fields.NotNullableValueLatinTextField
 import com.sedooj.ui_kit.R
 
 @Composable

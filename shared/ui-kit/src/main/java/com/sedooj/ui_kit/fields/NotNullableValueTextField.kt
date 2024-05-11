@@ -1,10 +1,10 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.fields
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,16 +12,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.charset.Charset
+import com.sedooj.ui_kit.R
 
 @Composable
-fun NotNullableValueLatinTextField(
+fun NotNullableValueTextField(
     label: Int,
     onValueChange: (String) -> Unit,
     value: String?,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
+        readOnly = readOnly,
         value = value ?: "",
         onValueChange = {
             onValueChange(it)
@@ -39,22 +42,14 @@ fun NotNullableValueLatinTextField(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-            if (!isValidCharacters(value))
-                Text(
-                    text = stringResource(id = R.string.field_must_contains_only_latin_chars),
-                    color = MaterialTheme.colorScheme.error,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = if (!value.isNullOrBlank()) MaterialTheme.colorScheme.surfaceTint else MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
         shape = RoundedCornerShape(10.dp),
-        isError = value.isNullOrBlank() || !isValidCharacters(value),
+        isError = value.isNullOrBlank(),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next
         )
     )
-}
-
-private fun isValidCharacters(s: String?): Boolean {
-    return Charset.forName("US-ASCII").newEncoder().canEncode(s)
 }

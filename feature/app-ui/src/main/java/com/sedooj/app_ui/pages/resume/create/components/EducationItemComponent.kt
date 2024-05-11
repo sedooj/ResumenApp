@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.api.domain.data.types.EducationStage
-import com.sedooj.ui_kit.FilledButton
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R
 
 @Deprecated("Old version of EducationItem", level = DeprecationLevel.WARNING)

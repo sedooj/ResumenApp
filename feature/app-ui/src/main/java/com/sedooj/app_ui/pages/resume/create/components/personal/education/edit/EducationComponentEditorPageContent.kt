@@ -50,8 +50,8 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.DateValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.ui_kit.FilledButton
-import com.sedooj.ui_kit.NotNullableValueTextField
+import com.sedooj.ui_kit.fields.FilledButton
+import com.sedooj.ui_kit.fields.NotNullableValueTextField
 import com.sedooj.ui_kit.R
 import kotlinx.coroutines.launch
 import java.util.Locale

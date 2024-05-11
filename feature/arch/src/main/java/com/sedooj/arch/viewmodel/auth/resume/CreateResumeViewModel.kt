@@ -92,8 +92,7 @@ class CreateResumeViewModel @Inject constructor(
                     desiredSalary = input.desiredSalary,
                     busynessType = input.busynessType,
                     scheduleType = input.scheduleType,
-                    readyForTravelling = input.readyForTravelling,
-                    isChangesSaved = input.isChangesSaved
+                    readyForTravelling = input.readyForTravelling
                 )
             )
         }

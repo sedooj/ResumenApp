@@ -1,65 +1,60 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.sedooj.ui_kit.textField.TitleTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditableTitleScreen(
+fun TabsScreen(
     modifier: Modifier = Modifier,
-    title: TextFieldValue,
+    title: String? = null,
+    topBar: @Composable () -> Unit,
     navigationButton: @Composable () -> Unit = {},
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     alignment: Alignment.Vertical = Alignment.CenterVertically,
-    paddingValues: Dp = 15.dp,
-    onValueChange: (TextFieldValue) -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    TitleTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = title,
-                        onValueChange = {
-                            onValueChange(it)
-                        },
-                        maxLines = 1,
-                        singleLine = true,
-                        keyboardActions = KeyboardActions(onDone = {
-                            focusManager.clearFocus()
-                        })
-                    )
-                }, navigationIcon = {
-                    navigationButton()
-                }, actions = {
-                    actionButton()
-                })
-
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (title != null)
+                    TopAppBar(title = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = title, fontWeight = FontWeight.Bold)
+                        }
+                    }, navigationIcon = {
+                        navigationButton()
+                    }, actions = {
+                        actionButton()
+                    })
+                topBar()
+            }
         },
         floatingActionButton = {
             floatingActionButton()
@@ -69,8 +64,7 @@ fun EditableTitleScreen(
             ScaffoldContentComponent(
                 modifier = modifier.padding(it),
                 content = content,
-                alignment = alignment,
-                paddingValues = paddingValues
+                alignment = alignment
             )
         }
     )
@@ -81,8 +75,7 @@ fun EditableTitleScreen(
 private fun ScaffoldContentComponent(
     modifier: Modifier,
     content: @Composable () -> Unit,
-    alignment: Alignment.Vertical = Alignment.CenterVertically,
-    paddingValues: Dp,
+    alignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Surface(
         modifier = modifier
@@ -93,7 +86,7 @@ private fun ScaffoldContentComponent(
                 .fillMaxSize()
                 .verticalScroll(state = scrollState),
             verticalArrangement = Arrangement.spacedBy(
-                paddingValues,
+                15.dp,
                 alignment = alignment
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
