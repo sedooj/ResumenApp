@@ -22,7 +22,8 @@ data class CreateResumeUseCase(
         var stackType: StackType,
         var platformType: PlatformType,
         var desiredRole: String,
-        var desiredSalary: String,
+        var desiredSalaryFrom: String,
+        var desiredSalaryTo: String,
         var busynessType: BusynessType,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean

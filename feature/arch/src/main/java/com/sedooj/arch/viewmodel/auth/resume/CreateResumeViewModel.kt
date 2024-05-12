@@ -89,7 +89,8 @@ class CreateResumeViewModel @Inject constructor(
                     stackType = input.stackType,
                     platformType = input.platformType,
                     desiredRole = input.desiredRole,
-                    desiredSalary = input.desiredSalary,
+                    desiredSalaryFrom = input.desiredSalaryFrom,
+                    desiredSalaryTo = input.desiredSalaryTo,
                     busynessType = input.busynessType,
                     scheduleType = input.scheduleType,
                     readyForTravelling = input.readyForTravelling

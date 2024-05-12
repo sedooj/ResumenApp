@@ -38,7 +38,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         stackType = input.vacancyInformation.stackType,
                         platformType = input.vacancyInformation.platformType,
                         desiredRole = input.vacancyInformation.desiredRole,
-                        desiredSalary = input.vacancyInformation.desiredSalary,
+                        desiredSalaryFrom = input.vacancyInformation.desiredSalaryFrom,
+                        desiredSalaryTo = input.vacancyInformation.desiredSalaryTo,
                         busynessType = input.vacancyInformation.busynessType,
                         scheduleType = input.vacancyInformation.scheduleType,
                         readyForTravelling = input.vacancyInformation.readyForTravelling
@@ -121,7 +122,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         stackType = input.vacancyInformation.stackType,
                         platformType = input.vacancyInformation.platformType,
                         desiredRole = input.vacancyInformation.desiredRole,
-                        desiredSalary = input.vacancyInformation.desiredSalary,
+                        desiredSalaryFrom = input.vacancyInformation.desiredSalaryFrom,
+                        desiredSalaryTo = input.vacancyInformation.desiredSalaryTo,
                         busynessType = input.vacancyInformation.busynessType,
                         scheduleType = input.vacancyInformation.scheduleType,
                         readyForTravelling = input.vacancyInformation.readyForTravelling

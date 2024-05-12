@@ -1,5 +1,9 @@
 package com.sedooj.app_ui.pages.resume.create.components.vacancy
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,7 +27,6 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.parseData
 import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.VacancyComponent
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
@@ -45,6 +48,7 @@ fun VacancyComponentPage(
     val data = vacancyComponent.dataMap(initInfo = vacancyInformation)
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
+    var isDataSaved by remember { mutableStateOf(false) }
     Screen(
         title = stringResource(id = R.string.vacancy),
         alertDialog = {
@@ -62,32 +66,38 @@ fun VacancyComponentPage(
         alignment = Alignment.Top,
         hasBackButton = true,
         onBack = {
-            if (isDataEdited)
+            if (isDataEdited && !isDataSaved)
                 isLostDataAlertShow = true
             else
                 navigator.navigateUp()
         },
         floatingActionButton = {
-            if (vacancyInformation != null) {
-                vacancyComponent.parseData(data = data, initInfo = vacancyInformation)
-            }
-            // TODO("save data")
-            FloatingActionButton(onClick = {
-                createResumeViewModel.updateVacancyInformation(input = CreateResumeUseCase.VacancyInformation(
-                    stackType = stackType,
-                    platformType = platformType,
-                    desiredRole = desiredRole,
-                    desiredSalary = desiredSalary,
-                    busynessType = busynessType,
-                    scheduleType = scheduleType,
-                    readyForTravelling = readyForTravelling,
-
-                ))
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Done,
-                    contentDescription = stringResource(id = R.string.done)
+            val parsedData = vacancyComponent.parseData(data = data, initInfo = vacancyInformation)
+            AnimatedVisibility(
+                visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
+                    tween(200)
                 )
+            ) {
+                FloatingActionButton(onClick = {
+                    createResumeViewModel.updateVacancyInformation(
+                        input = CreateResumeUseCase.VacancyInformation(
+                            stackType = parsedData.stackType,
+                            platformType = parsedData.platformType,
+                            desiredRole = parsedData.desiredRole,
+                            desiredSalaryFrom = parsedData.desiredSalaryFrom,
+                            desiredSalaryTo = parsedData.desiredSalaryTo,
+                            busynessType = parsedData.busynessType,
+                            scheduleType = parsedData.scheduleType,
+                            readyForTravelling = parsedData.readyForTravelling
+                        )
+                    )
+                    isDataSaved = true
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Done,
+                        contentDescription = stringResource(id = R.string.done)
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.EndOverlay
@@ -99,6 +109,7 @@ fun VacancyComponentPage(
             data = data, onValueChange = { field, value ->
                 data[field] = value
                 isDataEdited = true
+                isDataSaved = false
             })
     }
 }
