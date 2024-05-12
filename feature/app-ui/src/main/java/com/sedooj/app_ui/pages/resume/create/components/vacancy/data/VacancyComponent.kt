@@ -42,13 +42,16 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.PlatformTypeConvertibleContainer
+import com.sedooj.app_ui.pages.resume.create.components.generic.SalaryValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.ScheduleTypeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.StackTypeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
+import com.sedooj.ui_kit.fields.SalaryField
 
 enum class VacancyComponentFields(
     @StringRes
@@ -129,7 +132,8 @@ class VacancyComponent {
         var stackType: StackType,
         var platformType: PlatformType,
         var desiredRole: String,
-        var desiredSalary: String,
+        var desiredSalaryFrom: String,
+        var desiredSalaryTo: String,
         var busynessType: BusynessType,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
@@ -138,37 +142,40 @@ class VacancyComponent {
     @Composable
     fun parseData(
         data: Map<VacancyComponentFields, FieldValue>,
-        initInfo: CreateResumeUseCase.VacancyInformation,
+        initInfo: CreateResumeUseCase.VacancyInformation?,
     ): EditorVacancy {
         val stackType =
-            (data[VacancyComponentFields.STACK_TYPE] as StackTypeConvertibleContainer?)?.value
-                ?: initInfo.stackType
+            (data[VacancyComponentFields.STACK_TYPE]?.asInitialValue() as StackTypeConvertibleContainer?)?.value
+                ?: initInfo?.stackType
         val platformType =
-            (data[VacancyComponentFields.PLATFORM_TYPE] as PlatformTypeConvertibleContainer?)?.value
-                ?: initInfo.platformType
+            (data[VacancyComponentFields.PLATFORM_TYPE]?.asInitialValue() as PlatformTypeConvertibleContainer?)?.value
+                ?: initInfo?.platformType
         val desiredRole = data[VacancyComponentFields.ROLE]?.asStringValue()
-            ?: initInfo.desiredRole
-        val desiredSalary =
-            data[VacancyComponentFields.SALARY]?.asStringValue()
-                ?: initInfo.desiredSalary
+            ?: initInfo?.desiredRole
+        val desiredSalaryFrom =
+            (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.from
+                ?: initInfo?.desiredSalaryFrom
+        val desiredSalaryTo =
+            (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.to
+                ?: initInfo?.desiredSalaryTo
         val busynessType =
-            (data[VacancyComponentFields.BUSYNESS] as BusynessTypeConvertibleContainer?)?.value
-                ?: initInfo.busynessType
+            (data[VacancyComponentFields.BUSYNESS]?.asInitialValue() as BusynessTypeConvertibleContainer?)?.value
+                ?: initInfo?.busynessType
         val scheduleType =
-            (data[VacancyComponentFields.SCHEDULE] as ScheduleTypeConvertibleContainer?)?.value
-                ?: initInfo.scheduleType
+            (data[VacancyComponentFields.SCHEDULE]?.asInitialValue() as ScheduleTypeConvertibleContainer?)?.value
+                ?: initInfo?.scheduleType
         val readyForTravelling =
-            (data[VacancyComponentFields.READY_FOR_TRAVELLING] as BooleanConvertibleContainer?)?.value
-        ?: initInfo.readyForTravelling
+            (data[VacancyComponentFields.READY_FOR_TRAVELLING]?.asInitialValue() as BooleanConvertibleContainer?)?.value
+                ?: initInfo?.readyForTravelling
         return EditorVacancy(
-            stackType = stackType,
-            platformType = platformType,
-            desiredRole = desiredRole,
-            desiredSalary = desiredSalary,
-            busynessType = busynessType,
-            scheduleType = scheduleType,
-            readyForTravelling = readyForTravelling
-
+            stackType = stackType ?: StackType.NOT_SELECTED,
+            platformType = platformType ?: PlatformType.NOT_SELECTED,
+            desiredRole = desiredRole ?: "",
+            desiredSalaryFrom = desiredSalaryFrom ?: "",
+            desiredSalaryTo = desiredSalaryTo ?: "",
+            busynessType = busynessType ?: BusynessType.NOT_SELECTED,
+            scheduleType = scheduleType ?: ScheduleType.NOT_SELECTED,
+            readyForTravelling = readyForTravelling ?: false
         )
     }
 
@@ -269,37 +276,45 @@ class VacancyComponentContent {
     ) {
         var isFocused by remember { mutableStateOf(false) }
         Column {
-            InputTextField(
-                field = field,
-                value = value.asStringValue(),
-                onValueChange = onValueChange,
-                modifier = modifier.onFocusChanged { isFocused = it.isFocused },
-                readOnly = readOnly
-            )
-            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        alignment = Alignment.CenterHorizontally
-                    ),
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    field.suggestions.forEach {
-                        SuggestionChip(
-                            onClick = {
-                                onValueChange(it)
-                            },
-                            label = {
-                                Text(
-                                    text = it.value.asStringValue(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center
-                                )
-                            },
-                            enabled = value.asStringValue() != it.value.asStringValue()
-                        )
+            if (value is SalaryValue) {
+                SalaryField(onFromValueChange = {
+                    onValueChange(SalaryValue(from = it, to = value.to))
+                }, onToValueChange = {
+                    onValueChange(SalaryValue(from = value.from, to = it))
+                }, fromValue = value.from, toValue = value.to)
+            } else {
+                InputTextField(
+                    field = field,
+                    value = value.asStringValue(),
+                    onValueChange = onValueChange,
+                    modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+                    readOnly = readOnly
+                )
+                AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(
+                            10.dp,
+                            alignment = Alignment.CenterHorizontally
+                        ),
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        field.suggestions.forEach {
+                            SuggestionChip(
+                                onClick = {
+                                    onValueChange(it)
+                                },
+                                label = {
+                                    Text(
+                                        text = it.value.asStringValue(),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                enabled = value.asStringValue() != it.value.asStringValue()
+                            )
+                        }
                     }
                 }
             }
@@ -347,14 +362,14 @@ class VacancyComponentData {
                     TextValue("")
                 else TextValue(initInfo.desiredRole),
 
-                VacancyComponentFields.SALARY to if (initInfo?.desiredSalary == null)
-                    TextValue("")
-                else TextValue(initInfo.desiredSalary ?: "Null"),
+                VacancyComponentFields.SALARY to if (initInfo?.desiredSalaryFrom == null && initInfo?.desiredSalaryTo == null)
+                    SalaryValue(from = "", to = "")
+                else SalaryValue(from = initInfo.desiredSalaryFrom, to = initInfo.desiredSalaryTo),
 
                 VacancyComponentFields.BUSYNESS to if (initInfo?.busynessType == null)
                     CustomValue(BusynessTypeConvertibleContainer(BusynessType.NOT_SELECTED))
                 else
-                    CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType!!)),
+                    CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType)),
 
                 VacancyComponentFields.SCHEDULE to if (initInfo?.scheduleType == null)
                     CustomValue(ScheduleTypeConvertibleContainer(ScheduleType.NOT_SELECTED))

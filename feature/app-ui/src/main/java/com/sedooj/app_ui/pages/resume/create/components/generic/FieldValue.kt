@@ -17,6 +17,7 @@ sealed class FieldValue
 
 class TextValue(val text: String) : FieldValue()
 class DateValue(val date: String) : FieldValue()
+class SalaryValue(val from: String, val to: String) : FieldValue()
 
 class CustomValue<T : ConvertibleValue>(val value: T) : FieldValue()
 
@@ -49,14 +50,16 @@ fun FieldValue.asStringValue(): String {
         is CustomValue<*> -> value.asStringValue()
         is TextValue -> text
         is DateValue -> date
+        is SalaryValue -> "${stringResource(id = R.string.from)} $from ${stringResource(id = R.string.to)} $to"
     }
 }
 
 fun FieldValue.asInitialValue(): Any {
-    return when(this) {
+    return when (this) {
         is CustomValue<*> -> value
         is DateValue -> date
         is TextValue -> text
+        is SalaryValue -> SalaryValue(from = from, to = to)
     }
 }
 
@@ -73,6 +76,7 @@ value class StackTypeConvertibleContainer(val value: StackType) : ConvertibleVal
     }
 
 }
+
 @JvmInline
 value class BooleanConvertibleContainer(val value: Boolean) : ConvertibleValue {
     @Composable
@@ -84,6 +88,7 @@ value class BooleanConvertibleContainer(val value: Boolean) : ConvertibleValue {
     }
 
 }
+
 @JvmInline
 value class PlatformTypeConvertibleContainer(val value: PlatformType) : ConvertibleValue {
     @Composable
@@ -97,6 +102,7 @@ value class PlatformTypeConvertibleContainer(val value: PlatformType) : Converti
     }
 
 }
+
 @JvmInline
 value class BusynessTypeConvertibleContainer(val value: BusynessType) : ConvertibleValue {
     @Composable
@@ -112,6 +118,7 @@ value class BusynessTypeConvertibleContainer(val value: BusynessType) : Converti
     }
 
 }
+
 @JvmInline
 value class ScheduleTypeConvertibleContainer(val value: ScheduleType) : ConvertibleValue {
     @Composable
