@@ -2,6 +2,7 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.main
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.MainP
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
 
@@ -35,7 +37,7 @@ fun MainPersonalComponentPage(
     destinationsNavigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
 ) {
-    var isAlertDialogVisible by remember { mutableStateOf(false) }
+    var isLostDataAlertShow by remember { mutableStateOf(false) }
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     BackHandler {}
@@ -49,9 +51,19 @@ fun MainPersonalComponentPage(
         hasBackButton = true,
         onBack = {
             if (isDataEdited && !isDataSaved)
-                isAlertDialogVisible = true
+                isLostDataAlertShow = true
             else
                 destinationsNavigator.navigateUp()
+        },
+        showAlert = isLostDataAlertShow,
+        alertDialog = {
+            LostDataAlert(onDismiss = { isLostDataAlertShow = false },
+                onConfirm = {
+                    isLostDataAlertShow = false
+                    destinationsNavigator.navigateUp()
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         },
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.End,

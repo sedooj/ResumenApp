@@ -26,13 +26,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
@@ -135,7 +133,7 @@ class MainPersonalComponent {
         initInfo: CreateResumeUseCase.PersonalInformation?,
         createResumeViewModel: CreateResumeViewModel,
     ) {
-        MainPersonalComponentContent().FAB(
+        MainPersonalComponentContent().FloatingActionButton(
             onSaved = onSaved,
             isDataSaved = isDataSaved,
             isDataEdited = isDataEdited,
@@ -212,7 +210,6 @@ private class MainPersonalComponentData {
         }
     }
 
-
     @Composable
     fun parseData(
         data: Map<MainPersonalPageFields, FieldValue>,
@@ -269,7 +266,7 @@ private class MainPersonalComponentContent {
         }, value = value, modifier = modifier, readOnly = readOnly)
     }
 
-    @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun Field(
         field: MainPersonalPageFields,
@@ -280,8 +277,6 @@ private class MainPersonalComponentContent {
     ) {
         var isFocused by remember { mutableStateOf(false) }
         var showDateDialog by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
-        val sheetState = rememberModalBottomSheetState()
         Column {
             InputTextField(
                 field = field,
@@ -429,7 +424,7 @@ private class MainPersonalComponentContent {
     }
 
     @Composable
-    fun FAB(
+    fun FloatingActionButton(
         onSaved: () -> Unit,
         isDataSaved: Boolean, isDataEdited: Boolean,
         data: Map<MainPersonalPageFields, FieldValue>,
@@ -470,4 +465,6 @@ private class MainPersonalComponentContent {
             }
         }
     }
+
+
 }

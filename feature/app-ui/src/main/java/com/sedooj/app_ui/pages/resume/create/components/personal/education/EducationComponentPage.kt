@@ -2,17 +2,12 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.education
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
@@ -21,9 +16,8 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.EditorEducation
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.EducationEditorPageContent
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.createOrEdit
+import com.sedooj.app_ui.pages.resume.create.components.personal.education.data.EducationListComponent
+import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data.EducationComponentData
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -38,7 +32,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun EducationComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EditorEducation>,
+    resultRecipient: ResultRecipient<EDUCATIONEDITORDestination, EducationComponentData.EditorEducation>,
 ) {
     BackHandler {}
     val educationList =
@@ -65,26 +59,18 @@ fun EducationComponentPage(
             navigator.navigateUp()
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = dropUnlessResumed {
-                createOrEdit(
-                    navigator = navigator,
-                    id = educationList?.lastIndex?.plus(1) ?: 0
-                )
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = stringResource(id = R.string.new_education)
-                )
-            }
+            EducationListComponent().FloatingActionButton(
+                navigator = navigator,
+                educationList = educationList
+            )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        EducationEditorPageContent(
-            modifier = Modifier
-                .fillMaxSize(),
+        EducationListComponent().Content(modifier = Modifier
+            .fillMaxSize(),
             educationList = educationList,
             onEdit = { i, edu ->
-                createOrEdit(
+                EducationListComponent().createOrEdit(
                     navigator = navigator,
                     id = i,
                     education = Education(

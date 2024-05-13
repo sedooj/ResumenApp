@@ -65,6 +65,7 @@ fun SalaryField(
     }
 }
 
+@Deprecated("Function's working so bad", level = DeprecationLevel.ERROR)
 private fun handleValueChange(value: String, previousValue: String): String {
     val newChar = value.removePrefix(previousValue)
     if (newChar == "\b") {
@@ -103,7 +104,7 @@ private fun FromField(
         value = fromValue,
         colors = colors,
         onValueChange = {
-            onValueChange(handleValueChange(value = it, previousValue = fromValue))
+            onValueChange(it)
         },
         trailingIcon = {
             Icon(

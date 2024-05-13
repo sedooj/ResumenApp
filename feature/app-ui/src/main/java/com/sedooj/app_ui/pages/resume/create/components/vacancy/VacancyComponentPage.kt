@@ -31,6 +31,7 @@ import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.VacancyComp
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
@@ -52,7 +53,7 @@ fun VacancyComponentPage(
     Screen(
         title = stringResource(id = R.string.vacancy),
         alertDialog = {
-            vacancyComponent.LostDataAlert(
+            LostDataAlert(
                 onDismiss = { isLostDataAlertShow = false },
                 onConfirm = {
                     isLostDataAlertShow = false
@@ -102,7 +103,7 @@ fun VacancyComponentPage(
         },
         floatingActionButtonPosition = FabPosition.EndOverlay
     ) {
-        vacancyComponent.content(
+        vacancyComponent.Content(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
