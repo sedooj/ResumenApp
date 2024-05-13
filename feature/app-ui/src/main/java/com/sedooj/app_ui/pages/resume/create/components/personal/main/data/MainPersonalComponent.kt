@@ -429,7 +429,7 @@ private class MainPersonalComponentContent {
         isDataSaved: Boolean, isDataEdited: Boolean,
         data: Map<MainPersonalPageFields, FieldValue>,
         initInfo: CreateResumeUseCase.PersonalInformation?,
-        createResumeViewModel: CreateResumeViewModel,
+        createResumeViewModel: CreateResumeViewModel
     ) {
         val parsedData = MainPersonalComponentData().parseData(data = data, initInfo = initInfo)
         AnimatedVisibility(

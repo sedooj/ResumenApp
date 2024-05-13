@@ -81,27 +81,6 @@ class CreateResumeViewModel @Inject constructor(
             )
         }
     }
-    fun updateMainPersonalInformation(input: CreateResumeUseCase.PersonalInformation) {
-        _uiState.update {
-            it.copy(
-                personalInformation = CreateResumeUseCase.PersonalInformation(
-                    firstName = input.firstName,
-                    secondName = input.secondName,
-                    thirdName = input.thirdName,
-                    dateOfBirth = input.dateOfBirth,
-                    city = input.city,
-                    residenceCountry = input.residenceCountry,
-                    genderType = input.genderType,
-                    maritalStatus = input.maritalStatus,
-                    education = input.education,
-                    hasChild = input.hasChild,
-                    socialMedia = input.socialMedia,
-                    aboutMe = input.aboutMe,
-                    personalQualities = input.personalQualities
-                )
-            )
-        }
-    }
 
     override fun updateVacancyInformation(input: CreateResumeUseCase.VacancyInformation) {
         _uiState.update {
