@@ -16,8 +16,8 @@ import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDesti
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
-import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R.string
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.screens.Screen
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ fun HomeScreen(
         title = stringResource(id = string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         FilledButton(
             modifier = Modifier.fillMaxWidth(),

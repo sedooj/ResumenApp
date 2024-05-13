@@ -24,7 +24,7 @@ fun ProfileScreen(
         title = stringResource(id = string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         Text(text = stringResource(id = string.no_content_here_now))
     }

@@ -39,7 +39,7 @@ fun MyResumesScreen(
         title = stringResource(id = string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(10.dp),
         alignment = Alignment.Top
     ) {
         if (uiState.isNullOrEmpty()) {

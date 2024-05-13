@@ -50,10 +50,9 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.DateValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
+import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
-import com.sedooj.ui_kit.R
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
@@ -78,7 +77,7 @@ fun Field(
     modifier: Modifier = Modifier,
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showDateDialog by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     Column {
@@ -87,9 +86,9 @@ fun Field(
             value = value.asStringValue(),
             onValueChange = onValueChange,
             modifier = modifier.onFocusChanged {
-                isFocused = it.isFocused && !showBottomSheet
-                if (field.readOnly && value is DateValue && it.isFocused) {
-                    showBottomSheet = true
+                isFocused = it.isFocused && !showDateDialog
+                if (value is DateValue && it.isFocused) {
+                    showDateDialog = true
                 }
             },
             readOnly = field.readOnly
@@ -97,10 +96,10 @@ fun Field(
         if (field.readOnly && value is DateValue) {
             DatePicker(
                 onDismiss = {
-                    showBottomSheet = false
+                    showDateDialog = false
                     isFocused = false
                 },
-                showBottomSheet = showBottomSheet,
+                showBottomSheet = showDateDialog,
                 content = {
                     Box(
                         modifier =
@@ -118,13 +117,7 @@ fun Field(
                             onDate = {
                                 onValueChange(DateValue(it ?: ""))
                                 isFocused = false
-                                scope.launch {
-                                    sheetState.hide()
-                                }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
-                                }
+                                showDateDialog = false
                             },
                             title = field.fieldName,
                         )

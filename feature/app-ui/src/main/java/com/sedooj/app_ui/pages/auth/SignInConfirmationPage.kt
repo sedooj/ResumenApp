@@ -30,9 +30,9 @@ import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.ConfirmationState
 import com.sedooj.arch.viewmodel.auth.SignInConfirmationViewModel
-import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
@@ -63,7 +63,7 @@ fun SignInConfirmationPage(
     Screen(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         Image(
             modifier = Modifier.requiredSize(208.dp),
