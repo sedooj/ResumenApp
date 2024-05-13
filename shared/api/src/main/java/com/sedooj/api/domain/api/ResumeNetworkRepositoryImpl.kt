@@ -66,11 +66,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                             )
                         },
                         hasChild = input.personalInformation.hasChild,
-                        socialMedia = input.personalInformation.socialMedia?.map {
-                            CreateResume.PersonalInformation.SocialMedia(
-                                type = it.type, url = it.url
-                            )
-                        },
+                        email = input.personalInformation.email,
                         aboutMe = input.personalInformation.aboutMe,
                         personalQualities = input.personalInformation.personalQualities
 
@@ -150,11 +146,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                             )
                         },
                         hasChild = input.personalInformation.hasChild,
-                        socialMedia = input.personalInformation.socialMedia?.map {
-                            CreateResume.PersonalInformation.SocialMedia(
-                                type = it.type, url = it.url
-                            )
-                        },
+                        email = input.personalInformation.email,
                         aboutMe = input.personalInformation.aboutMe,
                         personalQualities = input.personalInformation.personalQualities
 

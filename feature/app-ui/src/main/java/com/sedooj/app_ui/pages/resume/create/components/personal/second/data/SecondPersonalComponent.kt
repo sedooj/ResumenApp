@@ -33,9 +33,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
-import com.sedooj.app_ui.pages.resume.create.components.generic.SocialMediaConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
-import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
@@ -47,8 +45,8 @@ enum class SecondPageFields(
     val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
 ) {
     SOCIAL_MEDIA(
-        fieldName = R.string.social_media,
-        readOnly = true
+        fieldName = R.string.email,
+        readOnly = false
     ),
     ABOUT_ME(
         fieldName = R.string.about_me,
@@ -101,7 +99,7 @@ class SecondPersonalComponent {
 class SecondPersonalComponentData {
 
     data class EditorSecondPersonal(
-        var socialMedia: List<CreateResumeUseCase.PersonalInformation.SocialMedia>,
+        var email: String,
         var aboutMe: String,
         var personalQualities: String,
     ) : java.io.Serializable
@@ -111,29 +109,10 @@ class SecondPersonalComponentData {
         return remember {
             mutableStateMapOf(
                 SecondPageFields.SOCIAL_MEDIA to
-                        if (initInfo?.socialMedia == null)
-                            CustomValue(
-                                SocialMediaConvertibleContainer(
-                                    listOf(
-                                        CreateResumeUseCase.PersonalInformation.SocialMedia(
-                                            type = "",
-                                            url = ""
-                                        )
-                                    )
-                                )
-                            )
+                        if (initInfo?.email == null)
+                            TextValue("")
                         else
-                            CustomValue(
-                                SocialMediaConvertibleContainer(
-                                    initInfo.socialMedia.map {
-                                        CreateResumeUseCase.PersonalInformation.SocialMedia(
-                                            type = it.type,
-                                            url = it.url
-                                        )
-                                    }
-                                )
-                            ),
-
+                            TextValue(initInfo.email),
                 SecondPageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
                     ""
                 ),
@@ -149,9 +128,8 @@ class SecondPersonalComponentData {
         data: Map<SecondPageFields, FieldValue>,
         initInfo: CreateResumeUseCase.PersonalInformation?,
     ): EditorSecondPersonal {
-        val socialMedia =
-            (data[SecondPageFields.SOCIAL_MEDIA]?.asInitialValue() as SocialMediaConvertibleContainer?)?.value
-                ?: initInfo?.socialMedia
+        val email =
+            data[SecondPageFields.SOCIAL_MEDIA]?.asStringValue() ?: initInfo?.email
         val aboutMe =
             data[SecondPageFields.ABOUT_ME]?.asStringValue() ?: initInfo?.aboutMe
         val personalQualities =
@@ -159,7 +137,7 @@ class SecondPersonalComponentData {
                 ?: initInfo?.personalQualities
 
         return EditorSecondPersonal(
-            socialMedia = socialMedia ?: emptyList(),
+            email = email ?: "",
             aboutMe = aboutMe ?: "",
             personalQualities = personalQualities ?: ""
         )
@@ -263,10 +241,7 @@ private class SecondPersonalComponentContent {
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                10.dp,
-                alignment = Alignment.CenterVertically
-            )
+            verticalArrangement = Arrangement.Center
         ) {
             data.toSortedMap().forEach { (field, value) ->
                 Field(

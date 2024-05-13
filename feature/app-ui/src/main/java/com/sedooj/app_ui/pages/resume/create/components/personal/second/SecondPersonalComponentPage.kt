@@ -25,6 +25,7 @@ import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.Sec
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
 
@@ -48,7 +49,7 @@ fun SecondPersonalComponentPage(
     Screen(
         modifier = Modifier
             .fillMaxSize()
-            .padding(15.dp),
+            .padding(10.dp),
         title = stringResource(id = R.string.personal_information),
         hasBackButton = true,
         onBack = {
@@ -58,6 +59,13 @@ fun SecondPersonalComponentPage(
                 destinationsNavigator.navigateUp()
         },
         alignment = Alignment.Top,
+        showAlert = isAlertDialogVisible,
+        alertDialog = {
+            LostDataAlert(onDismiss = { isAlertDialogVisible = false }, onConfirm = {
+                isAlertDialogVisible = false
+                destinationsNavigator.navigateUp()
+            })
+        },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             SecondPersonalComponent().FloatingActionButton(
@@ -74,7 +82,7 @@ fun SecondPersonalComponentPage(
                             maritalStatus = personal?.maritalStatus ?: MaritalStatus.NOT_SELECTED,
                             education = personal?.education ?: emptyList(),
                             hasChild = personal?.hasChild ?: false,
-                            socialMedia = it.socialMedia,
+                            email = it.email,
                             aboutMe = it.aboutMe,
                             personalQualities = it.personalQualities
                         )

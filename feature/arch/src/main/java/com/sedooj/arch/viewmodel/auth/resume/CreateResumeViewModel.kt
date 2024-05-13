@@ -74,7 +74,7 @@ class CreateResumeViewModel @Inject constructor(
                     maritalStatus = input.maritalStatus,
                     education = input.education,
                     hasChild = input.hasChild,
-                    socialMedia = input.socialMedia,
+                    email = input.email,
                     aboutMe = input.aboutMe,
                     personalQualities = input.personalQualities
                 )
@@ -154,7 +154,7 @@ class CreateResumeViewModel @Inject constructor(
                         ?: MaritalStatus.NOT_SELECTED,
                     education = newEducationList.toList(),
                     hasChild = _uiState.value.personalInformation?.hasChild ?: false,
-                    socialMedia = _uiState.value.personalInformation?.socialMedia ?: emptyList(),
+                    email = _uiState.value.personalInformation?.email ?: "",
                     aboutMe = _uiState.value.personalInformation?.aboutMe,
                     personalQualities = _uiState.value.personalInformation?.personalQualities ?: ""
                 )

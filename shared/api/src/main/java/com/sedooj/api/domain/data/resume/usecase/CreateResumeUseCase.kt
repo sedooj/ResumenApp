@@ -40,7 +40,7 @@ data class CreateResumeUseCase(
         var maritalStatus: MaritalStatus,
         var education: List<Education>,
         var hasChild: Boolean,
-        var socialMedia: List<SocialMedia>,
+        var email: String,
         var aboutMe: String?,
         var personalQualities: String,
     ) {

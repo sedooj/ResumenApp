@@ -438,7 +438,7 @@ private class MainPersonalComponentContent {
             )
         ) {
             FloatingActionButton(onClick = {
-                createResumeViewModel.updateMainPersonalInformation(
+                createResumeViewModel.updatePersonalInformation(
                     input = CreateResumeUseCase.PersonalInformation(
                         firstName = parsedData.firstName,
                         secondName = parsedData.secondName,
@@ -450,7 +450,7 @@ private class MainPersonalComponentContent {
                         maritalStatus = parsedData.maritalStatus,
                         education = initInfo?.education ?: emptyList(),
                         hasChild = parsedData.hasChild,
-                        socialMedia = initInfo?.socialMedia ?: emptyList(),
+                        email = initInfo?.email ?: "",
                         aboutMe = initInfo?.aboutMe,
                         personalQualities = initInfo?.personalQualities ?: ""
 
