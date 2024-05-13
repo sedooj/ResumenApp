@@ -129,6 +129,20 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
+    override fun saveWork(index: Int, input: CreateResumeUseCase.WorkExperienceInformation) {
+        val newWorkExperienceList =
+            (_uiState.value.workExperienceInformation ?: emptyList()).toMutableList()
+        if (newWorkExperienceList.size <= index || newWorkExperienceList.isEmpty())
+            newWorkExperienceList.add(input)
+        else
+            newWorkExperienceList[index] = input
+        _uiState.update {
+            it.copy(
+                workExperienceInformation = newWorkExperienceList.toList()
+            )
+        }
+    }
+
     override fun saveEducation(
         index: Int,
         input: CreateResumeUseCase.PersonalInformation.Education,

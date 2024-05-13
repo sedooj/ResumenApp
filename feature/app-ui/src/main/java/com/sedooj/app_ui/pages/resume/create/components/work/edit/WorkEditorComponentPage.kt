@@ -1,4 +1,4 @@
-package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit
+package com.sedooj.app_ui.pages.resume.create.components.work.edit
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,40 +18,35 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data.EducationComponent
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data.EducationComponentData
+import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListComponentData
+import com.sedooj.app_ui.pages.resume.create.components.work.edit.data.WorkEditorComponent
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
+    route = Routes.CREATE_RESUME_WORK_EDITOR,
     start = false,
-    style = SlideScreenTransitions::class,
-    route = Routes.EDUCATION_EDITOR,
+    style = SlideScreenTransitions::class
 )
 @Composable
-fun EducationComponentEditorPage(
-    education: EducationComponentData.EditorEducation,
-    resultNavigator: ResultBackNavigator<EducationComponentData.EditorEducation>,
+fun WorkEditorComponentPage(
+    work: WorkListComponentData.EditWork,
+    resultNavigator: ResultBackNavigator<WorkListComponentData.EditWork>,
 ) {
-    val data = EducationComponent().dataMap(initInfo = education)
+    val data = WorkEditorComponent().dataMap(initInfo = work)
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
-    BackHandler {
-        if (isDataEdited)
-            isLostDataAlertShow = true
-        else
-            resultNavigator.navigateBack()
-    }
+    BackHandler {}
     Screen(
         modifier = Modifier.fillMaxSize(),
-        title = if (education.isEdit) education.title else stringResource(id = R.string.new_education),
+        title = if (work.isEdit) work.company else stringResource(id = R.string.new_work),
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         floatingActionButton = {
-            EducationComponent().GetFloatingActionButton(
+            WorkEditorComponent().FloatingActionButton(
                 onSave = {
                     resultNavigator.navigateBack(
                         result = it
@@ -61,7 +56,7 @@ fun EducationComponentEditorPage(
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited,
                 data = data,
-                initInfo = education
+                initInfo = work
             )
         },
         hasBackButton = true,
@@ -83,7 +78,7 @@ fun EducationComponentEditorPage(
         },
         showAlert = isLostDataAlertShow
     ) {
-        EducationComponent().Content(
+        WorkEditorComponent().Content(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
@@ -95,5 +90,5 @@ fun EducationComponentEditorPage(
             data = data
         )
     }
-}
 
+}

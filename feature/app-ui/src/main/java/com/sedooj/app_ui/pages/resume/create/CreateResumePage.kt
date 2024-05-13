@@ -3,15 +3,9 @@ package com.sedooj.app_ui.pages.resume.create
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -36,10 +29,10 @@ import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
-import com.sedooj.ui_kit.screens.EditableTitleScreen
-import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
+import com.sedooj.ui_kit.components.LostDataAlert
+import com.sedooj.ui_kit.screens.EditableTitleScreen
 
 @Destination<RootGraph>(
     start = false,
@@ -52,6 +45,8 @@ fun CreateResumePage(
     createResumeViewModel: CreateResumeViewModel,
 ) {
     var isAlertDialogVisible by remember { mutableStateOf(false) }
+    var isDataSaved by remember { mutableStateOf(false) }
+    var isDataEdited by remember { mutableStateOf(false) }
     val viewModel = createResumeViewModel.uiState.collectAsState().value
     val defaultTitle = "New resume"
     val title = remember {
@@ -67,7 +62,6 @@ fun CreateResumePage(
     }
     val focusManager = LocalFocusManager.current
     BackHandler {
-//        destinationsNavigator.navigateUp()
         isAlertDialogVisible = true
     }
     EditableTitleScreen(
@@ -83,19 +77,17 @@ fun CreateResumePage(
             )
             createResumeViewModel.updateTitle(it.text)
         },
-        navigationButton = {
-            IconButton(onClick = {
-                isAlertDialogVisible = true
-            }) {
-                Icon(
-                    painter = painterResource(id = drawable.arrow_back),
-                    contentDescription = stringResource(
-                        id = string.go_back
-                    ),
-                    Modifier.size(15.dp)
-                )
-            }
+        hasBackButton = true,
+        onBack = {
+            isAlertDialogVisible = true
         },
+        alertDialog = {
+            LostDataAlert(onDismiss = { isAlertDialogVisible = false }, onConfirm = {
+                destinationsNavigator.navigateUp()
+                createResumeViewModel.dropUiState()
+            })
+        },
+        showAlert = isAlertDialogVisible,
         actionButton = {
             IconButton(onClick = { focusManager.moveFocus(FocusDirection.Left) }) {
                 Icon(
@@ -114,56 +106,7 @@ fun CreateResumePage(
             }
         )
     }
-    ShowAlert(
-        setVisible = { isAlertDialogVisible = it },
-        visible = isAlertDialogVisible,
-        onConfirm = {
-            destinationsNavigator.navigateUp()
-            createResumeViewModel.dropUiState()
-        })
-}
 
-@Composable
-private fun ShowAlert(setVisible: (Boolean) -> Unit, visible: Boolean, onConfirm: () -> Unit) {
-    if (visible)
-        AlertDialog(
-            onDismissRequest = { setVisible(false) },
-            confirmButton = {
-                FilledButton(
-                    label = stringResource(id = string.cancel),
-                    onClick = {
-                        setVisible(false)
-                    },
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(70.dp)
-                )
-            },
-            dismissButton = {
-                FilledButton(
-                    label = stringResource(id = string.yes),
-                    onClick = {
-                        setVisible(false)
-                        onConfirm()
-                    },
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(70.dp),
-                    colors = ButtonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        disabledContentColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                    ),
-                )
-            },
-            text = {
-                Text(
-                    text = stringResource(id = string.changes_is_not_saved),
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            })
 }
 
 @Composable

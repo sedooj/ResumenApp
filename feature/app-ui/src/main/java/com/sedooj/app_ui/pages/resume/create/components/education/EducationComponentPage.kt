@@ -1,4 +1,4 @@
-package com.sedooj.app_ui.pages.resume.create.components.personal.education
+package com.sedooj.app_ui.pages.resume.create.components.education
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +16,8 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.data.EducationListComponent
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data.EducationComponentData
+import com.sedooj.app_ui.pages.resume.create.components.education.data.EducationListComponent
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponentData
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -26,7 +26,7 @@ import com.sedooj.ui_kit.screens.Screen
 @Destination<RootGraph>(
     start = false,
     style = SlideScreenTransitions::class,
-    route = Routes.EDUCATION
+    route = Routes.CREATE_RESUME_EDUCATION
 )
 @Composable
 fun EducationComponentPage(

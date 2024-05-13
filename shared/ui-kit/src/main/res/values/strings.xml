@@ -43,6 +43,7 @@
     <string name="type_skills">Знания языков, soft, hard skills</string>
     <string name="education">Образование</string>
     <string name="new_education">Добавить учреждение</string>
+    <string name="new_work">Добавить компанию</string>
     <string name="education_college">Колледж</string>
     <string name="education_university">Университет</string>
     <string name="education_institute">Институт</string>
@@ -97,6 +98,11 @@
     <string name="gender_picker">Пол</string>
     <string name="marital_picker">Семейное положение</string>
     <string name="birth_date">Дата рождения</string>
+    <string name="company_name">Название компании</string>
+    <string name="kind_of_activity">В чём заключалась ваша работа?</string>
+    <string name="enter_job">Дата трудоустройства</string>
+    <string name="quit_job">Дата увольнения</string>
+    <string name="currently_working">Всё ещё работаю здесь</string>
     <string name="changes_is_not_saved">Изменения не были сохранены</string>
     <string name="schedule_picked">Выбранное расписание</string>
     <string name="schedule_full_day">Полный день</string>
@@ -135,6 +141,7 @@
     <string name="education_graduation_date">Дата выпуска</string>
     <string name="no_content_here_now">Здесь пока ничего нет</string>
     <string name="put_information_about_education">Добавьте информацию об образовательном учреждении</string>
+    <string name="put_information_about_work_experience">Добавьте информацию об опыте работы</string>
     <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
     <string name="wrong_username_length">Имя пользователя должно быть не меньше 6 символов</string>
     <string name="wrong_password_length">Пароль должен быть не меньше 8 символов</string>

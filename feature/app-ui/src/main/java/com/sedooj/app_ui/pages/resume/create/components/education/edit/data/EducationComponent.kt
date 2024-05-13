@@ -1,4 +1,4 @@
-package com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data
+package com.sedooj.app_ui.pages.resume.create.components.education.edit.data
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility

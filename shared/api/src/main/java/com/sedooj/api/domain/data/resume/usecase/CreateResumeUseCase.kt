@@ -64,7 +64,7 @@ data class CreateResumeUseCase(
         var companyName: String,
         var kindOfActivity: String,
         var gotJobDate: String,
-        var quitJobDate: String?,
+        var quitJobDate: String,
         var isCurrentlyWorking: Boolean,
     )
 

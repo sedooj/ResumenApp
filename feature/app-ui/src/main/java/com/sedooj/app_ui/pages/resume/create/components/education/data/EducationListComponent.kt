@@ -1,4 +1,4 @@
-package com.sedooj.app_ui.pages.resume.create.components.personal.education.data
+package com.sedooj.app_ui.pages.resume.create.components.education.data
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDe
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.EducationStage
-import com.sedooj.app_ui.pages.resume.create.components.personal.education.edit.data.EducationComponentData
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponentData
 import com.sedooj.ui_kit.R
 
 class EducationListComponent {

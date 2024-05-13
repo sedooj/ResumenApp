@@ -10,13 +10,13 @@ import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDestination
-import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALMAINDestination
-import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEPERSONALSECONDARYDestination
-import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONDestination
 import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
 import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
-//import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEVACANCYDestination
+import com.ramcosta.composedestinations.generated.destinations.PERSONALMAINDestination
+import com.ramcosta.composedestinations.generated.destinations.PERSONALSECONDARYDestination
+import com.ramcosta.composedestinations.generated.destinations.VACANCYDestination
+import com.ramcosta.composedestinations.generated.destinations.WORKDestination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.destination
 import com.sedooj.app_ui.pages.home.bottomBar.AnimatedBottomBar
@@ -42,10 +42,10 @@ fun MainScreen() {
                 destination(CREATERESUMEDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(CREATERESUMEPERSONALMAINDestination) {
+                destination(PERSONALMAINDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(CREATERESUMEPERSONALSECONDARYDestination) {
+                destination(PERSONALSECONDARYDestination) {
                     dependency(createResumeViewModel)
                 }
                 destination(EDUCATIONDestination) {
@@ -57,7 +57,10 @@ fun MainScreen() {
                 destination(MYRESUMESDestination) {
                     dependency(myResumesViewModel)
                 }
-                destination(CREATERESUMEVACANCYDestination) {
+                destination(VACANCYDestination) {
+                    dependency(createResumeViewModel)
+                }
+                destination(WORKDestination) {
                     dependency(createResumeViewModel)
                 }
             }
