@@ -35,6 +35,7 @@
     <string name="resume">Резюме</string>
     <string name="vacancy">Вакансия</string>
     <string name="type_vacancy">Информация о должности</string>
+    <string name="type_languages">Языки</string>
     <string name="personal_main">Основная</string>
     <string name="personal_secondary">Дополнительная</string>
     <string name="personal_information">Персональная информация</string>
@@ -44,6 +45,7 @@
     <string name="education">Образование</string>
     <string name="new_education">Добавить учреждение</string>
     <string name="new_language">Добавить язык</string>
+    <string name="new_programming_language">Добавить язык программирования</string>
     <string name="new_work">Добавить компанию</string>
     <string name="education_college">Колледж</string>
     <string name="education_university">Университет</string>
@@ -69,7 +71,7 @@
     <string name="work_experience">Опыт работы</string>
     <string name="skills">Навыки</string>
     <string name="skills_languages">Знания языков</string>
-    <string name="skills_programming_languages">Языки программирования</string>
+    <string name="skills_programming_languages">Знания языков программирования</string>
     <string name="knowledge_level">Уровень знаний</string>
     <string name="language_knowledge_a1">Начальный</string>
     <string name="language_knowledge_a2">Ниже среднего</string>
@@ -80,6 +82,7 @@
     <string name="drop_down_item_icon">Иконка объекта в меню выбора</string>
     <string name="stack_picker">Выберите тип стека</string>
     <string name="language">Язык</string>
+    <string name="programming_language">Язык программирования</string>
     <string name="platform_picker">Выберите платформу разработки</string>
     <string name="stack_picked">Выбранный тип стека</string>
     <string name="busyness_picker">Выберите тип занятости</string>
@@ -152,6 +155,8 @@
     <string name="education_graduation_date">Дата выпуска</string>
     <string name="no_content_here_now">Здесь пока ничего нет</string>
     <string name="put_information_about_education">Добавьте информацию об образовательном учреждении</string>
+    <string name="put_information_about_programming_languages">Добавьте информацию о языках программирования</string>
+    <string name="put_information_about_languages">Добавьте информацию о языках</string>
     <string name="put_information_about_work_experience">Добавьте информацию об опыте работы</string>
     <string name="wrong_username_or_password">Неправильное имя пользователя или пароль</string>
     <string name="wrong_username_length">Имя пользователя должно быть не меньше 6 символов</string>

@@ -83,6 +83,7 @@ fun CreateResumePage(
         },
         alertDialog = {
             LostDataAlert(onDismiss = { isAlertDialogVisible = false }, onConfirm = {
+                isAlertDialogVisible = false
                 destinationsNavigator.navigateUp()
                 createResumeViewModel.dropUiState()
             })

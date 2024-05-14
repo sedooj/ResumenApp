@@ -90,7 +90,8 @@ class LanguageSkillsComponentData {
                     EditLanguageSkillsComponentData.LanguageSkill(
                         languageName = skill.languageName,
                         knowledge = skill.knowledgeLevel,
-                        id = id
+                        id = id,
+                        isEdit = true
                     )
                 )
             ) {
@@ -111,7 +112,7 @@ private class LanguageSkillsComponentContent {
         if (skillsList.isNullOrEmpty())
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
                 Text(
-                    text = stringResource(id = R.string.put_information_about_education),
+                    text = stringResource(id = R.string.put_information_about_languages),
                     textAlign = TextAlign.Center,
                     fontSize = MaterialTheme.typography.labelLarge.fontSize,
                     fontWeight = FontWeight.Bold,

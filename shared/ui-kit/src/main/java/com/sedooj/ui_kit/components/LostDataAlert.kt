@@ -65,7 +65,7 @@ fun LostDataAlert(
                 onClick = { onDismiss() },
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.inversePrimary,
-                    contentColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.Gray
                 )
