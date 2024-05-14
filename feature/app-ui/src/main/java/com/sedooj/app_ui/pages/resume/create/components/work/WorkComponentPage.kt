@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.WORKEDITORDestination
+import com.ramcosta.composedestinations.generated.destinations.WorkEditorDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
@@ -32,7 +32,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun WorkComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<WORKEDITORDestination, WorkListComponentData.EditWork>,
+    resultRecipient: ResultRecipient<WorkEditorDestination, WorkListComponentData.EditWork>,
 ) {
     BackHandler {}
     val workExperienceList =

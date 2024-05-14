@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import com.ramcosta.composedestinations.generated.destinations.WORKEDITORDestination
+import com.ramcosta.composedestinations.generated.destinations.WorkEditorDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.ui_kit.R
@@ -85,7 +85,7 @@ class WorkListComponentData {
     ) {
         if (work == null)
             navigator.navigate(
-                WORKEDITORDestination(
+                WorkEditorDestination(
                     EditWork(
                         id = id,
                         company = "",
@@ -100,7 +100,7 @@ class WorkListComponentData {
             }
         else
             navigator.navigate(
-                WORKEDITORDestination(
+                WorkEditorDestination(
                     EditWork(
                         id = id,
                         isEdit = true,

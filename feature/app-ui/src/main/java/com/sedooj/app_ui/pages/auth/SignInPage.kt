@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.SIGNINCONFIRMATIONDestination
-import com.ramcosta.composedestinations.generated.destinations.SIGNUPDestination
+import com.ramcosta.composedestinations.generated.destinations.SignInConfirmationDestination
+import com.ramcosta.composedestinations.generated.destinations.SignUpDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
@@ -72,7 +72,7 @@ fun SignInPage(
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
             destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(SIGNINCONFIRMATIONDestination)
+            destinationsNavigator.navigate(SignInConfirmationDestination)
         }
     }
 
@@ -106,7 +106,7 @@ fun SignInPage(
             SignInComponent(
                 enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && (errorState == null || errorState == string.no_connection),
                 toSignUp = {
-                    destinationsNavigator.navigate(SIGNUPDestination)
+                    destinationsNavigator.navigate(SignUpDestination)
                 },
                 login = {
                     signInViewModel.auth(

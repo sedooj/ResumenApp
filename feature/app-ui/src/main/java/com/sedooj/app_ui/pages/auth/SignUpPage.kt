@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.SIGNINDestination
+import com.ramcosta.composedestinations.generated.destinations.SignInDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
@@ -106,7 +106,7 @@ fun SignUpPage(
                     enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
                     toSignIn = {
                         destinationsNavigator.popBackStack()
-                        destinationsNavigator.navigate(SIGNINDestination)
+                        destinationsNavigator.navigate(SignInDestination)
                     },
                     register = {
                         signUpViewModel.auth(

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.arch.Routes
@@ -56,7 +56,7 @@ fun SignInConfirmationPage(
     LaunchedEffect(key1 = confirmationState) {
         if (confirmationState == ConfirmationState.APPROVED) {
             destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(HOMEDestination)
+            destinationsNavigator.navigate(HomeDestination)
         }
     }
 
