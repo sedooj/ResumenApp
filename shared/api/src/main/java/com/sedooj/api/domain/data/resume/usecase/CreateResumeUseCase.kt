@@ -4,6 +4,7 @@ import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
@@ -69,15 +70,12 @@ data class CreateResumeUseCase(
     )
 
     data class SkillsInformation(
-        var softSkillsInformation: List<String>?,
-        var hardSkillsInformation: List<String>?,
-        var workedFrameworksInformation: List<String>?,
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
-        var workedProgrammingLanguageInformation: List<String>?,
+        var programmingLanguagesSkillsInformation: List<String>?,
     ) {
         data class LanguageSkillsInformation(
             var languageName: String,
-            var knowledgeLevel: String,
+            var knowledgeLevel: LanguageKnowledgeLevelType,
         )
     }
 

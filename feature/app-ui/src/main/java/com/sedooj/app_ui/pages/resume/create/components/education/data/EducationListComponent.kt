@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +26,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponentData
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingAddButton
 
 class EducationListComponent {
 
@@ -59,10 +58,12 @@ class EducationListComponent {
         navigator: DestinationsNavigator,
         educationList: List<CreateResumeUseCase.PersonalInformation.Education>?,
     ) {
-        EducationListComponentContent().FloatingActionButton(
-            navigator = navigator,
-            educationList = educationList
-        )
+        FloatingAddButton(onClick = dropUnlessResumed {
+            EducationListComponent().createOrEdit(
+                navigator = navigator,
+                id = educationList?.lastIndex?.plus(1) ?: 0
+            )
+        })
     }
 
 }
@@ -160,21 +161,4 @@ private class EducationListComponentContent {
             }
     }
 
-    @Composable
-    fun FloatingActionButton(
-        navigator: DestinationsNavigator,
-        educationList: List<CreateResumeUseCase.PersonalInformation.Education>?,
-    ) {
-        androidx.compose.material3.FloatingActionButton(onClick = dropUnlessResumed {
-            EducationListComponent().createOrEdit(
-                navigator = navigator,
-                id = educationList?.lastIndex?.plus(1) ?: 0
-            )
-        }) {
-            Icon(
-                imageVector = Icons.Outlined.Add,
-                contentDescription = stringResource(id = R.string.new_education)
-            )
-        }
-    }
 }

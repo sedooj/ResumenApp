@@ -7,6 +7,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInf
 import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
@@ -72,6 +73,23 @@ value class StackTypeConvertibleContainer(val value: StackType) : ConvertibleVal
             StackType.BACKEND -> stringResource(id = value.title)
             StackType.FULL_STACK -> stringResource(id = value.title)
             StackType.NOT_SELECTED -> stringResource(id = value.title)
+        }
+    }
+
+}
+
+@JvmInline
+value class LanguageKnowledgeConvertibleContainer(val value: LanguageKnowledgeLevelType) : ConvertibleValue {
+    @Composable
+    override fun asStringValue(): String {
+        return when (value) {
+            LanguageKnowledgeLevelType.A1 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.A2 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.B1 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.B2 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.C1 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.C2 -> stringResource(id = value.title)
+            LanguageKnowledgeLevelType.NOT_SELECTED -> stringResource(id = value.title)
         }
     }
 
