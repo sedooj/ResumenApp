@@ -81,16 +81,17 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         )
                     },
                     skillsInformation = CreateResume.SkillsInformation(
-                        softSkillsInformation = input.skillsInformation.softSkillsInformation,
-                        hardSkillsInformation = input.skillsInformation.hardSkillsInformation,
-                        workedFrameworksInformation = input.skillsInformation.workedFrameworksInformation,
                         languagesSkillsInformation = input.skillsInformation.languagesSkillsInformation?.map {
                             CreateResume.SkillsInformation.LanguageSkillsInformation(
                                 languageName = it.languageName,
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation
+                        programmingLanguageInformation = input.skillsInformation.programmingLanguagesSkillsInformation?.map {
+                            CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                                languageName = it.languageName
+                            )
+                        }
                     ),
                     resumeOptions = CreateResume.ResumeOptionsComponent(
                         generatePreview = input.resumeOptions.generatePreview,
@@ -161,16 +162,17 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         )
                     },
                     skillsInformation = CreateResume.SkillsInformation(
-                        softSkillsInformation = input.skillsInformation.softSkillsInformation,
-                        hardSkillsInformation = input.skillsInformation.hardSkillsInformation,
-                        workedFrameworksInformation = input.skillsInformation.workedFrameworksInformation,
                         languagesSkillsInformation = input.skillsInformation.languagesSkillsInformation?.map {
                             CreateResume.SkillsInformation.LanguageSkillsInformation(
                                 languageName = it.languageName,
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation
+                        programmingLanguageInformation = input.skillsInformation.programmingLanguagesSkillsInformation?.map {
+                            CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                                languageName = it.languageName
+                            )
+                        }
                     ),
                     resumeOptions = CreateResume.ResumeOptionsComponent(
                         generatePreview = input.resumeOptions.generatePreview,

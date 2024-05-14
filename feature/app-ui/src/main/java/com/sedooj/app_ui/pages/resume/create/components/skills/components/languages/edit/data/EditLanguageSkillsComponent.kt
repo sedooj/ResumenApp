@@ -2,11 +2,17 @@ package com.sedooj.app_ui.pages.resume.create.components.skills.components.langu
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +25,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +36,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.LanguageKnowledgeConvertibleContainer
 import com.sedooj.app_ui.pages.resume.create.components.generic.SalaryValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
@@ -43,7 +51,7 @@ enum class LanguageSkillsComponentFields(
 ) {
     LANGUAGE(
         fieldName = R.string.language,
-        readOnly = true,
+        readOnly = false,
     ),
     KNOWLEDGE_LEVEL(
         fieldName = R.string.knowledge_level,
@@ -63,21 +71,45 @@ class EditLanguageSkillsComponent {
     @Composable
     fun Content(
         data: Map<LanguageSkillsComponentFields, FieldValue>,
-        onValueChange: (LanguageSkillsComponentFields, FieldValue) -> Unit,
+        onEdit: (LanguageSkillsComponentFields, FieldValue) -> Unit,
         modifier: Modifier = Modifier,
     ) {
         EditLanguageSkillsComponentContent().Content(
             data = data,
-            onValueChange = onValueChange,
+            onValueChange = onEdit,
             modifier = modifier
+        )
+    }
+
+    @Composable
+    fun dataMap(initInfo: EditLanguageSkillsComponentData.LanguageSkill): SnapshotStateMap<LanguageSkillsComponentFields, FieldValue> {
+        return EditLanguageSkillsComponentData().rememberDataMap(initInfo = initInfo)
+    }
+
+    @Composable
+    fun FloatingActionButton(
+        onSave: (EditLanguageSkillsComponentData.LanguageSkill) -> Unit,
+        isDataSaved: Boolean,
+        isDataEdited: Boolean,
+        data: Map<LanguageSkillsComponentFields, FieldValue>,
+        initInfo: EditLanguageSkillsComponentData.LanguageSkill
+    ) {
+        EditLanguageSkillsComponentContent().FloatingActionButton(
+            onSave = onSave,
+            isDataSaved = isDataSaved,
+            isDataEdited = isDataEdited,
+            data = data,
+            initInfo = initInfo
         )
     }
 }
 
-class EditLanguageSkillsComponentDate {
+class EditLanguageSkillsComponentData {
     data class LanguageSkill(
-        var language: String,
+        var id: Int,
+        var languageName: String,
         var knowledge: LanguageKnowledgeLevelType,
+        var isEdit: Boolean = false,
     ) : Serializable
 
     @Composable
@@ -85,10 +117,10 @@ class EditLanguageSkillsComponentDate {
         return remember {
             mutableStateMapOf(
                 LanguageSkillsComponentFields.LANGUAGE to
-                        if (initInfo.language.isBlank()) {
+                        if (initInfo.languageName.isBlank()) {
                             TextValue("")
                         } else {
-                            TextValue(initInfo.language)
+                            TextValue(initInfo.languageName)
                         },
                 LanguageSkillsComponentFields.KNOWLEDGE_LEVEL to if (initInfo.knowledge == LanguageKnowledgeLevelType.NOT_SELECTED) {
                     CustomValue(LanguageKnowledgeConvertibleContainer(LanguageKnowledgeLevelType.NOT_SELECTED))
@@ -97,6 +129,23 @@ class EditLanguageSkillsComponentDate {
                 }
             )
         }
+    }
+
+    @Composable
+    fun parseData(
+        data: Map<LanguageSkillsComponentFields, FieldValue>,
+        initInfo: LanguageSkill,
+    ): LanguageSkill {
+        val languageName =
+            data[LanguageSkillsComponentFields.LANGUAGE]?.asStringValue() ?: initInfo.languageName
+        val knowledgeLevel =
+            (data[LanguageSkillsComponentFields.KNOWLEDGE_LEVEL]?.asInitialValue() as LanguageKnowledgeConvertibleContainer?)?.value
+                ?: initInfo.knowledge
+        return LanguageSkill(
+            languageName = languageName,
+            knowledge = knowledgeLevel,
+            id = initInfo.id
+        )
     }
 }
 
@@ -188,6 +237,32 @@ private class EditLanguageSkillsComponentContent {
                     onValueChange = { onValueChange(field, it) },
                     modifier = Modifier.fillMaxWidth(),
                     readOnly = field.readOnly
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun FloatingActionButton(
+        onSave: (EditLanguageSkillsComponentData.LanguageSkill) -> Unit,
+        isDataSaved: Boolean,
+        isDataEdited: Boolean,
+        data: Map<LanguageSkillsComponentFields, FieldValue>,
+        initInfo: EditLanguageSkillsComponentData.LanguageSkill,
+    ) {
+        val parsedData =
+            EditLanguageSkillsComponentData().parseData(data = data, initInfo = initInfo)
+        AnimatedVisibility(
+            visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
+                tween(200)
+            )
+        ) {
+            androidx.compose.material3.FloatingActionButton(onClick = {
+                onSave(parsedData)
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Done,
+                    contentDescription = stringResource(id = R.string.done)
                 )
             }
         }

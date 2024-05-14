@@ -99,35 +99,46 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override fun updateSkillsInformation(input: CreateResumeUseCase.SkillsInformation) {
+    override fun saveLanguageSkill(
+        index: Int,
+        input: CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation,
+    ) {
+        val newLanguageSkillsList =
+            (_uiState.value.skillsInformation?.languagesSkillsInformation ?: emptyList()).toMutableList()
+        if (newLanguageSkillsList.size <= index || newLanguageSkillsList.isEmpty())
+            newLanguageSkillsList.add(input)
+        else
+            newLanguageSkillsList[index] = input
         _uiState.update {
             it.copy(
                 skillsInformation = CreateResumeUseCase.SkillsInformation(
-                    softSkillsInformation = input.softSkillsInformation,
-                    hardSkillsInformation = input.hardSkillsInformation,
-                    workedFrameworksInformation = input.workedFrameworksInformation,
-                    languagesSkillsInformation = input.languagesSkillsInformation,
-                    workedProgrammingLanguageInformation = input.workedProgrammingLanguageInformation
+                    languagesSkillsInformation = newLanguageSkillsList.toList(),
+                    programmingLanguagesSkillsInformation = _uiState.value.skillsInformation?.programmingLanguagesSkillsInformation
                 )
             )
         }
     }
 
-    override fun updateWorkExperienceInformation(input: List<CreateResumeUseCase.WorkExperienceInformation>) {
+    override fun saveProgrammingLanguageSkill(
+        index: Int,
+        input: CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation,
+    ) {
+        val newProgrammingLanguageSkillsList =
+            (_uiState.value.skillsInformation?.programmingLanguagesSkillsInformation ?: emptyList()).toMutableList()
+        if (newProgrammingLanguageSkillsList.size <= index || newProgrammingLanguageSkillsList.isEmpty())
+            newProgrammingLanguageSkillsList.add(input)
+        else
+            newProgrammingLanguageSkillsList[index] = input
         _uiState.update {
             it.copy(
-                workExperienceInformation = input.map { work ->
-                    CreateResumeUseCase.WorkExperienceInformation(
-                        companyName = work.companyName,
-                        kindOfActivity = work.kindOfActivity,
-                        gotJobDate = work.gotJobDate,
-                        quitJobDate = work.quitJobDate,
-                        isCurrentlyWorking = work.isCurrentlyWorking
-                    )
-                }
+                skillsInformation = CreateResumeUseCase.SkillsInformation(
+                    languagesSkillsInformation =_uiState.value.skillsInformation?.languagesSkillsInformation,
+                    programmingLanguagesSkillsInformation = newProgrammingLanguageSkillsList.toList()
+                )
             )
         }
     }
+
 
     override fun saveWork(index: Int, input: CreateResumeUseCase.WorkExperienceInformation) {
         val newWorkExperienceList =

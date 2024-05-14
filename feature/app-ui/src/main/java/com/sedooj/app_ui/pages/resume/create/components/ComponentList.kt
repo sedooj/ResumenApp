@@ -3,6 +3,7 @@ package com.sedooj.app_ui.pages.resume.create.components
 import com.ramcosta.composedestinations.generated.destinations.EducationDestination
 import com.ramcosta.composedestinations.generated.destinations.PersonalMainDestination
 import com.ramcosta.composedestinations.generated.destinations.PersonalSecondaryDestination
+import com.ramcosta.composedestinations.generated.destinations.SkillsDestination
 import com.ramcosta.composedestinations.generated.destinations.VacancyDestination
 import com.ramcosta.composedestinations.generated.destinations.WorkDestination
 import com.ramcosta.composedestinations.spec.Direction
@@ -48,6 +49,6 @@ enum class ComponentList(
         title = R.string.skills,
         subTitle = R.string.type_skills,
         icon = R.drawable.skills,
-        direction = PersonalMainDestination
+        direction = SkillsDestination
     )
 }

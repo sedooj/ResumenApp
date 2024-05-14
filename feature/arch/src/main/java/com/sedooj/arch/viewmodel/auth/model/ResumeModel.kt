@@ -20,9 +20,8 @@ interface ResumeModel {
 
     fun updateVacancyInformation(input: CreateResumeUseCase.VacancyInformation)
 
-    fun updateSkillsInformation(input: CreateResumeUseCase.SkillsInformation)
-
-    fun updateWorkExperienceInformation(input: List<CreateResumeUseCase.WorkExperienceInformation>)
+    fun saveLanguageSkill(index: Int, input: CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation)
+    fun saveProgrammingLanguageSkill(index: Int, input: CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation)
 
     fun saveWork(index: Int, input: CreateResumeUseCase.WorkExperienceInformation)
 

@@ -20,9 +20,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import com.ramcosta.composedestinations.generated.destinations.SkillsEditLanguagesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingAddButton
 
 class LanguageSkillsComponent {
     @Composable
@@ -49,14 +53,14 @@ class LanguageSkillsComponent {
     @Composable
     fun FloatingActionButton(
         navigator: DestinationsNavigator,
-        educationList: List<CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation>?,
+        skillsList: List<CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation>?,
     ) {
-//        FloatingAddButton(onClick = dropUnlessResumed {
-//            EducationListComponent().createOrEdit(
-//                navigator = navigator,
-//                id = educationList?.lastIndex?.plus(1) ?: 0
-//            )
-//        })
+        FloatingAddButton(onClick = dropUnlessResumed {
+            createOrEdit(
+                navigator = navigator,
+                id = skillsList?.lastIndex?.plus(1) ?: 0
+            )
+        })
     }
 
 }
@@ -69,16 +73,29 @@ class LanguageSkillsComponentData {
         skill: CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation? = null,
     ) {
         if (skill == null)
-//            navigator.navigate(
-//
-//            ) {
-//                launchSingleTop = true
-//            }
+            navigator.navigate(
+                SkillsEditLanguagesDestination(
+                    EditLanguageSkillsComponentData.LanguageSkill(
+                        languageName = "",
+                        knowledge = LanguageKnowledgeLevelType.NOT_SELECTED,
+                        id = id
+                    )
+                )
+            ) {
+                launchSingleTop = true
+            }
         else {
-//            navigator.navigate(
-//            ) {
-//                launchSingleTop = true
-//            }
+            navigator.navigate(
+                SkillsEditLanguagesDestination(
+                    EditLanguageSkillsComponentData.LanguageSkill(
+                        languageName = skill.languageName,
+                        knowledge = skill.knowledgeLevel,
+                        id = id
+                    )
+                )
+            ) {
+                launchSingleTop = true
+            }
         }
     }
 }

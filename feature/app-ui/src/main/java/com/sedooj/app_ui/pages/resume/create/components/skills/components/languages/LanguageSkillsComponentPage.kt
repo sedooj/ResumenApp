@@ -10,10 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SkillsEditLanguagesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.data.LanguageSkillsComponent
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -27,26 +31,21 @@ import com.sedooj.ui_kit.screens.Screen
 fun LanguageSkillsComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-//    resultRecipient: ResultRecipient<, EducationComponentData.EditorEducation>,
+    resultRecipient: ResultRecipient<SkillsEditLanguagesDestination, EditLanguageSkillsComponentData.LanguageSkill>,
 ) {
     BackHandler {}
     val languageSkillList =
         createResumeViewModel.uiState.collectAsState().value.skillsInformation?.languagesSkillsInformation
-//    resultRecipient.onResult {
-//        createResumeViewModel.saveEducation(
-//            it.id, CreateResumeUseCase.PersonalInformation.Education(
-//                educationStage = it.educationStage,
-//                title = it.title,
-//                locationCity = it.locationCity,
-//                enterDate = it.enterDate,
-//                graduatedDate = it.graduatedDate,
-//                faculty = it.faculty,
-//                speciality = it.speciality
-//            )
-//        )
-//    }
+    resultRecipient.onResult {
+        createResumeViewModel.saveLanguageSkill(
+            it.id, CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+                languageName = it.languageName,
+                knowledgeLevel = it.knowledge
+            )
+        )
+    }
     Screen(
-        title = stringResource(id = R.string.education),
+        title = stringResource(id = R.string.skills_languages),
         modifier = Modifier.fillMaxSize(),
         alignment = if (languageSkillList != null) Alignment.Top else Alignment.CenterVertically,
         hasBackButton = true,
@@ -56,12 +55,13 @@ fun LanguageSkillsComponentPage(
         floatingActionButton = {
             LanguageSkillsComponent().FloatingActionButton(
                 navigator = navigator,
-                educationList = languageSkillList
+                skillsList = languageSkillList
             )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        LanguageSkillsComponent().Content(modifier = Modifier
+        LanguageSkillsComponent().Content(
+            modifier = Modifier
             .fillMaxSize(),
             skillsList = languageSkillList,
             onEdit = { i, language ->

@@ -43,6 +43,7 @@
     <string name="type_skills">Знания языков, soft, hard skills</string>
     <string name="education">Образование</string>
     <string name="new_education">Добавить учреждение</string>
+    <string name="new_language">Добавить язык</string>
     <string name="new_work">Добавить компанию</string>
     <string name="education_college">Колледж</string>
     <string name="education_university">Университет</string>
