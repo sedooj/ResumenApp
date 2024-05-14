@@ -3,10 +3,6 @@ package com.sedooj.app_ui.pages.resume.create.components.skills
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,10 +25,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun SkillsComponentPage(
     navigator: DestinationsNavigator
 ) {
-    var isAlertDialogVisible by remember { mutableStateOf(false) }
-    BackHandler {
-        isAlertDialogVisible = true
-    }
+    BackHandler {}
     Screen(
         title = stringResource(id = R.string.skills),
         modifier = Modifier
@@ -41,9 +34,8 @@ fun SkillsComponentPage(
         paddingValues = 0.dp,
         hasBackButton = true,
         onBack = {
-            isAlertDialogVisible = true
+            navigator.navigateUp()
         },
-        showAlert = isAlertDialogVisible,
     ) {
         SkillsComponent().Content(onSelect = {
             navigator.navigate(it) {

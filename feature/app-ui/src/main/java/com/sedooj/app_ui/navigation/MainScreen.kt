@@ -16,6 +16,7 @@ import com.ramcosta.composedestinations.generated.destinations.PersonalMainDesti
 import com.ramcosta.composedestinations.generated.destinations.PersonalSecondaryDestination
 import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
 import com.ramcosta.composedestinations.generated.destinations.SkillsLanguagesDestination
+import com.ramcosta.composedestinations.generated.destinations.SkillsProgrammingLanguagesDestination
 import com.ramcosta.composedestinations.generated.destinations.VacancyDestination
 import com.ramcosta.composedestinations.generated.destinations.WorkDestination
 import com.ramcosta.composedestinations.navigation.dependency
@@ -65,6 +66,9 @@ fun MainScreen() {
                     dependency(createResumeViewModel)
                 }
                 destination(SkillsLanguagesDestination) {
+                    dependency(createResumeViewModel)
+                }
+                destination(SkillsProgrammingLanguagesDestination) {
                     dependency(createResumeViewModel)
                 }
             }

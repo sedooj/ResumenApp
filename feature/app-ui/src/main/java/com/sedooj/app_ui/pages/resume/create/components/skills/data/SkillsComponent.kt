@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.generated.destinations.SkillsLanguagesDestination
+import com.ramcosta.composedestinations.generated.destinations.SkillsProgrammingLanguagesDestination
 import com.ramcosta.composedestinations.spec.Direction
 import com.sedooj.ui_kit.R
 
@@ -22,15 +23,15 @@ enum class SkillsComponentList(
 ) {
     LANGUAGES(
         title = R.string.skills_languages,
-        subTitle = R.string.type_vacancy,
+        subTitle = null,
         icon = R.drawable.languages,
         direction = SkillsLanguagesDestination
     ),
     PROGRAMMING_LANGUAGES(
         title = R.string.skills_programming_languages,
-        subTitle = R.string.type_vacancy,
+        subTitle = null,
         icon = R.drawable.code_brackets,
-        direction = SkillsLanguagesDestination
+        direction = SkillsProgrammingLanguagesDestination
     )
 }
 
@@ -42,10 +43,6 @@ class SkillsComponent {
     ) {
         SkillsComponentContent().GetContent(onSelect = onSelect, modifier = modifier)
     }
-}
-
-class SkillsComponentData {
-
 }
 
 private class SkillsComponentContent {

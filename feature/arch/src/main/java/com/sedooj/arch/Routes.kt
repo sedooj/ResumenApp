@@ -15,7 +15,8 @@ object Routes {
     const val CREATE_RESUME_SKILLS = "Skills"
     const val CREATE_RESUME_SKILLS_LANGUAGE = "Skills_Languages"
     const val CREATE_RESUME_SKILLS_EDIT_LANGUAGE = "Skills_Edit_Languages"
-    const val CREATE_RESUME_SKILLS_LANGUAGE_PROGRAMMING = "Skills_Programming_Languages"
+    const val CREATE_RESUME_SKILLS_PROGRAMMING_LANGUAGE = "Skills_Programming_Languages"
+    const val CREATE_RESUME_SKILLS_EDIT_PROGRAMMING_LANGUAGE = "Skills_Edit_Programming_Languages"
     const val CREATE_RESUME_EDUCATION = "Education"
     const val EDUCATION_EDITOR = "Education_Editor"
 }
