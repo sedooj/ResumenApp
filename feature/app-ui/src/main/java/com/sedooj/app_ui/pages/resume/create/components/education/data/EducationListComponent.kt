@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
+import com.ramcosta.composedestinations.generated.destinations.EducationEditorDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.EducationStage
@@ -75,7 +75,7 @@ private class EducationListComponentData {
     ) {
         if (education == null)
             navigator.navigate(
-                EDUCATIONEDITORDestination(
+                EducationEditorDestination(
                     EducationComponentData.EditorEducation(
                         id = id,
                         educationStage = EducationStage.NOT_SPECIFIED,
@@ -92,7 +92,7 @@ private class EducationListComponentData {
             }
         else
             navigator.navigate(
-                EDUCATIONEDITORDestination(
+                EducationEditorDestination(
                     EducationComponentData.EditorEducation(
                         id = id,
                         educationStage = education.educationStage,

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.MainPersonalComponent
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
@@ -30,7 +30,7 @@ import com.sedooj.ui_kit.screens.Screen
 @Destination<RootGraph>(
     start = false,
     route = Routes.CREATE_RESUME_PERSONAL_MAIN,
-    style = FadeScreensTransitions::class
+    style = SlideScreenTransitions::class
 )
 @Composable
 fun MainPersonalComponentPage(

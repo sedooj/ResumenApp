@@ -9,14 +9,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
-import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDestination
-import com.ramcosta.composedestinations.generated.destinations.EDUCATIONDestination
-import com.ramcosta.composedestinations.generated.destinations.EDUCATIONEDITORDestination
-import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
-import com.ramcosta.composedestinations.generated.destinations.PERSONALMAINDestination
-import com.ramcosta.composedestinations.generated.destinations.PERSONALSECONDARYDestination
-import com.ramcosta.composedestinations.generated.destinations.VACANCYDestination
-import com.ramcosta.composedestinations.generated.destinations.WORKDestination
+import com.ramcosta.composedestinations.generated.destinations.CreateResumeDestination
+import com.ramcosta.composedestinations.generated.destinations.EducationDestination
+import com.ramcosta.composedestinations.generated.destinations.EducationEditorDestination
+import com.ramcosta.composedestinations.generated.destinations.PersonalMainDestination
+import com.ramcosta.composedestinations.generated.destinations.PersonalSecondaryDestination
+import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
+import com.ramcosta.composedestinations.generated.destinations.SkillsDestination
+import com.ramcosta.composedestinations.generated.destinations.VacancyDestination
+import com.ramcosta.composedestinations.generated.destinations.WorkDestination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.destination
 import com.sedooj.app_ui.pages.home.bottomBar.AnimatedBottomBar
@@ -39,28 +40,31 @@ fun MainScreen() {
             navController = navController,
             modifier = Modifier.padding(it),
             dependenciesContainerBuilder = {
-                destination(CREATERESUMEDestination) {
+                destination(CreateResumeDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(PERSONALMAINDestination) {
+                destination(PersonalMainDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(PERSONALSECONDARYDestination) {
+                destination(PersonalSecondaryDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(EDUCATIONDestination) {
+                destination(EducationDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(EDUCATIONEDITORDestination) {
+                destination(EducationEditorDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(MYRESUMESDestination) {
+                destination(ResumeListDestination) {
                     dependency(myResumesViewModel)
                 }
-                destination(VACANCYDestination) {
+                destination(VacancyDestination) {
                     dependency(createResumeViewModel)
                 }
-                destination(WORKDestination) {
+                destination(WorkDestination) {
+                    dependency(createResumeViewModel)
+                }
+                destination(SkillsDestination) {
                     dependency(createResumeViewModel)
                 }
             }

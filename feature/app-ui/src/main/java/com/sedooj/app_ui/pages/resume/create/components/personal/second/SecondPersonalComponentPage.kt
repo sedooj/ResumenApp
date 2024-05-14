@@ -20,7 +20,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.SecondPersonalComponent
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
@@ -32,7 +32,7 @@ import com.sedooj.ui_kit.screens.Screen
 @Destination<RootGraph>(
     start = false,
     route = Routes.CREATE_RESUME_PERSONAL_SECONDARY,
-    style = FadeScreensTransitions::class
+    style = SlideScreenTransitions::class
 )
 @Composable
 fun SecondPersonalComponentPage(

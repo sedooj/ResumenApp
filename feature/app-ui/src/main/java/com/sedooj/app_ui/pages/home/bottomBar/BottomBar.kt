@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.ExperimentalSafeArgsApi
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.generated.NavGraphs
-import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
-import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
-import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
+import com.ramcosta.composedestinations.generated.destinations.ProfileDestination
+import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.startDestination
 
@@ -35,7 +35,7 @@ fun AnimatedBottomBar(
     val currentDestination =
         navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
     AnimatedVisibility(
-        visible = currentDestination == HOMEDestination || currentDestination == MYRESUMESDestination || currentDestination == PROFILEDestination,
+        visible = currentDestination == HomeDestination || currentDestination == ResumeListDestination || currentDestination == ProfileDestination,
         enter = slideInVertically(tween(200)) { it },
         exit = slideOutVertically(tween(100)) { it }
     ) {

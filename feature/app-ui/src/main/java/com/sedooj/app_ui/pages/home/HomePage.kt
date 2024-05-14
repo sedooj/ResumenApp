@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.CREATERESUMEDestination
+import com.ramcosta.composedestinations.generated.destinations.CreateResumeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
@@ -39,7 +39,7 @@ fun HomeScreen(
             label = stringResource(id = string.create_resume),
             onClick = {
                 scope.launch {
-                    destinationsNavigator.navigate(CREATERESUMEDestination)
+                    destinationsNavigator.navigate(CreateResumeDestination)
                 }
             })
     }
