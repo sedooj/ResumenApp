@@ -48,7 +48,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListComponentData
+import com.sedooj.app_ui.pages.resume.create.components.work.data.EditWork
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
@@ -91,296 +91,233 @@ enum class WorkEditorComponentPageFields(
     )
 }
 
-class WorkEditorComponent {
-    @Composable
-    fun dataMap(initInfo: WorkListComponentData.EditWork): SnapshotStateMap<WorkEditorComponentPageFields, FieldValue> {
-        return WorkEditorComponentData().rememberDataMap(initInfo = initInfo)
-    }
+@Composable
+fun rememberWorkEditorDataMap(initInfo: EditWork): SnapshotStateMap<WorkEditorComponentPageFields, FieldValue> {
+    return remember {
+        mutableStateMapOf(
+            WorkEditorComponentPageFields.COMPANY to if (initInfo.company.isBlank()) TextValue(
+                ""
+            ) else TextValue(
+                initInfo.company
+            ),
 
-    @Composable
-    fun Content(
-        modifier: Modifier = Modifier,
-        onEdit: (WorkEditorComponentPageFields, FieldValue) -> Unit,
-        data: Map<WorkEditorComponentPageFields, FieldValue>,
-    ) {
-        WorkEditorComponentContent().GetContent(onEdit = onEdit, data = data, modifier = modifier)
-    }
+            WorkEditorComponentPageFields.ACTIVITY to if (initInfo.kindOfActivity.isBlank()) DateValue(
+                ""
+            ) else DateValue(
+                initInfo.kindOfActivity
+            ),
 
-    @Composable
-    fun FloatingActionButton(
-        onSave: (WorkListComponentData.EditWork) -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<WorkEditorComponentPageFields, FieldValue>,
-        initInfo: WorkListComponentData.EditWork,
-    ) {
-        WorkEditorComponentContent().FloatingActionButton(
-            onSave = onSave,
-            isDataSaved = isDataSaved,
-            isDataEdited = isDataEdited,
-            data = data,
-            initInfo = initInfo
+            WorkEditorComponentPageFields.ENTER_JOB to if (initInfo.enterJobDate.isBlank()) DateValue(
+                ""
+            )
+            else DateValue(initInfo.enterJobDate),
+            WorkEditorComponentPageFields.QUIT_JOB to if (initInfo.quitJobDate.isBlank()) DateValue(
+                ""
+            )
+            else DateValue(initInfo.quitJobDate),
+            WorkEditorComponentPageFields.CURRENTLY_WORKING to CustomValue(
+                BooleanConvertibleContainer(initInfo.currentlyWorking)
+            )
         )
     }
-
 }
 
-class WorkEditorComponentData {
+@Composable
+fun parseWorkEditorData(
+    data: Map<WorkEditorComponentPageFields, FieldValue>,
+    initInfo: EditWork,
+): EditWork {
+    val company =
+        data[WorkEditorComponentPageFields.COMPANY]?.asStringValue() ?: initInfo.company
+    val kindOfActivity =
+        data[WorkEditorComponentPageFields.ACTIVITY]?.asStringValue() ?: initInfo.kindOfActivity
+    val enterJob =
+        data[WorkEditorComponentPageFields.ENTER_JOB]?.asStringValue() ?: initInfo.enterJobDate
+    val quitJob =
+        data[WorkEditorComponentPageFields.QUIT_JOB]?.asStringValue() ?: initInfo.quitJobDate
+    val currentlyWorking =
+        (data[WorkEditorComponentPageFields.CURRENTLY_WORKING]?.asInitialValue() as BooleanConvertibleContainer?)?.value
+            ?: initInfo.currentlyWorking
 
-    @Composable
-    fun rememberDataMap(initInfo: WorkListComponentData.EditWork): SnapshotStateMap<WorkEditorComponentPageFields, FieldValue> {
-        return remember {
-            mutableStateMapOf(
-                WorkEditorComponentPageFields.COMPANY to if (initInfo.company.isBlank()) TextValue(
-                    ""
-                ) else TextValue(
-                    initInfo.company
-                ),
+    return EditWork(
+        id = initInfo.id,
+        company = company,
+        kindOfActivity = kindOfActivity,
+        enterJobDate = enterJob,
+        quitJobDate = quitJob,
+        currentlyWorking = currentlyWorking
+    )
+}
 
-                WorkEditorComponentPageFields.ACTIVITY to if (initInfo.kindOfActivity.isBlank()) DateValue(
-                    ""
-                ) else DateValue(
-                    initInfo.kindOfActivity
-                ),
+@Composable
+private fun InputTextField(
+    field: WorkEditorComponentPageFields,
+    value: String,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier, readOnly = readOnly)
+}
 
-                WorkEditorComponentPageFields.ENTER_JOB to if (initInfo.enterJobDate.isBlank()) DateValue(
-                    ""
-                )
-                else DateValue(initInfo.enterJobDate),
-                WorkEditorComponentPageFields.QUIT_JOB to if (initInfo.quitJobDate.isBlank()) DateValue(
-                    ""
-                )
-                else DateValue(initInfo.quitJobDate),
-                WorkEditorComponentPageFields.CURRENTLY_WORKING to CustomValue(
-                    BooleanConvertibleContainer(initInfo.currentlyWorking)
-                )
-            )
-        }
-    }
-
-    @Composable
-    fun parseData(
-        data: Map<WorkEditorComponentPageFields, FieldValue>,
-        initInfo: WorkListComponentData.EditWork,
-    ): WorkListComponentData.EditWork {
-        val company =
-            data[WorkEditorComponentPageFields.COMPANY]?.asStringValue() ?: initInfo.company
-        val kindOfActivity =
-            data[WorkEditorComponentPageFields.ACTIVITY]?.asStringValue() ?: initInfo.kindOfActivity
-        val enterJob =
-            data[WorkEditorComponentPageFields.ENTER_JOB]?.asStringValue() ?: initInfo.enterJobDate
-        val quitJob =
-            data[WorkEditorComponentPageFields.QUIT_JOB]?.asStringValue() ?: initInfo.quitJobDate
-        val currentlyWorking =
-            (data[WorkEditorComponentPageFields.CURRENTLY_WORKING]?.asInitialValue() as BooleanConvertibleContainer?)?.value
-                ?: initInfo.currentlyWorking
-
-        return WorkListComponentData.EditWork(
-            id = initInfo.id,
-            company = company,
-            kindOfActivity = kindOfActivity,
-            enterJobDate = enterJob,
-            quitJobDate = quitJob,
-            currentlyWorking = currentlyWorking
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Field(
+    field: WorkEditorComponentPageFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    var showDateDialog by remember { mutableStateOf(false) }
+    Column {
+        InputTextField(
+            field = field,
+            value = value.asStringValue(),
+            onValueChange = onValueChange,
+            modifier = modifier.onFocusChanged {
+                isFocused = it.isFocused && !showDateDialog
+                if (value is DateValue && it.isFocused) {
+                    showDateDialog = true
+                }
+            },
+            readOnly = field.readOnly
         )
-    }
-
-}
-
-private class WorkEditorComponentContent {
-    @Composable
-    fun FloatingActionButton(
-        onSave: (WorkListComponentData.EditWork) -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<WorkEditorComponentPageFields, FieldValue>,
-        initInfo: WorkListComponentData.EditWork,
-    ) {
-        val parsedData = WorkEditorComponentData().parseData(data = data, initInfo = initInfo)
-        AnimatedVisibility(
-            visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
-                tween(200)
-            )
-        ) {
-            androidx.compose.material3.FloatingActionButton(onClick = {
-                onSave(parsedData)
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Done,
-                    contentDescription = stringResource(id = R.string.done)
-                )
-            }
-        }
-    }
-
-    @Composable
-    private fun InputTextField(
-        field: WorkEditorComponentPageFields,
-        value: String,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean = false,
-    ) {
-        NotNullableValueTextField(label = field.fieldName, onValueChange = {
-            onValueChange(TextValue(it))
-        }, value = value, modifier = modifier, readOnly = readOnly)
-    }
-
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    fun Field(
-        field: WorkEditorComponentPageFields,
-        value: FieldValue,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        var isFocused by remember { mutableStateOf(false) }
-        var showDateDialog by remember { mutableStateOf(false) }
-        Column {
-            InputTextField(
-                field = field,
-                value = value.asStringValue(),
-                onValueChange = onValueChange,
-                modifier = modifier.onFocusChanged {
-                    isFocused = it.isFocused && !showDateDialog
-                    if (value is DateValue && it.isFocused) {
-                        showDateDialog = true
-                    }
+        if (field.readOnly && value is DateValue) {
+            DatePicker(
+                onDismiss = {
+                    showDateDialog = false
+                    isFocused = false
                 },
-                readOnly = field.readOnly
-            )
-            if (field.readOnly && value is DateValue) {
-                DatePicker(
-                    onDismiss = {
-                        showDateDialog = false
-                        isFocused = false
-                    },
-                    showDialog = showDateDialog,
-                    content = {
-                        Box(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colorScheme.surface,
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .padding(10.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            DatePickerComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                onDate = {
-                                    onValueChange(DateValue(it ?: ""))
-                                    isFocused = false
-                                    showDateDialog = false
-                                },
-                                title = field.fieldName,
+                showDialog = showDateDialog,
+                content = {
+                    Box(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = RoundedCornerShape(8.dp)
                             )
-                        }
-                    }
-                )
-            }
-
-            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        alignment = Alignment.CenterHorizontally
-                    ),
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    field.suggestions.forEach {
-                        SuggestionChip(
-                            onClick = {
-                                onValueChange(it)
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DatePickerComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            onDate = {
+                                onValueChange(DateValue(it ?: ""))
+                                isFocused = false
+                                showDateDialog = false
                             },
-                            label = {
-                                Text(
-                                    text = it.value.asStringValue(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center
-                                )
-                            },
-                            enabled = value.asStringValue() != it.value.asStringValue()
+                            title = field.fieldName,
                         )
                     }
+                }
+            )
+        }
+
+        AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                field.suggestions.forEach {
+                    SuggestionChip(
+                        onClick = {
+                            onValueChange(it)
+                        },
+                        label = {
+                            Text(
+                                text = it.value.asStringValue(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                        },
+                        enabled = value.asStringValue() != it.value.asStringValue()
+                    )
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun DatePicker(
-        onDismiss: () -> Unit,
-        showDialog: Boolean,
-        content: @Composable () -> Unit,
-    ) {
-        if (showDialog)
-            Dialog(onDismissRequest = onDismiss) {
-                content()
-            }
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    private fun DatePickerComponent(
-        modifier: Modifier = Modifier,
-        onDate: (String?) -> Unit,
-        @StringRes
-        title: Int,
-    ) {
-        val datePicker = rememberDatePickerState()
-        datePicker.displayMode = DisplayMode.Input
-        val defaultLocale = CalendarLocale.getDefault(Locale.Category.FORMAT)
-        val formatter = remember { DatePickerDefaults.dateFormatter() }
-
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            androidx.compose.material3.DatePicker(
-                state = datePicker,
-                title = {
-                    Text(
-                        text = stringResource(id = title),
-                        color = MaterialTheme.colorScheme.surfaceTint,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                dateFormatter = formatter,
-                showModeToggle = true
-            )
-            FilledButton(label = stringResource(id = R.string.save), onClick = {
-                onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
-            })
+@Composable
+private fun DatePicker(
+    onDismiss: () -> Unit,
+    showDialog: Boolean,
+    content: @Composable () -> Unit,
+) {
+    if (showDialog)
+        Dialog(onDismissRequest = onDismiss) {
+            content()
         }
-    }
+}
 
-    @Composable
-    fun GetContent(
-        modifier: Modifier = Modifier,
-        onEdit: (WorkEditorComponentPageFields, FieldValue) -> Unit,
-        data: Map<WorkEditorComponentPageFields, FieldValue>,
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatePickerComponent(
+    modifier: Modifier = Modifier,
+    onDate: (String?) -> Unit,
+    @StringRes
+    title: Int,
+) {
+    val datePicker = rememberDatePickerState()
+    datePicker.displayMode = DisplayMode.Input
+    val defaultLocale = CalendarLocale.getDefault(Locale.Category.FORMAT)
+    val formatter = remember { DatePickerDefaults.dateFormatter() }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(
-                10.dp,
-                alignment = Alignment.CenterVertically
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            data.toSortedMap().entries.forEach { (key, value) ->
-                Field(
-                    field = key,
-                    value = value,
-                    onValueChange = { onEdit(key, it) },
-                    modifier = Modifier.fillMaxWidth(),
+        androidx.compose.material3.DatePicker(
+            state = datePicker,
+            title = {
+                Text(
+                    text = stringResource(id = title),
+                    color = MaterialTheme.colorScheme.surfaceTint,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
-            }
+            },
+            dateFormatter = formatter,
+            showModeToggle = true
+        )
+        FilledButton(label = stringResource(id = R.string.save), onClick = {
+            onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
+        })
+    }
+}
+
+@Composable
+fun WorkEditorPageContent(
+    modifier: Modifier = Modifier,
+    onEdit: (WorkEditorComponentPageFields, FieldValue) -> Unit,
+    data: Map<WorkEditorComponentPageFields, FieldValue>,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(
+            10.dp,
+            alignment = Alignment.CenterVertically
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        data.toSortedMap().entries.forEach { (key, value) ->
+            Field(
+                field = key,
+                value = value,
+                onValueChange = { onEdit(key, it) },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }

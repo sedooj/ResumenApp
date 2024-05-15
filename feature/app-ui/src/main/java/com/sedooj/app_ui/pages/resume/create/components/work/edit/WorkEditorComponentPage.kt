@@ -18,10 +18,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListComponentData
-import com.sedooj.app_ui.pages.resume.create.components.work.edit.data.WorkEditorComponent
+import com.sedooj.app_ui.pages.resume.create.components.work.data.EditWork
+import com.sedooj.app_ui.pages.resume.create.components.work.edit.data.WorkEditorPageContent
+import com.sedooj.app_ui.pages.resume.create.components.work.edit.data.parseWorkEditorData
+import com.sedooj.app_ui.pages.resume.create.components.work.edit.data.rememberWorkEditorDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -32,10 +35,10 @@ import com.sedooj.ui_kit.screens.Screen
 )
 @Composable
 fun WorkEditorComponentPage(
-    work: WorkListComponentData.EditWork,
-    resultNavigator: ResultBackNavigator<WorkListComponentData.EditWork>,
+    work: EditWork,
+    resultNavigator: ResultBackNavigator<EditWork>,
 ) {
-    val data = WorkEditorComponent().dataMap(initInfo = work)
+    val data = rememberWorkEditorDataMap(initInfo = work)
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
@@ -46,17 +49,16 @@ fun WorkEditorComponentPage(
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         floatingActionButton = {
-            WorkEditorComponent().FloatingActionButton(
+            val parsedData = parseWorkEditorData(data = data, initInfo = work)
+            FloatingSaveButton(
                 onSave = {
                     resultNavigator.navigateBack(
-                        result = it
+                        result = parsedData
                     )
                     isDataSaved = true
                 },
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited,
-                data = data,
-                initInfo = work
             )
         },
         hasBackButton = true,
@@ -78,7 +80,7 @@ fun WorkEditorComponentPage(
         },
         showAlert = isLostDataAlertShow
     ) {
-        WorkEditorComponent().Content(
+        WorkEditorPageContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
