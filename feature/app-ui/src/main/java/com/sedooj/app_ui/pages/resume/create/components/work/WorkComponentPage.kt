@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.WorkEditorDestination
@@ -16,11 +17,13 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListComponent
-import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListComponentData
+import com.sedooj.app_ui.pages.resume.create.components.work.data.EditWork
+import com.sedooj.app_ui.pages.resume.create.components.work.data.WorkListContent
+import com.sedooj.app_ui.pages.resume.create.components.work.data.createOrEdit
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingAddButton
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
@@ -32,7 +35,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun WorkComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<WorkEditorDestination, WorkListComponentData.EditWork>,
+    resultRecipient: ResultRecipient<WorkEditorDestination, EditWork>,
 ) {
     BackHandler {}
     val workExperienceList =
@@ -57,18 +60,22 @@ fun WorkComponentPage(
             navigator.navigateUp()
         },
         floatingActionButton = {
-            WorkListComponent().FloatingActionButton(
-                navigator = navigator,
-                workList = workExperienceList
+            FloatingAddButton(
+                onClick = dropUnlessResumed {
+                    createOrEdit(
+                        navigator = navigator,
+                        id = workExperienceList?.lastIndex?.plus(1) ?: 0
+                    )
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        WorkListComponent().Content(modifier = Modifier
+        WorkListContent(modifier = Modifier
             .fillMaxSize(),
             workExperienceList = workExperienceList,
             onEdit = { i, work ->
-                WorkListComponent().createOrEdit(
+                createOrEdit(
                     navigator = navigator,
                     id = i,
                     work = CreateResumeUseCase.WorkExperienceInformation(
