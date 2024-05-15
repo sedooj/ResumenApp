@@ -21,10 +21,13 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.SecondPersonalComponent
+import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.SecondPersonalPageContent
+import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.parseSecondPersonalData
+import com.sedooj.app_ui.pages.resume.create.components.personal.second.data.rememberSecondPersonalDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -44,7 +47,7 @@ fun SecondPersonalComponentPage(
     var isDataSaved by remember { mutableStateOf(false) }
     BackHandler {}
     val personal = createResumeViewModel.uiState.collectAsState().value.personalInformation
-    val data = SecondPersonalComponent().dataMap(initInfo = personal)
+    val data = rememberSecondPersonalDataMap(initInfo = personal)
 
     Screen(
         modifier = Modifier
@@ -68,8 +71,9 @@ fun SecondPersonalComponentPage(
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            SecondPersonalComponent().FloatingActionButton(
-                onSaved = {
+            val parsedData = parseSecondPersonalData(data = data, initInfo = personal)
+            FloatingSaveButton(
+                onSave = {
                     createResumeViewModel.updatePersonalInformation(
                         input = CreateResumeUseCase.PersonalInformation(
                             firstName = personal?.firstName ?: "",
@@ -79,24 +83,23 @@ fun SecondPersonalComponentPage(
                             city = personal?.city ?: "",
                             residenceCountry = personal?.residenceCountry ?: "",
                             genderType = personal?.genderType ?: GenderType.NOT_SELECTED,
-                            maritalStatus = personal?.maritalStatus ?: MaritalStatus.NOT_SELECTED,
+                            maritalStatus = personal?.maritalStatus
+                                ?: MaritalStatus.NOT_SELECTED,
                             education = personal?.education ?: emptyList(),
                             hasChild = personal?.hasChild ?: false,
-                            email = it.email,
-                            aboutMe = it.aboutMe,
-                            personalQualities = it.personalQualities
+                            email = parsedData.email,
+                            aboutMe = parsedData.aboutMe,
+                            personalQualities = parsedData.personalQualities
                         )
                     )
                     isDataSaved = true
                 },
                 isDataSaved = isDataSaved,
-                isDataEdited = isDataEdited,
-                data = data,
-                initInfo = personal
+                isDataEdited = isDataEdited
             )
         }
     ) {
-        SecondPersonalComponent().Content(
+        SecondPersonalPageContent(
             data = data,
             onValueChange = { field, value ->
                 data[field] = value

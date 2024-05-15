@@ -2,9 +2,6 @@ package com.sedooj.app_ui.pages.resume.create.components.personal.main.data
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,14 +11,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.CalendarLocale
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -54,7 +47,7 @@ import com.sedooj.app_ui.pages.resume.create.components.generic.MaritalConvertib
 import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asInitialValue
 import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
-import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
+import com.sedooj.app_ui.pages.resume.create.components.generic.toStringValue
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.fields.NotNullableValueTextField
@@ -105,366 +98,274 @@ enum class MainPersonalPageFields(
     )
 }
 
-class MainPersonalComponent {
+data class EditorMainPersonal(
+    var firstName: String,
+    var secondName: String,
+    var thirdName: String,
+    var dateOfBirth: String,
+    var city: String,
+    var residenceCountry: String,
+    var genderType: GenderType,
+    var maritalStatus: MaritalStatus,
+    var hasChild: Boolean,
+) : java.io.Serializable
 
-    @Composable
-    fun dataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<MainPersonalPageFields, FieldValue> {
-        return MainPersonalComponentData().getDataMap(initInfo = initInfo)
-    }
-
-    @Composable
-    fun Content(
-        modifier: Modifier = Modifier,
-        onValueChange: (MainPersonalPageFields, FieldValue) -> Unit,
-        data: Map<MainPersonalPageFields, FieldValue>,
-    ) {
-        MainPersonalComponentContent().GetContent(
-            data = data,
-            onValueChange = onValueChange,
-            modifier = modifier
-        )
-    }
-
-    @Composable
-    fun GetFAB(
-        onSaved: () -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<MainPersonalPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-        createResumeViewModel: CreateResumeViewModel,
-    ) {
-        MainPersonalComponentContent().FloatingActionButton(
-            onSaved = onSaved,
-            isDataSaved = isDataSaved,
-            isDataEdited = isDataEdited,
-            data = data,
-            initInfo = initInfo,
-            createResumeViewModel = createResumeViewModel
-        )
-    }
-
-}
-
-private class MainPersonalComponentData {
-
-    data class EditorMainPersonal(
-        var firstName: String,
-        var secondName: String,
-        var thirdName: String,
-        var dateOfBirth: String,
-        var city: String,
-        var residenceCountry: String,
-        var genderType: GenderType,
-        var maritalStatus: MaritalStatus,
-        var hasChild: Boolean,
-    ) : java.io.Serializable
-
-    @Composable
-    fun getDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<MainPersonalPageFields, FieldValue> {
-        return remember {
-            mutableStateMapOf(
-                MainPersonalPageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(
-                    initInfo.firstName
-                ) else TextValue(
-                    ""
-                ),
-                MainPersonalPageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(
-                    initInfo.secondName
-                ) else TextValue(
-                    ""
-                ),
-                MainPersonalPageFields.THIRD_NAME to if (initInfo?.thirdName != null) TextValue(
-                    initInfo.thirdName!!
-                ) else TextValue(
-                    ""
-                ),
-                MainPersonalPageFields.DATE_OF_BIRTH to if (initInfo?.dateOfBirth != null) DateValue(
-                    initInfo.dateOfBirth
-                ) else DateValue(
-                    ""
-                ),
-                MainPersonalPageFields.CITY to if (initInfo?.city != null) TextValue(initInfo.city) else TextValue(
-                    ""
-                ),
-                MainPersonalPageFields.RESIDENCE_COUNTRY to if (initInfo?.residenceCountry != null) TextValue(
-                    initInfo.residenceCountry
-                ) else TextValue(
-                    ""
-                ),
-                MainPersonalPageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
-                    GenderConvertibleContainer(initInfo.genderType)
-                ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
-                MainPersonalPageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
-                    MaritalConvertibleContainer(initInfo.maritalStatus)
-                ) else CustomValue(
-                    MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
-                ),
-                MainPersonalPageFields.HAS_CHILD to if (initInfo?.hasChild != null) CustomValue(
-                    HasChildConvertibleContainer(initInfo.hasChild)
-                ) else CustomValue(
-                    HasChildConvertibleContainer(
-                        false
-                    )
+@Composable
+fun rememberMainPersonalDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<MainPersonalPageFields, FieldValue> {
+    return remember {
+        mutableStateMapOf(
+            MainPersonalPageFields.FIRST_NAME to if (initInfo?.firstName != null) TextValue(
+                initInfo.firstName
+            ) else TextValue(
+                ""
+            ),
+            MainPersonalPageFields.SECOND_NAME to if (initInfo?.secondName != null) TextValue(
+                initInfo.secondName
+            ) else TextValue(
+                ""
+            ),
+            MainPersonalPageFields.THIRD_NAME to if (initInfo?.thirdName != null) TextValue(
+                initInfo.thirdName!!
+            ) else TextValue(
+                ""
+            ),
+            MainPersonalPageFields.DATE_OF_BIRTH to if (initInfo?.dateOfBirth != null) DateValue(
+                initInfo.dateOfBirth
+            ) else DateValue(
+                ""
+            ),
+            MainPersonalPageFields.CITY to if (initInfo?.city != null) TextValue(initInfo.city) else TextValue(
+                ""
+            ),
+            MainPersonalPageFields.RESIDENCE_COUNTRY to if (initInfo?.residenceCountry != null) TextValue(
+                initInfo.residenceCountry
+            ) else TextValue(
+                ""
+            ),
+            MainPersonalPageFields.GENDER to if (initInfo?.genderType != null) CustomValue(
+                GenderConvertibleContainer(initInfo.genderType)
+            ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
+            MainPersonalPageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
+                MaritalConvertibleContainer(initInfo.maritalStatus)
+            ) else CustomValue(
+                MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
+            ),
+            MainPersonalPageFields.HAS_CHILD to if (initInfo?.hasChild != null) CustomValue(
+                HasChildConvertibleContainer(initInfo.hasChild)
+            ) else CustomValue(
+                HasChildConvertibleContainer(
+                    false
                 )
             )
-        }
-    }
-
-    @Composable
-    fun parseData(
-        data: Map<MainPersonalPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-    ): EditorMainPersonal {
-        val firstName =
-            data[MainPersonalPageFields.FIRST_NAME]?.asStringValue() ?: initInfo?.firstName
-        val secondName =
-            data[MainPersonalPageFields.SECOND_NAME]?.asStringValue() ?: initInfo?.secondName
-        val thirdName =
-            data[MainPersonalPageFields.THIRD_NAME]?.asStringValue() ?: initInfo?.thirdName
-        val dateOfBirth =
-            data[MainPersonalPageFields.DATE_OF_BIRTH]?.asStringValue() ?: initInfo?.dateOfBirth
-        val city = data[MainPersonalPageFields.CITY]?.asStringValue() ?: initInfo?.city
-        val residenceCountry = data[MainPersonalPageFields.RESIDENCE_COUNTRY]?.asStringValue()
-            ?: initInfo?.residenceCountry
-        val genderType =
-            (data[MainPersonalPageFields.GENDER]?.asInitialValue() as GenderConvertibleContainer?)?.value
-                ?: initInfo?.genderType
-        val maritalStatus =
-            (data[MainPersonalPageFields.MARITAL]?.asInitialValue() as MaritalConvertibleContainer?)?.value
-                ?: initInfo?.maritalStatus
-        val hasChild =
-            (data[MainPersonalPageFields.HAS_CHILD]?.asInitialValue() as HasChildConvertibleContainer?)?.value
-                ?: initInfo?.hasChild
-
-        return EditorMainPersonal(
-            firstName = firstName ?: "",
-            secondName = secondName ?: "",
-            thirdName = thirdName ?: "",
-            dateOfBirth = dateOfBirth ?: "",
-            city = city ?: "",
-            residenceCountry = residenceCountry ?: "",
-            genderType = genderType ?: GenderType.NOT_SELECTED,
-            maritalStatus = maritalStatus ?: MaritalStatus.NOT_SELECTED,
-            hasChild = hasChild ?: false
         )
     }
-
 }
 
-private class MainPersonalComponentContent {
 
-    @Composable
-    private fun InputTextField(
-        field: MainPersonalPageFields,
-        value: String,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean = false,
-    ) {
-        NotNullableValueTextField(label = field.fieldName, onValueChange = {
-            onValueChange(TextValue(it))
-        }, value = value, modifier = modifier, readOnly = readOnly)
-    }
+fun parseMainPersonalData(
+    data: Map<MainPersonalPageFields, FieldValue>,
+    initInfo: CreateResumeUseCase.PersonalInformation?,
+): EditorMainPersonal {
+    val firstName =
+        data[MainPersonalPageFields.FIRST_NAME]?.toStringValue() ?: initInfo?.firstName
+    val secondName =
+        data[MainPersonalPageFields.SECOND_NAME]?.toStringValue() ?: initInfo?.secondName
+    val thirdName =
+        data[MainPersonalPageFields.THIRD_NAME]?.toStringValue() ?: initInfo?.thirdName
+    val dateOfBirth =
+        data[MainPersonalPageFields.DATE_OF_BIRTH]?.toStringValue() ?: initInfo?.dateOfBirth
+    val city = data[MainPersonalPageFields.CITY]?.toStringValue() ?: initInfo?.city
+    val residenceCountry = data[MainPersonalPageFields.RESIDENCE_COUNTRY]?.toStringValue()
+        ?: initInfo?.residenceCountry
+    val genderType =
+        (data[MainPersonalPageFields.GENDER]?.asInitialValue() as GenderConvertibleContainer?)?.value
+            ?: initInfo?.genderType
+    val maritalStatus =
+        (data[MainPersonalPageFields.MARITAL]?.asInitialValue() as MaritalConvertibleContainer?)?.value
+            ?: initInfo?.maritalStatus
+    val hasChild =
+        (data[MainPersonalPageFields.HAS_CHILD]?.asInitialValue() as HasChildConvertibleContainer?)?.value
+            ?: initInfo?.hasChild
 
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    private fun Field(
-        field: MainPersonalPageFields,
-        value: FieldValue,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean,
-    ) {
-        var isFocused by remember { mutableStateOf(false) }
-        var showDateDialog by remember { mutableStateOf(false) }
-        Column {
-            InputTextField(
-                field = field,
-                value = value.asStringValue(),
-                onValueChange = onValueChange,
-                modifier = modifier
-                    .onFocusChanged {
+    return EditorMainPersonal(
+        firstName = firstName ?: "",
+        secondName = secondName ?: "",
+        thirdName = thirdName ?: "",
+        dateOfBirth = dateOfBirth ?: "",
+        city = city ?: "",
+        residenceCountry = residenceCountry ?: "",
+        genderType = genderType ?: GenderType.NOT_SELECTED,
+        maritalStatus = maritalStatus ?: MaritalStatus.NOT_SELECTED,
+        hasChild = hasChild ?: false
+    )
+}
+
+@Composable
+private fun InputTextField(
+    field: MainPersonalPageFields,
+    value: String,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier, readOnly = readOnly)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Field(
+    field: MainPersonalPageFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    var showDateDialog by remember { mutableStateOf(false) }
+    Column {
+        InputTextField(
+            field = field,
+            value = value.asStringValue(),
+            onValueChange = onValueChange,
+            modifier = modifier
+                .onFocusChanged {
                     isFocused = it.isFocused && !showDateDialog
                     if (value is DateValue && isFocused) {
                         showDateDialog = true
                     }
                 },
-                readOnly = readOnly
-            )
-            if (field.readOnly && value is DateValue) {
-                DatePicker(
-                    onDismiss = {
-                        showDateDialog = false
-                        isFocused = false
-                    },
-                    showBottomSheet = showDateDialog,
-                    content = {
-                        Box(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colorScheme.surface,
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .padding(10.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            DatePickerComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                onDate = {
-                                    onValueChange(DateValue(it ?: ""))
-                                    isFocused = false
-                                    showDateDialog = false
-                                },
-                                title = field.fieldName,
+            readOnly = readOnly
+        )
+        if (field.readOnly && value is DateValue) {
+            DatePicker(
+                onDismiss = {
+                    showDateDialog = false
+                    isFocused = false
+                },
+                showBottomSheet = showDateDialog,
+                content = {
+                    Box(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = RoundedCornerShape(8.dp)
                             )
-                        }
-                    }
-                )
-            }
-            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        alignment = Alignment.CenterHorizontally
-                    ),
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    field.suggestions.forEach {
-                        SuggestionChip(
-                            onClick = {
-                                onValueChange(it)
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DatePickerComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            onDate = {
+                                onValueChange(DateValue(it ?: ""))
+                                isFocused = false
+                                showDateDialog = false
                             },
-                            label = {
-                                Text(
-                                    text = it.value.asStringValue(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    textAlign = TextAlign.Center
-                                )
-                            },
-                            enabled = value.asStringValue() != it.value.asStringValue()
+                            title = field.fieldName,
                         )
                     }
+                }
+            )
+        }
+        AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                field.suggestions.forEach {
+                    SuggestionChip(
+                        onClick = {
+                            onValueChange(it)
+                        },
+                        label = {
+                            Text(
+                                text = it.value.asStringValue(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                        },
+                        enabled = value.asStringValue() != it.value.asStringValue()
+                    )
                 }
             }
         }
     }
+}
 
-    @Composable
-    private fun DatePicker(
-        onDismiss: () -> Unit,
-        showBottomSheet: Boolean,
-        content: @Composable () -> Unit,
+@Composable
+private fun DatePicker(
+    onDismiss: () -> Unit,
+    showBottomSheet: Boolean,
+    content: @Composable () -> Unit,
+) {
+    if (showBottomSheet)
+        Dialog(onDismissRequest = onDismiss) {
+            content()
+        }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatePickerComponent(
+    modifier: Modifier = Modifier,
+    onDate: (String?) -> Unit,
+    @StringRes
+    title: Int,
+) {
+    val datePicker = rememberDatePickerState()
+    datePicker.displayMode = DisplayMode.Input
+    val defaultLocale = CalendarLocale.getDefault(Locale.Category.FORMAT)
+    val formatter = remember { DatePickerDefaults.dateFormatter() }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (showBottomSheet)
-            Dialog(onDismissRequest = onDismiss) {
-                content()
-            }
+        androidx.compose.material3.DatePicker(
+            state = datePicker,
+            title = {
+                Text(
+                    text = stringResource(id = title),
+                    color = MaterialTheme.colorScheme.surfaceTint,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            dateFormatter = formatter,
+            showModeToggle = true
+        )
+        FilledButton(label = stringResource(id = R.string.save), onClick = {
+            onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
+        })
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    private fun DatePickerComponent(
-        modifier: Modifier = Modifier,
-        onDate: (String?) -> Unit,
-        @StringRes
-        title: Int,
+@Composable
+fun MainPersonalPageContent(
+    data: Map<MainPersonalPageFields, FieldValue>,
+    onValueChange: (MainPersonalPageFields, FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
     ) {
-        val datePicker = rememberDatePickerState()
-        datePicker.displayMode = DisplayMode.Input
-        val defaultLocale = CalendarLocale.getDefault(Locale.Category.FORMAT)
-        val formatter = remember { DatePickerDefaults.dateFormatter() }
-
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            androidx.compose.material3.DatePicker(
-                state = datePicker,
-                title = {
-                    Text(
-                        text = stringResource(id = title),
-                        color = MaterialTheme.colorScheme.surfaceTint,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                dateFormatter = formatter,
-                showModeToggle = true
+        data.toSortedMap().forEach { (field, value) ->
+            Field(
+                field = field,
+                value = value,
+                onValueChange = { onValueChange(field, it) },
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = field.readOnly
             )
-            FilledButton(label = stringResource(id = R.string.save), onClick = {
-                onDate(formatter.formatDate(datePicker.selectedDateMillis, defaultLocale))
-            })
         }
     }
-
-    @Composable
-    fun GetContent(
-        data: Map<MainPersonalPageFields, FieldValue>,
-        onValueChange: (MainPersonalPageFields, FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        Column(
-            modifier = modifier,
-        ) {
-            data.toSortedMap().forEach { (field, value) ->
-                Field(
-                    field = field,
-                    value = value,
-                    onValueChange = { onValueChange(field, it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = field.readOnly
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun FloatingActionButton(
-        onSaved: () -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<MainPersonalPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-        createResumeViewModel: CreateResumeViewModel
-    ) {
-        val parsedData = MainPersonalComponentData().parseData(data = data, initInfo = initInfo)
-        AnimatedVisibility(
-            visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
-                tween(200)
-            )
-        ) {
-            FloatingActionButton(onClick = {
-                createResumeViewModel.updatePersonalInformation(
-                    input = CreateResumeUseCase.PersonalInformation(
-                        firstName = parsedData.firstName,
-                        secondName = parsedData.secondName,
-                        thirdName = parsedData.thirdName,
-                        dateOfBirth = parsedData.dateOfBirth,
-                        city = parsedData.city,
-                        residenceCountry = parsedData.residenceCountry,
-                        genderType = parsedData.genderType,
-                        maritalStatus = parsedData.maritalStatus,
-                        education = initInfo?.education ?: emptyList(),
-                        hasChild = parsedData.hasChild,
-                        email = initInfo?.email ?: "",
-                        aboutMe = initInfo?.aboutMe,
-                        personalQualities = initInfo?.personalQualities ?: ""
-
-                    )
-                )
-                onSaved()
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Done,
-                    contentDescription = stringResource(id = R.string.done)
-                )
-            }
-        }
-    }
-
-
 }

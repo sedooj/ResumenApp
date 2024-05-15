@@ -18,11 +18,15 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.MainPersonalComponent
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.MainPersonalPageContent
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.parseMainPersonalData
+import com.sedooj.app_ui.pages.resume.create.components.personal.main.data.rememberMainPersonalDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -42,7 +46,7 @@ fun MainPersonalComponentPage(
     var isDataEdited by remember { mutableStateOf(false) }
     BackHandler {}
     val personal = createResumeViewModel.uiState.collectAsState().value.personalInformation
-    val data = MainPersonalComponent().dataMap(initInfo = personal)
+    val data = rememberMainPersonalDataMap(initInfo = personal)
     Screen(
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +61,8 @@ fun MainPersonalComponentPage(
         },
         showAlert = isLostDataAlertShow,
         alertDialog = {
-            LostDataAlert(onDismiss = { isLostDataAlertShow = false },
+            LostDataAlert(
+                onDismiss = { isLostDataAlertShow = false },
                 onConfirm = {
                     isLostDataAlertShow = false
                     destinationsNavigator.navigateUp()
@@ -68,17 +73,35 @@ fun MainPersonalComponentPage(
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            MainPersonalComponent().GetFAB(
-                onSaved = { isDataSaved = true },
+            val parsedData = parseMainPersonalData(data = data, initInfo = personal)
+            FloatingSaveButton(
+                onSave = {
+                    createResumeViewModel.updatePersonalInformation(
+                        input = CreateResumeUseCase.PersonalInformation(
+                            firstName = parsedData.firstName,
+                            secondName = parsedData.secondName,
+                            thirdName = parsedData.thirdName,
+                            dateOfBirth = parsedData.dateOfBirth,
+                            city = parsedData.city,
+                            residenceCountry = parsedData.residenceCountry,
+                            genderType = parsedData.genderType,
+                            maritalStatus = parsedData.maritalStatus,
+                            education = personal?.education ?: emptyList(),
+                            hasChild = parsedData.hasChild,
+                            email = personal?.email ?: "",
+                            aboutMe = personal?.aboutMe,
+                            personalQualities = personal?.personalQualities ?: ""
+                        )
+                    )
+                    isDataSaved = true
+                },
                 isDataSaved = isDataSaved,
-                isDataEdited = isDataEdited,
-                data = data,
-                initInfo = personal,
-                createResumeViewModel = createResumeViewModel
+                isDataEdited = isDataEdited
             )
+
         }
     ) {
-        MainPersonalComponent().Content(
+        MainPersonalPageContent(
             data = data,
             onValueChange = { field, value ->
                 data[field] = value

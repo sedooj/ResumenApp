@@ -17,6 +17,7 @@ import com.sedooj.ui_kit.R
 sealed class FieldValue
 
 class TextValue(val text: String) : FieldValue()
+class UserInputValue(val userInputText: String) : FieldValue()
 class DateValue(val date: String) : FieldValue()
 class SalaryValue(val from: String, val to: String) : FieldValue()
 
@@ -45,6 +46,16 @@ interface ConvertibleEducationValue {
 
 }
 
+fun FieldValue.toStringValue(): String {
+    return when (this) {
+        is CustomValue<*> -> value.toString()
+        is TextValue -> text
+        is DateValue -> date
+        is SalaryValue -> "$from $to"
+        is UserInputValue -> userInputText
+    }
+}
+
 @Composable
 fun FieldValue.asStringValue(): String {
     return when (this) {
@@ -52,6 +63,7 @@ fun FieldValue.asStringValue(): String {
         is TextValue -> text
         is DateValue -> date
         is SalaryValue -> "${stringResource(id = R.string.from)} $from ${stringResource(id = R.string.to)} $to"
+        is UserInputValue -> userInputText
     }
 }
 
@@ -61,6 +73,7 @@ fun FieldValue.asInitialValue(): Any {
         is DateValue -> date
         is TextValue -> text
         is SalaryValue -> SalaryValue(from = from, to = to)
+        is UserInputValue -> userInputText
     }
 }
 

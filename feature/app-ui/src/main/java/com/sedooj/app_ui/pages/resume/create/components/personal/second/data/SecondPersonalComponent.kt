@@ -58,201 +58,130 @@ enum class SecondPageFields(
     ),
 }
 
-class SecondPersonalComponent {
+data class EditorSecondPersonal(
+    var email: String,
+    var aboutMe: String,
+    var personalQualities: String,
+) : java.io.Serializable
 
-    @Composable
-    fun dataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<SecondPageFields, FieldValue> {
-        return SecondPersonalComponentData().rememberDataMap(initInfo = initInfo)
+@Composable
+fun rememberSecondPersonalDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<SecondPageFields, FieldValue> {
+    return remember {
+        mutableStateMapOf(
+            SecondPageFields.SOCIAL_MEDIA to
+                    if (initInfo?.email == null)
+                        TextValue("")
+                    else
+                        TextValue(initInfo.email),
+            SecondPageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
+                ""
+            ),
+            SecondPageFields.PERSONAL_QUALITIES to if (initInfo?.personalQualities != null) TextValue(
+                initInfo.personalQualities
+            ) else TextValue("")
+        )
     }
+}
 
-    @Composable
-    fun Content(
-        data: Map<SecondPageFields, FieldValue>,
-        onValueChange: (SecondPageFields, FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        SecondPersonalComponentContent().GetContent(
-            data = data,
+@Composable
+fun parseSecondPersonalData(
+    data: Map<SecondPageFields, FieldValue>,
+    initInfo: CreateResumeUseCase.PersonalInformation?,
+): EditorSecondPersonal {
+    val email =
+        data[SecondPageFields.SOCIAL_MEDIA]?.asStringValue() ?: initInfo?.email
+    val aboutMe =
+        data[SecondPageFields.ABOUT_ME]?.asStringValue() ?: initInfo?.aboutMe
+    val personalQualities =
+        data[SecondPageFields.PERSONAL_QUALITIES]?.asStringValue()
+            ?: initInfo?.personalQualities
+
+    return EditorSecondPersonal(
+        email = email ?: "",
+        aboutMe = aboutMe ?: "",
+        personalQualities = personalQualities ?: ""
+    )
+}
+
+@Composable
+private fun InputTextField(
+    field: SecondPageFields,
+    value: String,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier, readOnly = readOnly)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Field(
+    field: SecondPageFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    Column {
+        InputTextField(
+            field = field,
+            value = value.asStringValue(),
             onValueChange = onValueChange,
-            modifier = modifier
+            modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+            readOnly = readOnly
         )
-    }
-
-    @Composable
-    fun FloatingActionButton(
-        onSaved: (SecondPersonalComponentData.EditorSecondPersonal) -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<SecondPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-    ) {
-        SecondPersonalComponentContent().FloatingActionButton(
-            onSaved = onSaved,
-            isDataSaved = isDataSaved,
-            isDataEdited = isDataEdited,
-            data = data,
-            initInfo = initInfo
-        )
-    }
-
-}
-
-class SecondPersonalComponentData {
-
-    data class EditorSecondPersonal(
-        var email: String,
-        var aboutMe: String,
-        var personalQualities: String,
-    ) : java.io.Serializable
-
-    @Composable
-    fun rememberDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<SecondPageFields, FieldValue> {
-        return remember {
-            mutableStateMapOf(
-                SecondPageFields.SOCIAL_MEDIA to
-                        if (initInfo?.email == null)
-                            TextValue("")
-                        else
-                            TextValue(initInfo.email),
-                SecondPageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
-                    ""
+        AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
                 ),
-                SecondPageFields.PERSONAL_QUALITIES to if (initInfo?.personalQualities != null) TextValue(
-                    initInfo.personalQualities
-                ) else TextValue("")
-            )
-        }
-    }
-
-    @Composable
-    fun parseData(
-        data: Map<SecondPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-    ): EditorSecondPersonal {
-        val email =
-            data[SecondPageFields.SOCIAL_MEDIA]?.asStringValue() ?: initInfo?.email
-        val aboutMe =
-            data[SecondPageFields.ABOUT_ME]?.asStringValue() ?: initInfo?.aboutMe
-        val personalQualities =
-            data[SecondPageFields.PERSONAL_QUALITIES]?.asStringValue()
-                ?: initInfo?.personalQualities
-
-        return EditorSecondPersonal(
-            email = email ?: "",
-            aboutMe = aboutMe ?: "",
-            personalQualities = personalQualities ?: ""
-        )
-    }
-
-
-}
-
-private class SecondPersonalComponentContent {
-
-    @Composable
-    fun FloatingActionButton(
-        onSaved: (SecondPersonalComponentData.EditorSecondPersonal) -> Unit,
-        isDataSaved: Boolean, isDataEdited: Boolean,
-        data: Map<SecondPageFields, FieldValue>,
-        initInfo: CreateResumeUseCase.PersonalInformation?,
-    ) {
-        val parsedData = SecondPersonalComponentData().parseData(data = data, initInfo = initInfo)
-        AnimatedVisibility(
-            visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
-                tween(200)
-            )
-        ) {
-            FloatingActionButton(onClick = {
-                onSaved(parsedData)
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Done,
-                    contentDescription = stringResource(id = R.string.done)
-                )
-            }
-        }
-    }
-
-    @Composable
-    private fun InputTextField(
-        field: SecondPageFields,
-        value: String,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean = false,
-    ) {
-        NotNullableValueTextField(label = field.fieldName, onValueChange = {
-            onValueChange(TextValue(it))
-        }, value = value, modifier = modifier, readOnly = readOnly)
-    }
-
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    private fun Field(
-        field: SecondPageFields,
-        value: FieldValue,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean,
-    ) {
-        var isFocused by remember { mutableStateOf(false) }
-        Column {
-            InputTextField(
-                field = field,
-                value = value.asStringValue(),
-                onValueChange = onValueChange,
-                modifier = modifier.onFocusChanged { isFocused = it.isFocused },
-                readOnly = readOnly
-            )
-            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        alignment = Alignment.CenterHorizontally
-                    ),
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    field.suggestions.forEach {
-                        SuggestionChip(
-                            onClick = {
-                                onValueChange(it)
-                            },
-                            label = {
-                                Text(
-                                    text = it.value.asStringValue(),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            },
-                            enabled = value.asStringValue() != it.value.asStringValue()
-                        )
-                    }
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                field.suggestions.forEach {
+                    SuggestionChip(
+                        onClick = {
+                            onValueChange(it)
+                        },
+                        label = {
+                            Text(
+                                text = it.value.asStringValue(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        enabled = value.asStringValue() != it.value.asStringValue()
+                    )
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun GetContent(
-        data: Map<SecondPageFields, FieldValue>,
-        onValueChange: (SecondPageFields, FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
+@Composable
+fun SecondPersonalPageContent(
+    data: Map<SecondPageFields, FieldValue>,
+    onValueChange: (SecondPageFields, FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            data.toSortedMap().forEach { (field, value) ->
-                Field(
-                    field = field,
-                    value = value,
-                    onValueChange = { onValueChange(field, it) },
-                    readOnly = field.readOnly,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+        data.toSortedMap().forEach { (field, value) ->
+            Field(
+                field = field,
+                value = value,
+                onValueChange = { onValueChange(field, it) },
+                readOnly = field.readOnly,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
-
 }
