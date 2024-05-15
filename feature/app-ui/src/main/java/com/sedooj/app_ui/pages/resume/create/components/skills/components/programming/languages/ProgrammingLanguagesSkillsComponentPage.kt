@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.SkillsEditProgrammingLanguagesDestination
@@ -16,11 +17,13 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.data.ProgrammingLanguagesSkillsComponent
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.data.ProgrammingLanguageSkillsListPageContent
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.data.addProgrammingLanguageOrEdit
 import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.EditProgrammingLanguagesSkillsComponentData
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingAddButton
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
@@ -52,19 +55,23 @@ fun ProgrammingLanguagesSkillsComponentPage(
             navigator.navigateUp()
         },
         floatingActionButton = {
-            ProgrammingLanguagesSkillsComponent().FloatingActionButton(
-                navigator = navigator,
-                skillsList = programmingLanguageSkillList
+            FloatingAddButton(
+                onClick = dropUnlessResumed {
+                    addProgrammingLanguageOrEdit(
+                        navigator = navigator,
+                        id = programmingLanguageSkillList?.lastIndex?.plus(1) ?: 0
+                    )
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        ProgrammingLanguagesSkillsComponent().Content(
+        ProgrammingLanguageSkillsListPageContent(
             modifier = Modifier
                 .fillMaxSize(),
             skillsList = programmingLanguageSkillList,
             onEdit = { i, language ->
-                ProgrammingLanguagesSkillsComponent().createOrEdit(
+                addProgrammingLanguageOrEdit(
                     navigator = navigator,
                     id = i,
                     skill = CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(

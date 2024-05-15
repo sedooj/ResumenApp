@@ -35,41 +35,27 @@ enum class SkillsComponentList(
     )
 }
 
-class SkillsComponent {
-    @Composable
-    fun Content(
-        onSelect: (Direction) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        SkillsComponentContent().GetContent(onSelect = onSelect, modifier = modifier)
+@Composable
+fun SkillsListPageContent(
+    onSelect: (Direction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SkillsComponentList.entries.forEach {
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = it.title))
+            }, supportingContent = {
+                if (it.subTitle != null)
+                    Text(text = stringResource(id = it.subTitle))
+            }, leadingContent = {
+                Icon(
+                    painter = painterResource(id = it.icon),
+                    contentDescription = stringResource(id = it.title),
+                    modifier = Modifier.size(25.dp)
+                )
+            }, modifier = modifier.clickable(onClick = {
+                onSelect(it.direction)
+            })
+        )
     }
-}
-
-private class SkillsComponentContent {
-
-    @Composable
-    fun GetContent(
-        onSelect: (Direction) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        SkillsComponentList.entries.forEach {
-            ListItem(
-                headlineContent = {
-                    Text(text = stringResource(id = it.title))
-                }, supportingContent = {
-                    if (it.subTitle != null)
-                        Text(text = stringResource(id = it.subTitle))
-                }, leadingContent = {
-                    Icon(
-                        painter = painterResource(id = it.icon),
-                        contentDescription = stringResource(id = it.title),
-                        modifier = Modifier.size(25.dp)
-                    )
-                }, modifier = modifier.clickable(onClick = {
-                    onSelect(it.direction)
-                })
-            )
-        }
-    }
-
 }

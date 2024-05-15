@@ -18,10 +18,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.EditProgrammingLanguagesSkillsComponent
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.EditProgrammingLanguagesSkillsComponentData
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.EditProgrammingLanguagePageContent
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.ProgrammingLanguageSkill
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.parseEditProgrammingLanguageData
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.programming.languages.edit.data.rememberEditProgrammingLanguageDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -31,11 +34,11 @@ import com.sedooj.ui_kit.screens.Screen
 )
 @Composable
 fun EditProgrammingLanguagesSkillsComponentPage(
-    programmingLanguageSkill: EditProgrammingLanguagesSkillsComponentData.ProgrammingLanguageSkill,
-    resultNavigator: ResultBackNavigator<EditProgrammingLanguagesSkillsComponentData.ProgrammingLanguageSkill>,
+    programmingLanguageSkill: ProgrammingLanguageSkill,
+    resultNavigator: ResultBackNavigator<ProgrammingLanguageSkill>,
 ) {
     val data =
-        EditProgrammingLanguagesSkillsComponent().dataMap(initInfo = programmingLanguageSkill)
+        rememberEditProgrammingLanguageDataMap(initInfo = programmingLanguageSkill)
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
@@ -48,17 +51,20 @@ fun EditProgrammingLanguagesSkillsComponentPage(
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         floatingActionButton = {
-            EditProgrammingLanguagesSkillsComponent().FloatingActionButton(
+            val parsedData =
+                parseEditProgrammingLanguageData(
+                    data = data,
+                    initInfo = programmingLanguageSkill
+                )
+            FloatingSaveButton(
                 onSave = {
                     resultNavigator.navigateBack(
-                        result = it
+                        result = parsedData
                     )
                     isDataSaved = true
                 },
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited,
-                data = data,
-                initInfo = programmingLanguageSkill
             )
         },
         hasBackButton = true,
@@ -80,7 +86,7 @@ fun EditProgrammingLanguagesSkillsComponentPage(
         },
         showAlert = isLostDataAlertShow
     ) {
-        EditProgrammingLanguagesSkillsComponent().Content(
+        EditProgrammingLanguagePageContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),

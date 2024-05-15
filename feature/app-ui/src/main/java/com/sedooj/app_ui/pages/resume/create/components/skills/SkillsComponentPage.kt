@@ -11,7 +11,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.skills.data.SkillsComponent
+import com.sedooj.app_ui.pages.resume.create.components.skills.data.SkillsListPageContent
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
 import com.sedooj.ui_kit.screens.Screen
@@ -23,7 +23,7 @@ import com.sedooj.ui_kit.screens.Screen
 )
 @Composable
 fun SkillsComponentPage(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
     BackHandler {}
     Screen(
@@ -37,7 +37,7 @@ fun SkillsComponentPage(
             navigator.navigateUp()
         },
     ) {
-        SkillsComponent().Content(onSelect = {
+        SkillsListPageContent(onSelect = {
             navigator.navigate(it) {
                 launchSingleTop = true
             }

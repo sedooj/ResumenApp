@@ -18,10 +18,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponent
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillPageContent
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.LanguageSkill
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.parseEditedLanguageData
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.rememberEditedLanguageDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -31,10 +34,10 @@ import com.sedooj.ui_kit.screens.Screen
 )
 @Composable
 fun EditLanguageSkillsComponentPage(
-    languageSkill: EditLanguageSkillsComponentData.LanguageSkill,
-    resultNavigator: ResultBackNavigator<EditLanguageSkillsComponentData.LanguageSkill>,
+    languageSkill: LanguageSkill,
+    resultNavigator: ResultBackNavigator<LanguageSkill>,
 ) {
-    val data = EditLanguageSkillsComponent().dataMap(initInfo = languageSkill)
+    val data = rememberEditedLanguageDataMap(initInfo = languageSkill)
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
@@ -45,17 +48,16 @@ fun EditLanguageSkillsComponentPage(
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         floatingActionButton = {
-            EditLanguageSkillsComponent().FloatingActionButton(
+            val parsedData = parseEditedLanguageData(data = data, initInfo = languageSkill)
+            FloatingSaveButton(
                 onSave = {
                     resultNavigator.navigateBack(
-                        result = it
+                        result = parsedData
                     )
                     isDataSaved = true
                 },
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited,
-                data = data,
-                initInfo = languageSkill
             )
         },
         hasBackButton = true,
@@ -77,7 +79,7 @@ fun EditLanguageSkillsComponentPage(
         },
         showAlert = isLostDataAlertShow
     ) {
-        EditLanguageSkillsComponent().Content(
+        EditLanguageSkillPageContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
