@@ -111,208 +111,183 @@ enum class VacancyComponentFields(
     )
 }
 
-class VacancyComponent {
 
-    @Composable
-    fun dataMap(initInfo: CreateResumeUseCase.VacancyInformation?): SnapshotStateMap<VacancyComponentFields, FieldValue> {
-        return VacancyComponentData().rememberDataMap(initInfo = initInfo)
-    }
+data class EditorVacancy(
+    var stackType: StackType,
+    var platformType: PlatformType,
+    var desiredRole: String,
+    var desiredSalaryFrom: String,
+    var desiredSalaryTo: String,
+    var busynessType: BusynessType,
+    var scheduleType: ScheduleType,
+    var readyForTravelling: Boolean,
+) : java.io.Serializable
 
-    data class EditorVacancy(
-        var stackType: StackType,
-        var platformType: PlatformType,
-        var desiredRole: String,
-        var desiredSalaryFrom: String,
-        var desiredSalaryTo: String,
-        var busynessType: BusynessType,
-        var scheduleType: ScheduleType,
-        var readyForTravelling: Boolean,
-    ) : java.io.Serializable
-
-    @Composable
-    fun parseData(
-        data: Map<VacancyComponentFields, FieldValue>,
-        initInfo: CreateResumeUseCase.VacancyInformation?,
-    ): EditorVacancy {
-        val stackType =
-            (data[VacancyComponentFields.STACK_TYPE]?.asInitialValue() as StackTypeConvertibleContainer?)?.value
-                ?: initInfo?.stackType
-        val platformType =
-            (data[VacancyComponentFields.PLATFORM_TYPE]?.asInitialValue() as PlatformTypeConvertibleContainer?)?.value
-                ?: initInfo?.platformType
-        val desiredRole = data[VacancyComponentFields.ROLE]?.asStringValue()
-            ?: initInfo?.desiredRole
-        val desiredSalaryFrom =
-            (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.from
-                ?: initInfo?.desiredSalaryFrom
-        val desiredSalaryTo =
-            (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.to
-                ?: initInfo?.desiredSalaryTo
-        val busynessType =
-            (data[VacancyComponentFields.BUSYNESS]?.asInitialValue() as BusynessTypeConvertibleContainer?)?.value
-                ?: initInfo?.busynessType
-        val scheduleType =
-            (data[VacancyComponentFields.SCHEDULE]?.asInitialValue() as ScheduleTypeConvertibleContainer?)?.value
-                ?: initInfo?.scheduleType
-        val readyForTravelling =
-            (data[VacancyComponentFields.READY_FOR_TRAVELLING]?.asInitialValue() as BooleanConvertibleContainer?)?.value
-                ?: initInfo?.readyForTravelling
-        return EditorVacancy(
-            stackType = stackType ?: StackType.NOT_SELECTED,
-            platformType = platformType ?: PlatformType.NOT_SELECTED,
-            desiredRole = desiredRole ?: "",
-            desiredSalaryFrom = desiredSalaryFrom ?: "",
-            desiredSalaryTo = desiredSalaryTo ?: "",
-            busynessType = busynessType ?: BusynessType.NOT_SELECTED,
-            scheduleType = scheduleType ?: ScheduleType.NOT_SELECTED,
-            readyForTravelling = readyForTravelling ?: false
-        )
-    }
-
-    @Composable
-    fun Content(
-        data: Map<VacancyComponentFields, FieldValue>,
-        onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        VacancyComponentContent().Content(
-            data = data,
-            onValueChange = onValueChange,
-            modifier = modifier
-        )
-    }
+@Composable
+fun parseVacancyData(
+    data: Map<VacancyComponentFields, FieldValue>,
+    initInfo: CreateResumeUseCase.VacancyInformation?,
+): EditorVacancy {
+    val stackType =
+        (data[VacancyComponentFields.STACK_TYPE]?.asInitialValue() as StackTypeConvertibleContainer?)?.value
+            ?: initInfo?.stackType
+    val platformType =
+        (data[VacancyComponentFields.PLATFORM_TYPE]?.asInitialValue() as PlatformTypeConvertibleContainer?)?.value
+            ?: initInfo?.platformType
+    val desiredRole = data[VacancyComponentFields.ROLE]?.asStringValue()
+        ?: initInfo?.desiredRole
+    val desiredSalaryFrom =
+        (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.from
+            ?: initInfo?.desiredSalaryFrom
+    val desiredSalaryTo =
+        (data[VacancyComponentFields.SALARY]?.asInitialValue() as SalaryValue?)?.to
+            ?: initInfo?.desiredSalaryTo
+    val busynessType =
+        (data[VacancyComponentFields.BUSYNESS]?.asInitialValue() as BusynessTypeConvertibleContainer?)?.value
+            ?: initInfo?.busynessType
+    val scheduleType =
+        (data[VacancyComponentFields.SCHEDULE]?.asInitialValue() as ScheduleTypeConvertibleContainer?)?.value
+            ?: initInfo?.scheduleType
+    val readyForTravelling =
+        (data[VacancyComponentFields.READY_FOR_TRAVELLING]?.asInitialValue() as BooleanConvertibleContainer?)?.value
+            ?: initInfo?.readyForTravelling
+    return EditorVacancy(
+        stackType = stackType ?: StackType.NOT_SELECTED,
+        platformType = platformType ?: PlatformType.NOT_SELECTED,
+        desiredRole = desiredRole ?: "",
+        desiredSalaryFrom = desiredSalaryFrom ?: "",
+        desiredSalaryTo = desiredSalaryTo ?: "",
+        busynessType = busynessType ?: BusynessType.NOT_SELECTED,
+        scheduleType = scheduleType ?: ScheduleType.NOT_SELECTED,
+        readyForTravelling = readyForTravelling ?: false
+    )
 }
 
-class VacancyComponentContent {
 
-    @Composable
-    private fun InputTextField(
-        field: VacancyComponentFields,
-        value: String,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean = false,
-    ) {
-        NotNullableValueTextField(label = field.fieldName, onValueChange = {
-            onValueChange(TextValue(it))
-        }, value = value, modifier = modifier, readOnly = readOnly)
-    }
+@Composable
+private fun InputTextField(
+    field: VacancyComponentFields,
+    value: String,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier, readOnly = readOnly)
+}
 
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    private fun Field(
-        field: VacancyComponentFields,
-        value: FieldValue,
-        onValueChange: (FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-        readOnly: Boolean,
-    ) {
-        var isFocused by remember { mutableStateOf(false) }
-        Column {
-            if (value is SalaryValue) {
-                SalaryField(onFromValueChange = {
-                    onValueChange(SalaryValue(from = it, to = value.to))
-                }, onToValueChange = {
-                    onValueChange(SalaryValue(from = value.from, to = it))
-                }, fromValue = value.from, toValue = value.to)
-            } else {
-                InputTextField(
-                    field = field,
-                    value = value.asStringValue(),
-                    onValueChange = onValueChange,
-                    modifier = modifier.onFocusChanged { isFocused = it.isFocused },
-                    readOnly = readOnly
-                )
-                AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(
-                            10.dp,
-                            alignment = Alignment.CenterHorizontally
-                        ),
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        field.suggestions.forEach {
-                            SuggestionChip(
-                                onClick = {
-                                    onValueChange(it)
-                                },
-                                label = {
-                                    Text(
-                                        text = it.value.asStringValue(),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        textAlign = TextAlign.Center
-                                    )
-                                },
-                                enabled = value.asStringValue() != it.value.asStringValue()
-                            )
-                        }
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Field(
+    field: VacancyComponentFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    Column {
+        if (value is SalaryValue) {
+            SalaryField(onFromValueChange = {
+                onValueChange(SalaryValue(from = it, to = value.to))
+            }, onToValueChange = {
+                onValueChange(SalaryValue(from = value.from, to = it))
+            }, fromValue = value.from, toValue = value.to)
+        } else {
+            InputTextField(
+                field = field,
+                value = value.asStringValue(),
+                onValueChange = onValueChange,
+                modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+                readOnly = readOnly
+            )
+            AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        alignment = Alignment.CenterHorizontally
+                    ),
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    field.suggestions.forEach {
+                        SuggestionChip(
+                            onClick = {
+                                onValueChange(it)
+                            },
+                            label = {
+                                Text(
+                                    text = it.value.asStringValue(),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.Center
+                                )
+                            },
+                            enabled = value.asStringValue() != it.value.asStringValue()
+                        )
                     }
                 }
             }
         }
     }
-
-
-    @Composable
-    fun Content(
-        data: Map<VacancyComponentFields, FieldValue>,
-        onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
-        modifier: Modifier = Modifier,
-    ) {
-        Column(
-            modifier = modifier,
-        ) {
-            data.toSortedMap().forEach { (field, value) ->
-                Field(
-                    field = field,
-                    value = value,
-                    onValueChange = { onValueChange(field, it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = field.readOnly
-                )
-            }
-        }
-    }
-
 }
 
-class VacancyComponentData {
-    @Composable
-    fun rememberDataMap(initInfo: CreateResumeUseCase.VacancyInformation?): SnapshotStateMap<VacancyComponentFields, FieldValue> {
-        return remember {
-            mutableStateMapOf(
-                VacancyComponentFields.STACK_TYPE to if (initInfo?.stackType == null) CustomValue(
-                    StackTypeConvertibleContainer(StackType.NOT_SELECTED)
-                ) else CustomValue(StackTypeConvertibleContainer(initInfo.stackType)),
 
-                VacancyComponentFields.PLATFORM_TYPE to if (initInfo?.platformType == null)
-                    CustomValue(PlatformTypeConvertibleContainer(PlatformType.NOT_SELECTED))
-                else CustomValue(PlatformTypeConvertibleContainer(initInfo.platformType)),
-
-                VacancyComponentFields.ROLE to if (initInfo?.desiredRole == null)
-                    TextValue("")
-                else TextValue(initInfo.desiredRole),
-
-                VacancyComponentFields.SALARY to if (initInfo?.desiredSalaryFrom == null && initInfo?.desiredSalaryTo == null)
-                    SalaryValue(from = "", to = "")
-                else SalaryValue(from = initInfo.desiredSalaryFrom, to = initInfo.desiredSalaryTo),
-
-                VacancyComponentFields.BUSYNESS to if (initInfo?.busynessType == null)
-                    CustomValue(BusynessTypeConvertibleContainer(BusynessType.NOT_SELECTED))
-                else
-                    CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType)),
-
-                VacancyComponentFields.SCHEDULE to if (initInfo?.scheduleType == null)
-                    CustomValue(ScheduleTypeConvertibleContainer(ScheduleType.NOT_SELECTED))
-                else
-                    CustomValue(ScheduleTypeConvertibleContainer(initInfo.scheduleType)),
-
-                VacancyComponentFields.READY_FOR_TRAVELLING to CustomValue(
-                    BooleanConvertibleContainer(initInfo?.readyForTravelling ?: false)
-                )
+@Composable
+fun VacancyPageContent(
+    data: Map<VacancyComponentFields, FieldValue>,
+    onValueChange: (VacancyComponentFields, FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        data.toSortedMap().forEach { (field, value) ->
+            Field(
+                field = field,
+                value = value,
+                onValueChange = { onValueChange(field, it) },
+                modifier = Modifier.fillMaxWidth(),
+                readOnly = field.readOnly
             )
         }
+    }
+}
+
+@Composable
+fun rememberVacancyDataMap(initInfo: CreateResumeUseCase.VacancyInformation?): SnapshotStateMap<VacancyComponentFields, FieldValue> {
+    return remember {
+        mutableStateMapOf(
+            VacancyComponentFields.STACK_TYPE to if (initInfo?.stackType == null) CustomValue(
+                StackTypeConvertibleContainer(StackType.NOT_SELECTED)
+            ) else CustomValue(StackTypeConvertibleContainer(initInfo.stackType)),
+
+            VacancyComponentFields.PLATFORM_TYPE to if (initInfo?.platformType == null)
+                CustomValue(PlatformTypeConvertibleContainer(PlatformType.NOT_SELECTED))
+            else CustomValue(PlatformTypeConvertibleContainer(initInfo.platformType)),
+
+            VacancyComponentFields.ROLE to if (initInfo?.desiredRole == null)
+                TextValue("")
+            else TextValue(initInfo.desiredRole),
+
+            VacancyComponentFields.SALARY to if (initInfo?.desiredSalaryFrom == null && initInfo?.desiredSalaryTo == null)
+                SalaryValue(from = "", to = "")
+            else SalaryValue(from = initInfo.desiredSalaryFrom, to = initInfo.desiredSalaryTo),
+
+            VacancyComponentFields.BUSYNESS to if (initInfo?.busynessType == null)
+                CustomValue(BusynessTypeConvertibleContainer(BusynessType.NOT_SELECTED))
+            else
+                CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType)),
+
+            VacancyComponentFields.SCHEDULE to if (initInfo?.scheduleType == null)
+                CustomValue(ScheduleTypeConvertibleContainer(ScheduleType.NOT_SELECTED))
+            else
+                CustomValue(ScheduleTypeConvertibleContainer(initInfo.scheduleType)),
+
+            VacancyComponentFields.READY_FOR_TRAVELLING to CustomValue(
+                BooleanConvertibleContainer(initInfo?.readyForTravelling ?: false)
+            )
+        )
     }
 }

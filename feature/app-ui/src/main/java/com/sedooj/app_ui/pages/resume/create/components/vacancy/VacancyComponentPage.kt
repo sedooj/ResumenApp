@@ -27,7 +27,9 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.VacancyComponent
+import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.VacancyPageContent
+import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.parseVacancyData
+import com.sedooj.app_ui.pages.resume.create.components.vacancy.data.rememberVacancyDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -44,9 +46,8 @@ fun VacancyComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
 ) {
-    val vacancyComponent = VacancyComponent()
     val vacancyInformation = createResumeViewModel.uiState.collectAsState().value.vacancyInformation
-    val data = vacancyComponent.dataMap(initInfo = vacancyInformation)
+    val data = rememberVacancyDataMap(initInfo = vacancyInformation)
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
     var isDataSaved by remember { mutableStateOf(false) }
@@ -73,7 +74,7 @@ fun VacancyComponentPage(
                 navigator.navigateUp()
         },
         floatingActionButton = {
-            val parsedData = vacancyComponent.parseData(data = data, initInfo = vacancyInformation)
+            val parsedData = parseVacancyData(data = data, initInfo = vacancyInformation)
             AnimatedVisibility(
                 visible = !isDataSaved && isDataEdited, enter = scaleIn(tween(200)), exit = scaleOut(
                     tween(200)
@@ -103,7 +104,7 @@ fun VacancyComponentPage(
         },
         floatingActionButtonPosition = FabPosition.EndOverlay
     ) {
-        vacancyComponent.Content(
+        VacancyPageContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
