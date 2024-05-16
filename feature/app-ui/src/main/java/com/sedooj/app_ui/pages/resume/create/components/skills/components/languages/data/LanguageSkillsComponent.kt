@@ -1,5 +1,6 @@
 package com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.data
 
+//import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,11 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import com.ramcosta.composedestinations.generated.destinations.SkillsEditLanguagesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
 import com.sedooj.ui_kit.R
 
 
@@ -34,30 +32,30 @@ fun addLanguageOrEdit(
     skill: CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation? = null,
 ) {
     if (skill == null)
-        navigator.navigate(
-            SkillsEditLanguagesDestination(
-                EditLanguageSkillsComponentData.LanguageSkill(
-                    languageName = "",
-                    knowledge = LanguageKnowledgeLevelType.NOT_SELECTED,
-                    id = id
-                )
-            )
-        ) {
-            launchSingleTop = true
-        }
+//        navigator.navigate(
+//            SkillsEditLanguagesDestination(
+//                EditLanguageSkillsComponentData.LanguageSkill(
+//                    languageName = "",
+//                    knowledge = LanguageKnowledgeLevelType.NOT_SELECTED,
+//                    id = id
+//                )
+//            )
+//        ) {
+//            launchSingleTop = true
+//        }
     else {
-        navigator.navigate(
-            SkillsEditLanguagesDestination(
-                EditLanguageSkillsComponentData.LanguageSkill(
-                    languageName = skill.languageName,
-                    knowledge = skill.knowledgeLevel,
-                    id = id,
-                    isEdit = true
-                )
-            )
-        ) {
-            launchSingleTop = true
-        }
+//        navigator.navigate(
+//            SkillsEditLanguagesDestination(
+//                EditLanguageSkillsComponentData.LanguageSkill(
+//                    languageName = skill.languageName,
+//                    knowledge = skill.knowledgeLevel,
+//                    id = id,
+//                    isEdit = true
+//                )
+//            )
+//        ) {
+//            launchSingleTop = true
+//        }
     }
 }
 

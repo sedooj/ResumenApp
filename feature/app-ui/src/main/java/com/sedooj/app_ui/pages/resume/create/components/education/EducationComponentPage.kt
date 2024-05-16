@@ -16,11 +16,13 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase.PersonalInformation.Education
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.education.data.EducationListComponent
-import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponentData
+import com.sedooj.app_ui.pages.resume.create.components.education.data.EducationListPageContent
+import com.sedooj.app_ui.pages.resume.create.components.education.data.addEducationOrEdit
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EditorEducation
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingAddButton
 import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
@@ -32,7 +34,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun EducationComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<EducationEditorDestination, EducationComponentData.EditorEducation>,
+    resultRecipient: ResultRecipient<EducationEditorDestination, EditorEducation>,
 ) {
     BackHandler {}
     val educationList =
@@ -59,18 +61,22 @@ fun EducationComponentPage(
             navigator.navigateUp()
         },
         floatingActionButton = {
-            EducationListComponent().FloatingActionButton(
-                navigator = navigator,
-                educationList = educationList
+            FloatingAddButton(
+                onClick = {
+                    addEducationOrEdit(
+                        navigator = navigator,
+                        id = educationList?.lastIndex?.plus(1) ?: 0
+                    )
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        EducationListComponent().Content(modifier = Modifier
+        EducationListPageContent(modifier = Modifier
             .fillMaxSize(),
             educationList = educationList,
             onEdit = { i, edu ->
-                EducationListComponent().createOrEdit(
+                addEducationOrEdit(
                     navigator = navigator,
                     id = i,
                     education = Education(

@@ -19,7 +19,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.data.LanguageSkillsPageContent
 import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.data.addLanguageOrEdit
-import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.EditLanguageSkillsComponentData
+import com.sedooj.app_ui.pages.resume.create.components.skills.components.languages.edit.data.LanguageSkill
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R
@@ -34,7 +34,7 @@ import com.sedooj.ui_kit.screens.Screen
 fun LanguageSkillsComponentPage(
     navigator: DestinationsNavigator,
     createResumeViewModel: CreateResumeViewModel,
-    resultRecipient: ResultRecipient<SkillsEditLanguagesDestination, EditLanguageSkillsComponentData.LanguageSkill>,
+    resultRecipient: ResultRecipient<SkillsEditLanguagesDestination, LanguageSkill>,
 ) {
     BackHandler {}
     val languageSkillList =

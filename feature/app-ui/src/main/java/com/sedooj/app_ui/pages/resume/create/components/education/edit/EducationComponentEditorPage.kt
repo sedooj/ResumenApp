@@ -18,10 +18,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
-import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponent
-import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationComponentData
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EditorEducation
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EducationEditorPageContent
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.parseEducationEditorData
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.rememberEditorEducationDataMap
 import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.components.FloatingSaveButton
 import com.sedooj.ui_kit.components.LostDataAlert
 import com.sedooj.ui_kit.screens.Screen
 
@@ -32,10 +35,10 @@ import com.sedooj.ui_kit.screens.Screen
 )
 @Composable
 fun EducationComponentEditorPage(
-    education: EducationComponentData.EditorEducation,
-    resultNavigator: ResultBackNavigator<EducationComponentData.EditorEducation>,
+    education: EditorEducation,
+    resultNavigator: ResultBackNavigator<EditorEducation>,
 ) {
-    val data = EducationComponent().dataMap(initInfo = education)
+    val data = rememberEditorEducationDataMap(initInfo = education)
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     var isLostDataAlertShow by remember { mutableStateOf(false) }
@@ -46,17 +49,16 @@ fun EducationComponentEditorPage(
         alignment = Alignment.Top,
         floatingActionButtonPosition = FabPosition.EndOverlay,
         floatingActionButton = {
-            EducationComponent().GetFloatingActionButton(
+            val parsedData = parseEducationEditorData(data = data, initInfo = education)
+            FloatingSaveButton(
                 onSave = {
                     resultNavigator.navigateBack(
-                        result = it
+                        result = parsedData
                     )
                     isDataSaved = true
                 },
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited,
-                data = data,
-                initInfo = education
             )
         },
         hasBackButton = true,
@@ -78,7 +80,7 @@ fun EducationComponentEditorPage(
         },
         showAlert = isLostDataAlertShow
     ) {
-        EducationComponent().Content(
+        EducationEditorPageContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp),
