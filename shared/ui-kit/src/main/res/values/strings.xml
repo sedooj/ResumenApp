@@ -62,6 +62,7 @@
     <string name="go_back">Вернуться назад</string>
     <string name="back">Назад</string>
     <string name="continue_edit">Продолжить редактирование</string>
+    <string name="next">Далее</string>
     <string name="not_specified_femenine">Не указана</string>
     <string name="education_stage">Образовательное учреждение</string>
     <string name="has_errors_in_education">Имеются незаполненные поля в данных об образовательном учреждении</string>
@@ -133,6 +134,7 @@
     <string name="save_changes_question">Сохранить изменения?</string>
     <string name="undo">Отменить</string>
     <string name="done">Готово</string>
+    <string name="resume_creation_done">Все поля заполнены. Теперь можно скачать ваше резюме!</string>
     <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
     <string name="resume_name">Название резюме</string>
     <string name="ruble">Рубли</string>
