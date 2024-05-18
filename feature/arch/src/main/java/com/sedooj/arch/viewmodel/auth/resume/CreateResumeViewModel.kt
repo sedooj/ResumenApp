@@ -2,9 +2,15 @@ package com.sedooj.arch.viewmodel.auth.resume
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
+import com.sedooj.api.domain.data.types.PlatformType
+import com.sedooj.api.domain.data.types.ScheduleType
+import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
 import com.sedooj.arch.viewmodel.auth.model.TabsModel
@@ -16,29 +22,80 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//data class CreateResumeUiState(
+//    var title: String = "New resume",
+//    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
+//    var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
+//    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
+//    var skillsInformation: CreateResumeUseCase.SkillsInformation? = null,
+//    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
+//)
 data class CreateResumeUiState(
-    var title: String = "New resume",
-    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
-    var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
-    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
-    var skillsInformation: CreateResumeUseCase.SkillsInformation? = null,
-    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
-)
+    var title: String = "My test resume",
+    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = CreateResumeUseCase.VacancyInformation(
+        stackType = StackType.FRONTEND,
+        platformType = PlatformType.NOT_SELECTED,
+        desiredRole = "consectetuer",
+        desiredSalaryFrom = "decore",
+        desiredSalaryTo = "has",
+        busynessType = BusynessType.FULL,
+        scheduleType = ScheduleType.SHIFT_METHOD,
+        readyForTravelling = false
 
-data class TabsUiState(
-    var selectedTab: TabsModel.Tabs = TabsModel.Tabs.PERSONAL_MAIN,
-    var selectedTabId: Int = 0,
+    ),
+    var personalInformation: CreateResumeUseCase.PersonalInformation? = CreateResumeUseCase.PersonalInformation(
+        firstName = "Krista Hinton",
+        secondName = "Ollie Benjamin",
+        thirdName = null,
+        dateOfBirth = "id",
+        city = "Heritage Park",
+        residenceCountry = "Morocco",
+        genderType = GenderType.NOT_SELECTED,
+        maritalStatus = MaritalStatus.NOT_SELECTED,
+        education = listOf(),
+        hasChild = false,
+        email = "alfonso.cline@example.com",
+        aboutMe = null,
+        personalQualities = "prompta"
+    ),
+    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = listOf(
+        CreateResumeUseCase.WorkExperienceInformation(
+            companyName = "Ty Nguyen",
+            kindOfActivity = "cursus",
+            gotJobDate = "adolescens",
+            quitJobDate = "ex",
+            isCurrentlyWorking = false
+        )
+    ),
+    var skillsInformation: CreateResumeUseCase.SkillsInformation? = CreateResumeUseCase.SkillsInformation(
+        languagesSkillsInformation = listOf(CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+            languageName = "Burton Meyers", knowledgeLevel = LanguageKnowledgeLevelType.A1
+
+        )), programmingLanguagesSkillsInformation = listOf(CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+            languageName = "Burt Dickson"
+        ))
+
+    ),
+    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
 )
 
 @HiltViewModel
 class CreateResumeViewModel @Inject constructor(
     private val resumeNetworkRepository: ResumeNetworkRepository,
-) : ViewModel(), ResumeModel, TabsModel {
+) : ViewModel(), ResumeModel {
     private val _uiState = MutableStateFlow(CreateResumeUiState())
     val uiState: StateFlow<CreateResumeUiState> = _uiState.asStateFlow()
 
-    private val _tabsState = MutableStateFlow(TabsUiState())
-    val tabsState: StateFlow<TabsUiState> = _tabsState.asStateFlow()
+    fun isFieldsFilled(): Boolean {
+        val data = uiState.value
+        if (data.title.isEmpty()) return false
+        if (data.vacancyInformation == null) return false
+        if (data.personalInformation == null) return false
+        if (data.resumeOptions == null) return false
+        if (data.skillsInformation == null) return false
+        if (data.workExperienceInformation == null) return false
+        return true
+    }
 
     override fun updateResumeOptions(input: CreateResumeUseCase.ResumeOptionsComponent) {
         _uiState.update {
@@ -104,7 +161,8 @@ class CreateResumeViewModel @Inject constructor(
         input: CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation,
     ) {
         val newLanguageSkillsList =
-            (_uiState.value.skillsInformation?.languagesSkillsInformation ?: emptyList()).toMutableList()
+            (_uiState.value.skillsInformation?.languagesSkillsInformation
+                ?: emptyList()).toMutableList()
         if (newLanguageSkillsList.size <= index || newLanguageSkillsList.isEmpty())
             newLanguageSkillsList.add(input)
         else
@@ -124,7 +182,8 @@ class CreateResumeViewModel @Inject constructor(
         input: CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation,
     ) {
         val newProgrammingLanguageSkillsList =
-            (_uiState.value.skillsInformation?.programmingLanguagesSkillsInformation ?: emptyList()).toMutableList()
+            (_uiState.value.skillsInformation?.programmingLanguagesSkillsInformation
+                ?: emptyList()).toMutableList()
         if (newProgrammingLanguageSkillsList.size <= index || newProgrammingLanguageSkillsList.isEmpty())
             newProgrammingLanguageSkillsList.add(input)
         else
@@ -132,7 +191,7 @@ class CreateResumeViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 skillsInformation = CreateResumeUseCase.SkillsInformation(
-                    languagesSkillsInformation =_uiState.value.skillsInformation?.languagesSkillsInformation,
+                    languagesSkillsInformation = _uiState.value.skillsInformation?.languagesSkillsInformation,
                     programmingLanguagesSkillsInformation = newProgrammingLanguageSkillsList.toList()
                 )
             )
@@ -201,11 +260,23 @@ class CreateResumeViewModel @Inject constructor(
     }
 
     override suspend fun push() {
+        val value = uiState.value
         viewModelScope.launch {
-//            val convertedState = _uiState.value.convertStateToPush() ?: throw NullInputException()
-//            resumeNetworkRepository.createResume(
-//                input = convertedState
-//            )
+            resumeNetworkRepository.createResume(
+                input = CreateResumeUseCase(
+                    title = value.title,
+                    vacancyInformation = value.vacancyInformation!!,
+                    personalInformation = value.personalInformation!!,
+                    workExperienceInformation = value.workExperienceInformation!!,
+                    skillsInformation = value.skillsInformation!!,
+                    resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                        generatePreview = true,
+                        generateFinalResult = true,
+                        generationTemplate = Templates.FREE
+
+                    )
+                )
+            )
         }
     }
 
@@ -213,14 +284,4 @@ class CreateResumeViewModel @Inject constructor(
     override fun save() {
         TODO("Not yet implemented")
     }
-
-    override fun setTab(tab: TabsModel.Tabs, id: Int) {
-        _tabsState.update {
-            it.copy(
-                selectedTab = tab,
-                selectedTabId = id
-            )
-        }
-    }
-
 }

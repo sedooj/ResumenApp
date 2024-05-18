@@ -20,8 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import com.ramcosta.composedestinations.generated.destinations.EducationEditorDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.data.types.EducationStage
+import com.sedooj.app_ui.pages.resume.create.components.education.edit.data.EditorEducation
 import com.sedooj.ui_kit.R
 
 fun addEducationOrEdit(
@@ -29,41 +32,41 @@ fun addEducationOrEdit(
     id: Int,
     education: CreateResumeUseCase.PersonalInformation.Education? = null,
 ) {
-//    if (education == null)
-//        navigator.navigate(
-//            EducationEditorDestination(
-//                EducationComponentData.EditorEducation(
-//                    id = id,
-//                    educationStage = EducationStage.NOT_SPECIFIED,
-//                    title = "",
-//                    locationCity = "",
-//                    enterDate = "",
-//                    graduatedDate = "",
-//                    faculty = "",
-//                    speciality = ""
-//                )
-//            )
-//        ) {
-//            launchSingleTop = true
-//        }
-//    else
-//        navigator.navigate(
-//            EducationEditorDestination(
-//                EducationComponentData.EditorEducation(
-//                    id = id,
-//                    educationStage = education.educationStage,
-//                    title = education.title,
-//                    locationCity = education.locationCity,
-//                    enterDate = education.enterDate,
-//                    graduatedDate = education.graduatedDate,
-//                    faculty = education.faculty,
-//                    speciality = education.speciality,
-//                    isEdit = true
-//                )
-//            )
-//        ) {
-//            launchSingleTop = true
-//        }
+    if (education == null)
+        navigator.navigate(
+            EducationEditorDestination(
+                EditorEducation(
+                    id = id,
+                    educationStage = EducationStage.NOT_SPECIFIED,
+                    title = "",
+                    locationCity = "",
+                    enterDate = "",
+                    graduatedDate = "",
+                    faculty = "",
+                    speciality = ""
+                )
+            )
+        ) {
+            launchSingleTop = true
+        }
+    else
+        navigator.navigate(
+            EducationEditorDestination(
+                EditorEducation(
+                    id = id,
+                    educationStage = education.educationStage,
+                    title = education.title,
+                    locationCity = education.locationCity,
+                    enterDate = education.enterDate,
+                    graduatedDate = education.graduatedDate,
+                    faculty = education.faculty,
+                    speciality = education.speciality,
+                    isEdit = true
+                )
+            )
+        ) {
+            launchSingleTop = true
+        }
 }
 
 @Composable

@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,9 @@ import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.components.LostDataAlert
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.screens.EditableTitleScreen
+import kotlinx.coroutines.launch
 
 @Destination<RootGraph>(
     start = false,
@@ -48,6 +51,16 @@ fun CreateResumePage(
     var isDataSaved by remember { mutableStateOf(false) }
     var isDataEdited by remember { mutableStateOf(false) }
     val viewModel = createResumeViewModel.uiState.collectAsState().value
+    val isResumeFilled by remember {
+        mutableStateOf(
+            viewModel.title.isNotEmpty()
+                    && viewModel.vacancyInformation != null
+                    && viewModel.personalInformation != null
+                    && viewModel.workExperienceInformation != null
+                    && viewModel.skillsInformation != null
+        )
+    }
+    val scope = rememberCoroutineScope()
     val defaultTitle = "New resume"
     val title = remember {
         mutableStateOf(
@@ -90,6 +103,14 @@ fun CreateResumePage(
         },
         showAlert = isAlertDialogVisible,
         actionButton = {
+            if (isResumeFilled)
+                FilledButton(
+                    label = stringResource(id = string.done),
+                    onClick = {
+                        scope.launch {
+                            createResumeViewModel.push()
+                        }
+                    })
             IconButton(onClick = { focusManager.moveFocus(FocusDirection.Left) }) {
                 Icon(
                     painter = painterResource(id = drawable.edit_pen),

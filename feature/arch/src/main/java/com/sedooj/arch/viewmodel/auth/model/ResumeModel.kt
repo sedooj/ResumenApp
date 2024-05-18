@@ -1,6 +1,7 @@
 package com.sedooj.arch.viewmodel.auth.model
 
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 
 interface ResumeModel {
 
