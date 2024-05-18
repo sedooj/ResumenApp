@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
+import com.ramcosta.composedestinations.generated.destinations.CreateResumeConfirmationDestination
 import com.ramcosta.composedestinations.generated.destinations.CreateResumeDestination
 import com.ramcosta.composedestinations.generated.destinations.EducationDestination
 import com.ramcosta.composedestinations.generated.destinations.EducationEditorDestination
@@ -69,6 +70,9 @@ fun MainScreen() {
                     dependency(createResumeViewModel)
                 }
                 destination(SkillsProgrammingLanguagesDestination) {
+                    dependency(createResumeViewModel)
+                }
+                destination(CreateResumeConfirmationDestination){
                     dependency(createResumeViewModel)
                 }
             }

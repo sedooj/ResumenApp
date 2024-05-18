@@ -8,6 +8,7 @@
     <string name="has_children_yes">Есть дети</string>
     <string name="has_children_no">Нет детей</string>
     <string name="save">Сохранить</string>
+    <string name="save_new_resume">Сохранить резюме</string>
     <string name="yes">Да</string>
     <string name="cancel">Назад</string>
     <string name="no">Нет</string>
@@ -134,7 +135,9 @@
     <string name="save_changes_question">Сохранить изменения?</string>
     <string name="undo">Отменить</string>
     <string name="done">Готово</string>
-    <string name="resume_creation_done">Все поля заполнены. Теперь можно скачать ваше резюме!</string>
+    <string name="chosen_template">Выбранный шаблон:</string>
+    <string name="choose_template">Выберите желаемый шаблон</string>
+    <string name="resume_creation_done">Все поля заполнены. Теперь выберите стиль вашего резюме используя наши шаблоны</string>
     <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
     <string name="resume_name">Название резюме</string>
     <string name="ruble">Рубли</string>

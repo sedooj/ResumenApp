@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CreateResumeConfirmationDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
@@ -126,7 +127,7 @@ fun CreateResumePage(
             DoneBox(
                 onClick = {
                     scope.launch {
-                        createResumeViewModel.push()
+                        destinationsNavigator.navigate(CreateResumeConfirmationDestination)
                     }
                 },
                 modifier = Modifier

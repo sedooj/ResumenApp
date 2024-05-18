@@ -7,6 +7,7 @@ object Routes {
     const val MY_RESUMES = "Resume_List"
     const val PROFILE = "Profile"
     const val CREATE_RESUME = "Create_Resume"
+    const val CREATE_RESUME_CONFIRMATION = "Create_Resume_Confirmation"
     const val CREATE_RESUME_VACANCY = "Vacancy"
     const val CREATE_RESUME_PERSONAL_MAIN = "Personal_Main"
     const val CREATE_RESUME_PERSONAL_SECONDARY = "Personal_Secondary"

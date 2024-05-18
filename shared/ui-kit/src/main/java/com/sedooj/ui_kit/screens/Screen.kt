@@ -37,12 +37,13 @@ fun Screen(
     navigationButton: @Composable () -> Unit = {},
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    bottomBar: @Composable (() -> Unit)? = null,
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     alignment: Alignment.Vertical = Alignment.CenterVertically,
     paddingValues: Dp = 15.dp,
     onBack: (() -> Unit)? = null,
     hasBackButton: Boolean = false,
-    alertDialog:( @Composable () -> Unit)? = null,
+    alertDialog: (@Composable () -> Unit)? = null,
     showAlert: Boolean = false,
     content: @Composable () -> Unit,
 ) {
@@ -71,6 +72,10 @@ fun Screen(
                 }, actions = {
                     actionButton()
                 })
+        },
+        bottomBar = {
+            if (bottomBar != null)
+                bottomBar()
         },
         floatingActionButton = {
             floatingActionButton()
