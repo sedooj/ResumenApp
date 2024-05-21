@@ -27,24 +27,26 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SignInConfirmationDestination
+import com.ramcosta.composedestinations.generated.destinations.SignUpDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
+import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignInViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
-import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.fields.FilledButton
+import com.sedooj.ui_kit.screens.Screen
 import com.sedooj.ui_kit.textField.PasswordTextField
 import com.sedooj.ui_kit.textField.UsernameTextField
 
 @Destination<RootGraph>(
     start = true,
     route = Routes.SIGN_IN,
-    style = ScreensTransitions::class
+    style = FadeScreensTransitions::class
 )
 @Composable
 fun SignInPage(
@@ -70,7 +72,7 @@ fun SignInPage(
     LaunchedEffect(key1 = uiState) {
         if (uiState == AuthState.AUTHORIZED) {
             destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(Routes.SIGN_IN_CONFIRMATION)
+            destinationsNavigator.navigate(SignInConfirmationDestination)
         }
     }
 
@@ -78,7 +80,7 @@ fun SignInPage(
         title = stringResource(id = string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         if (uiState == AuthState.AUTHORIZATION || uiState == AuthState.AUTHORIZED) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
@@ -102,11 +104,11 @@ fun SignInPage(
                     passwordState.value = it
                 })
             SignInComponent(
-                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
+                enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && (errorState == null || errorState == string.no_connection),
                 toSignUp = {
-                    destinationsNavigator.navigate(Routes.SIGN_UP)
+                    destinationsNavigator.navigate(SignUpDestination)
                 },
-                register = {
+                login = {
                     signInViewModel.auth(
                         input = AuthorizationInput(
                             username = usernameState.value,
@@ -149,14 +151,14 @@ private fun TextComponents(
 private fun SignInComponent(
     enabled: Boolean,
     toSignUp: () -> Unit,
-    register: () -> Unit,
+    login: () -> Unit,
 ) {
     FilledButton(
         modifier = Modifier.fillMaxWidth(),
         label = stringResource(id = string.sign_in),
         enabled = enabled,
         onClick = {
-            register()
+            login()
         })
     Row(
         horizontalArrangement = Arrangement.spacedBy(5.dp)

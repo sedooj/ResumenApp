@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,9 +22,10 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Screen(
+fun TabsScreen(
     modifier: Modifier = Modifier,
     title: String? = null,
+    topBar: @Composable () -> Unit,
     navigationButton: @Composable () -> Unit = {},
     actionButton: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
@@ -35,20 +36,25 @@ fun Screen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            if (title != null)
-                TopAppBar(title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = title, fontWeight = FontWeight.Bold)
-                    }
-
-                }, navigationIcon = {
-                    navigationButton()
-                }, actions = {
-                    actionButton()
-                })
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (title != null)
+                    TopAppBar(title = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = title, fontWeight = FontWeight.Bold)
+                        }
+                    }, navigationIcon = {
+                        navigationButton()
+                    }, actions = {
+                        actionButton()
+                    })
+                topBar()
+            }
         },
         floatingActionButton = {
             floatingActionButton()

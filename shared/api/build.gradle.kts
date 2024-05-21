@@ -42,6 +42,7 @@ dependencies {
     kapt(libs.dagger.hilt.compiler)
 
     implementation(project(":feature:localstorage"))
+    implementation(project(":shared:ui-kit"))
 
     // Network
     implementation(libs.kotlinx.serialization)

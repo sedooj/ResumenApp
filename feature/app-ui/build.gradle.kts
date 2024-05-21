@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
+    kotlin("plugin.serialization") version "1.9.22" apply false
 }
 
 android {
@@ -48,6 +49,7 @@ dependencies {
     implementation(project(":shared:api"))
     implementation(libs.androidx.hilt.navigation.compose)
     api(libs.network.ktor.client.cio)
+    api(libs.kotlinx.serialization)
 
     api(libs.material)
     api(libs.activity.compose)

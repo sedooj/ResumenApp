@@ -4,11 +4,11 @@ import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.types.BusynessType
 import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
+import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,7 +26,8 @@ data class CreateResume(
         var stackType: StackType,
         var platformType: PlatformType,
         var desiredRole: String,
-        var desiredSalary: String?,
+        var desiredSalaryFrom: String?,
+        var desiredSalaryTo: String?,
         var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean,
@@ -37,14 +38,14 @@ data class CreateResume(
         var firstName: String,
         var secondName: String,
         var thirdName: String?,
-        var dateOfBirth: LocalDate,
+        var dateOfBirth: String,
         var city: String,
         var residenceCountry: String,
         var genderType: GenderType,
         var maritalStatus: MaritalStatus?,
         var education: List<Education>?,
         var hasChild: Boolean,
-        var socialMedia: List<SocialMedia>?,
+        var email: String?,
         var aboutMe: String?,
         var personalQualities: String?,
     ) {
@@ -53,8 +54,8 @@ data class CreateResume(
             var educationStage: EducationStage,
             var title: String,
             var locationCity: String,
-            var enterDate: LocalDate,
-            var graduatedDate: LocalDate,
+            var enterDate: String,
+            var graduatedDate: String,
             var faculty: String,
             var speciality: String,
         )
@@ -70,23 +71,24 @@ data class CreateResume(
     data class WorkExperienceInformation(
         var companyName: String,
         var kindOfActivity: String,
-        var gotJobDate: LocalDate,
-        var quitJobDate: LocalDate?,
+        var gotJobDate: String,
+        var quitJobDate: String?,
         var isCurrentlyWorking: Boolean,
     )
 
     @Serializable
     data class SkillsInformation(
-        var softSkillsInformation: List<String>?,
-        var hardSkillsInformation: List<String>?,
-        var workedFrameworksInformation: List<String>?,
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
-        var workedProgrammingLanguageInformation: List<String>?,
+        var workedProgrammingLanguageInformation: List<ProgrammingLanguageSkillsInformation>?,
     ) {
         @Serializable
         data class LanguageSkillsInformation(
             var languageName: String,
-            var knowledgeLevel: String,
+            var knowledgeLevel: LanguageKnowledgeLevelType,
+        )
+        @Serializable
+        data class ProgrammingLanguageSkillsInformation(
+            var languageName: String
         )
     }
 

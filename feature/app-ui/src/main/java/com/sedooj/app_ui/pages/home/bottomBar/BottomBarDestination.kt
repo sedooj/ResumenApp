@@ -1,12 +1,11 @@
 package com.sedooj.app_ui.pages.home.bottomBar
 
 import androidx.annotation.StringRes
-import com.ramcosta.composedestinations.generated.destinations.HOMEDestination
-import com.ramcosta.composedestinations.generated.destinations.MYRESUMESDestination
-import com.ramcosta.composedestinations.generated.destinations.PROFILEDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
+import com.ramcosta.composedestinations.generated.destinations.ProfileDestination
+import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
-import com.sedooj.app_ui.R
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.arch.Routes
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
 
@@ -16,15 +15,15 @@ enum class BottomBarDestination(
     @StringRes val label: Int,
     val route: String,
 ) {
-    HOME(direction = HOMEDestination, icon = drawable.home, string.home, Routes.HOME),
+    HOME(direction = HomeDestination, icon = drawable.home, string.home, Routes.HOME),
     MY_RESUMES(
-        direction = MYRESUMESDestination,
+        direction = ResumeListDestination,
         icon = drawable.my_resumes,
         string.my_resumes,
         Routes.MY_RESUMES
     ),
     PROFILE(
-        direction = PROFILEDestination,
+        direction = ProfileDestination,
         icon = drawable.profile,
         string.profile,
         Routes.PROFILE

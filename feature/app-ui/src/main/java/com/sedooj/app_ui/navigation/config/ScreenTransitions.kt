@@ -9,7 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import com.ramcosta.composedestinations.spec.DestinationStyle
 
-object ScreensTransitions : DestinationStyle.Animated() {
+object FadeScreensTransitions : DestinationStyle.Animated() {
     override val enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)
         get() = {
             fadeIn(tween(500))
@@ -28,7 +28,7 @@ object ScreensTransitions : DestinationStyle.Animated() {
         }
 }
 
-object ConfirmationScreenTransitions : DestinationStyle.Animated() {
+object SlideScreenTransitions : DestinationStyle.Animated() {
     override val enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)
         get() = {
             this.slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)

@@ -26,17 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SignInDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.Client
 import com.sedooj.api.domain.api.UsersNetworkRepositoryImpl
-import com.sedooj.app_ui.navigation.config.ScreensTransitions
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
+import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.SignUpViewModel
 import com.sedooj.arch.viewmodel.auth.model.AuthenticationModel.AuthState
 import com.sedooj.arch.viewmodel.auth.model.AuthorizationInput
-import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.fields.FilledButton
+import com.sedooj.ui_kit.screens.Screen
 import com.sedooj.ui_kit.textField.PasswordTextField
 import com.sedooj.ui_kit.textField.UsernameTextField
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ import kotlinx.coroutines.launch
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_UP,
-    style = ScreensTransitions::class
+    style = FadeScreensTransitions::class
 )
 @Composable
 fun SignUpPage(
@@ -64,7 +65,7 @@ fun SignUpPage(
         title = stringResource(id = string.app_name),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         if (uiState == AuthState.AUTHORIZED) {
             Text(
@@ -105,7 +106,7 @@ fun SignUpPage(
                     enabled = usernameState.value.isNotBlank() && passwordState.value.isNotBlank() && errorState == null,
                     toSignIn = {
                         destinationsNavigator.popBackStack()
-                        destinationsNavigator.navigate(Routes.SIGN_IN)
+                        destinationsNavigator.navigate(SignInDestination)
                     },
                     register = {
                         signUpViewModel.auth(

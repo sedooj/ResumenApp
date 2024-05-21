@@ -5,7 +5,6 @@ import com.sedooj.api.domain.data.resume.entity.CreateResume
 import com.sedooj.api.domain.data.resume.entity.Resume
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
-import com.sedooj.api.domain.util.convert
 import com.sedooj.localstorage.dao.AuthUserDao
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -39,7 +38,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         stackType = input.vacancyInformation.stackType,
                         platformType = input.vacancyInformation.platformType,
                         desiredRole = input.vacancyInformation.desiredRole,
-                        desiredSalary = input.vacancyInformation.desiredSalary,
+                        desiredSalaryFrom = input.vacancyInformation.desiredSalaryFrom,
+                        desiredSalaryTo = input.vacancyInformation.desiredSalaryTo,
                         busynessType = input.vacancyInformation.busynessType,
                         scheduleType = input.vacancyInformation.scheduleType,
                         readyForTravelling = input.vacancyInformation.readyForTravelling
@@ -49,7 +49,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         firstName = input.personalInformation.firstName,
                         secondName = input.personalInformation.secondName,
                         thirdName = input.personalInformation.thirdName,
-                        dateOfBirth = input.personalInformation.dateOfBirth.convert(),
+                        dateOfBirth = input.personalInformation.dateOfBirth,
                         city = input.personalInformation.city,
                         residenceCountry = input.personalInformation.residenceCountry,
                         genderType = input.personalInformation.genderType,
@@ -59,18 +59,14 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 educationStage = it.educationStage,
                                 title = it.title,
                                 locationCity = it.locationCity,
-                                enterDate = it.enterDate.convert(),
-                                graduatedDate = it.graduatedDate.convert(),
+                                enterDate = it.enterDate,
+                                graduatedDate = it.graduatedDate,
                                 faculty = it.faculty,
                                 speciality = it.speciality
                             )
                         },
                         hasChild = input.personalInformation.hasChild,
-                        socialMedia = input.personalInformation.socialMedia?.map {
-                            CreateResume.PersonalInformation.SocialMedia(
-                                type = it.type, url = it.url
-                            )
-                        },
+                        email = input.personalInformation.email,
                         aboutMe = input.personalInformation.aboutMe,
                         personalQualities = input.personalInformation.personalQualities
 
@@ -79,22 +75,23 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         CreateResume.WorkExperienceInformation(
                             companyName = it.companyName,
                             kindOfActivity = it.kindOfActivity,
-                            gotJobDate = it.gotJobDate.convert(),
-                            quitJobDate = it.quitJobDate?.convert(),
+                            gotJobDate = it.gotJobDate,
+                            quitJobDate = it.quitJobDate,
                             isCurrentlyWorking = it.isCurrentlyWorking
                         )
                     },
                     skillsInformation = CreateResume.SkillsInformation(
-                        softSkillsInformation = input.skillsInformation.softSkillsInformation,
-                        hardSkillsInformation = input.skillsInformation.hardSkillsInformation,
-                        workedFrameworksInformation = input.skillsInformation.workedFrameworksInformation,
                         languagesSkillsInformation = input.skillsInformation.languagesSkillsInformation?.map {
                             CreateResume.SkillsInformation.LanguageSkillsInformation(
                                 languageName = it.languageName,
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation
+                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
+                            CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                                languageName = it.languageName
+                            )
+                        }
                     ),
                     resumeOptions = CreateResume.ResumeOptionsComponent(
                         generatePreview = input.resumeOptions.generatePreview,
@@ -122,7 +119,8 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         stackType = input.vacancyInformation.stackType,
                         platformType = input.vacancyInformation.platformType,
                         desiredRole = input.vacancyInformation.desiredRole,
-                        desiredSalary = input.vacancyInformation.desiredSalary,
+                        desiredSalaryFrom = input.vacancyInformation.desiredSalaryFrom,
+                        desiredSalaryTo = input.vacancyInformation.desiredSalaryTo,
                         busynessType = input.vacancyInformation.busynessType,
                         scheduleType = input.vacancyInformation.scheduleType,
                         readyForTravelling = input.vacancyInformation.readyForTravelling
@@ -132,7 +130,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         firstName = input.personalInformation.firstName,
                         secondName = input.personalInformation.secondName,
                         thirdName = input.personalInformation.thirdName,
-                        dateOfBirth = input.personalInformation.dateOfBirth.convert(),
+                        dateOfBirth = input.personalInformation.dateOfBirth,
                         city = input.personalInformation.city,
                         residenceCountry = input.personalInformation.residenceCountry,
                         genderType = input.personalInformation.genderType,
@@ -142,18 +140,14 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 educationStage = it.educationStage,
                                 title = it.title,
                                 locationCity = it.locationCity,
-                                enterDate = it.enterDate.convert(),
-                                graduatedDate = it.graduatedDate.convert(),
+                                enterDate = it.enterDate,
+                                graduatedDate = it.graduatedDate,
                                 faculty = it.faculty,
                                 speciality = it.speciality
                             )
                         },
                         hasChild = input.personalInformation.hasChild,
-                        socialMedia = input.personalInformation.socialMedia?.map {
-                            CreateResume.PersonalInformation.SocialMedia(
-                                type = it.type, url = it.url
-                            )
-                        },
+                        email = input.personalInformation.email,
                         aboutMe = input.personalInformation.aboutMe,
                         personalQualities = input.personalInformation.personalQualities
 
@@ -162,22 +156,23 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         CreateResume.WorkExperienceInformation(
                             companyName = it.companyName,
                             kindOfActivity = it.kindOfActivity,
-                            gotJobDate = it.gotJobDate.convert(),
-                            quitJobDate = it.quitJobDate?.convert(),
+                            gotJobDate = it.gotJobDate,
+                            quitJobDate = it.quitJobDate,
                             isCurrentlyWorking = it.isCurrentlyWorking
                         )
                     },
                     skillsInformation = CreateResume.SkillsInformation(
-                        softSkillsInformation = input.skillsInformation.softSkillsInformation,
-                        hardSkillsInformation = input.skillsInformation.hardSkillsInformation,
-                        workedFrameworksInformation = input.skillsInformation.workedFrameworksInformation,
                         languagesSkillsInformation = input.skillsInformation.languagesSkillsInformation?.map {
                             CreateResume.SkillsInformation.LanguageSkillsInformation(
                                 languageName = it.languageName,
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation
+                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
+                            CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                                languageName = it.languageName
+                            )
+                        }
                     ),
                     resumeOptions = CreateResume.ResumeOptionsComponent(
                         generatePreview = input.resumeOptions.generatePreview,
@@ -226,6 +221,14 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun downloadResume(resumeId: Long): ByteArray? {
-        TODO("Not yet implemented")
+        val authorizationData = authUserDao.getAuthorizationData() ?: return null
+        val response = client.get("${NetworkConfig.API_RESUME}list/download/${resumeId}") {
+            contentType(ContentType.Application.Pdf)
+            basicAuth(
+                username = authorizationData.username,
+                password = authorizationData.password
+            )
+        }
+        return response.body()
     }
 }

@@ -1,0 +1,187 @@
+package com.sedooj.app_ui.pages.resume.create.components.personal.second.data
+
+import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
+import com.sedooj.app_ui.pages.resume.create.components.generic.ConvertibleValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.CustomValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.FieldValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.TextValue
+import com.sedooj.app_ui.pages.resume.create.components.generic.asStringValue
+import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.fields.NotNullableValueTextField
+
+enum class SecondPageFields(
+    @StringRes
+    val fieldName: Int,
+    val readOnly: Boolean,
+    val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
+) {
+    SOCIAL_MEDIA(
+        fieldName = R.string.email,
+        readOnly = false
+    ),
+    ABOUT_ME(
+        fieldName = R.string.about_me,
+        readOnly = false
+    ),
+    PERSONAL_QUALITIES(
+        fieldName = R.string.personal_qualities,
+        readOnly = false
+    ),
+}
+
+data class EditorSecondPersonal(
+    var email: String,
+    var aboutMe: String,
+    var personalQualities: String,
+) : java.io.Serializable
+
+@Composable
+fun rememberSecondPersonalDataMap(initInfo: CreateResumeUseCase.PersonalInformation?): SnapshotStateMap<SecondPageFields, FieldValue> {
+    return remember {
+        mutableStateMapOf(
+            SecondPageFields.SOCIAL_MEDIA to
+                    if (initInfo?.email == null)
+                        TextValue("")
+                    else
+                        TextValue(initInfo.email),
+            SecondPageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
+                ""
+            ),
+            SecondPageFields.PERSONAL_QUALITIES to if (initInfo?.personalQualities != null) TextValue(
+                initInfo.personalQualities
+            ) else TextValue("")
+        )
+    }
+}
+
+@Composable
+fun parseSecondPersonalData(
+    data: Map<SecondPageFields, FieldValue>,
+    initInfo: CreateResumeUseCase.PersonalInformation?,
+): EditorSecondPersonal {
+    val email =
+        data[SecondPageFields.SOCIAL_MEDIA]?.asStringValue() ?: initInfo?.email
+    val aboutMe =
+        data[SecondPageFields.ABOUT_ME]?.asStringValue() ?: initInfo?.aboutMe
+    val personalQualities =
+        data[SecondPageFields.PERSONAL_QUALITIES]?.asStringValue()
+            ?: initInfo?.personalQualities
+
+    return EditorSecondPersonal(
+        email = email ?: "",
+        aboutMe = aboutMe ?: "",
+        personalQualities = personalQualities ?: ""
+    )
+}
+
+@Composable
+private fun InputTextField(
+    field: SecondPageFields,
+    value: String,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+) {
+    NotNullableValueTextField(label = field.fieldName, onValueChange = {
+        onValueChange(TextValue(it))
+    }, value = value, modifier = modifier, readOnly = readOnly)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Field(
+    field: SecondPageFields,
+    value: FieldValue,
+    onValueChange: (FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    Column {
+        InputTextField(
+            field = field,
+            value = value.asStringValue(),
+            onValueChange = onValueChange,
+            modifier = modifier.onFocusChanged { isFocused = it.isFocused },
+            readOnly = readOnly
+        )
+        AnimatedVisibility(visible = (isFocused && field.suggestions.isNotEmpty())) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                field.suggestions.forEach {
+                    SuggestionChip(
+                        onClick = {
+                            onValueChange(it)
+                        },
+                        label = {
+                            Text(
+                                text = it.value.asStringValue(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        enabled = value.asStringValue() != it.value.asStringValue()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SecondPersonalPageContent(
+    data: Map<SecondPageFields, FieldValue>,
+    onValueChange: (SecondPageFields, FieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        data.toSortedMap().forEach { (field, value) ->
+            Field(
+                field = field,
+                value = value,
+                onValueChange = { onValueChange(field, it) },
+                readOnly = field.readOnly,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}

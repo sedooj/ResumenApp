@@ -1,4 +1,4 @@
-package com.sedooj.ui_kit
+package com.sedooj.ui_kit.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.sedooj.ui_kit.R
+import com.sedooj.ui_kit.fields.FilledIconButton
 
 data class ResumeItemState(
     var resumeId: Long,
@@ -144,7 +146,7 @@ private fun ResumeItemButtons(
                 .fillMaxWidth()
                 .weight(1f),
             onClick = { onEditResume() },
-            icon = painterResource(id = R.drawable.edit),
+            icon = painterResource(id = R.drawable.edit_resume),
             contentDescription = stringResource(id = R.string.edit_resume),
         )
         FilledIconButton(
@@ -161,8 +163,7 @@ private fun ResumeItemButtons(
                 .weight(1f),
             onClick = { onDownloadResume() },
             icon = painterResource(id = R.drawable.download),
-            contentDescription = stringResource(id = R.string.download_resume),
-            enabled = false
+            contentDescription = stringResource(id = R.string.download_resume)
         )
     }
 }

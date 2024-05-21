@@ -24,20 +24,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sedooj.app_ui.navigation.config.ConfirmationScreenTransitions
-import com.sedooj.app_ui.pages.Routes
+import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
+import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.ConfirmationState
 import com.sedooj.arch.viewmodel.auth.SignInConfirmationViewModel
-import com.sedooj.ui_kit.FilledButton
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
-import com.sedooj.ui_kit.Screen
+import com.sedooj.ui_kit.fields.FilledButton
+import com.sedooj.ui_kit.screens.Screen
 
 @Destination<RootGraph>(
     start = false,
     route = Routes.SIGN_IN_CONFIRMATION,
-    style = ConfirmationScreenTransitions::class
+    style = SlideScreenTransitions::class
 )
 @Composable
 fun SignInConfirmationPage(
@@ -55,14 +56,14 @@ fun SignInConfirmationPage(
     LaunchedEffect(key1 = confirmationState) {
         if (confirmationState == ConfirmationState.APPROVED) {
             destinationsNavigator.popBackStack()
-            destinationsNavigator.navigate(Routes.HOME)
+            destinationsNavigator.navigate(HomeDestination)
         }
     }
 
     Screen(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         Image(
             modifier = Modifier.requiredSize(208.dp),
@@ -98,7 +99,7 @@ fun SignInConfirmationPage(
             FilledButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                label = stringResource(id = string.sign_in),
+                label = stringResource(id = string.keep),
                 onClick = {
                     signInConfirmationViewModel.approve()
                 },
