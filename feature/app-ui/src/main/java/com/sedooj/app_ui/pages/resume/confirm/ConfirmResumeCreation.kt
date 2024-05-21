@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sedooj.api.domain.data.template.TemplateEntity
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
@@ -58,7 +59,14 @@ fun ConfirmResumeCreationPage(
             ) {
                 FilledButton(
                     label = stringResource(id = string.save_new_resume),
-                    onClick = { scope.launch { createResumeViewModel.push() } },
+                    onClick = {
+                        scope.launch {
+                            createResumeViewModel.push()
+                            createResumeViewModel.dropUiState()
+                        }
+                        navigator.popBackStack()
+                        navigator.navigate(HomeDestination)
+                    },
                     enabled =
                     selectedTemplateIndexValue != -1 && selectedTemplateEntityValue != null,
                     modifier = Modifier.padding(start = 15.dp, end = 15.dp)
