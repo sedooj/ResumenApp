@@ -271,7 +271,7 @@ class CreateResumeViewModel @Inject constructor(
                     resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
                         generatePreview = true,
                         generateFinalResult = true,
-                        generationTemplate = Templates.FREE
+                        generationTemplate = Templates.FREE_1
 
                     )
                 )
