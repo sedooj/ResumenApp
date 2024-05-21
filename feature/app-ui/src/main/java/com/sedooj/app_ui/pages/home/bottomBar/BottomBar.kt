@@ -1,6 +1,5 @@
 package com.sedooj.app_ui.pages.home.bottomBar
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -14,6 +13,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -27,10 +27,11 @@ import com.ramcosta.composedestinations.generated.destinations.ProfileDestinatio
 import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.startDestination
+import kotlinx.coroutines.launch
 
 @Composable
 fun AnimatedBottomBar(
-    navController: NavController
+    navController: NavController,
 ) {
     val currentDestination =
         navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
@@ -44,13 +45,13 @@ fun AnimatedBottomBar(
 }
 
 @OptIn(ExperimentalSafeArgsApi::class)
-@SuppressLint("RestrictedApi")
 @Composable
 fun BottomBar(
-    navController: NavController
+    navController: NavController,
 ) {
     val currentDestination =
         navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
+    val scope = rememberCoroutineScope()
     NavigationBar(
         Modifier
             .padding(10.dp)
@@ -64,29 +65,12 @@ fun BottomBar(
                 selected = currentDestination == destination.direction,
                 onClick = {
                     if (currentDestination != destination.direction) {
-                        val findDestination = navController.findDestination(destination.direction.route)?.id ?: destination.route
-                        navController.navigate(
-                            findDestination
-                        ) {
-                            launchSingleTop = true
+                        scope.launch {
+                            navController.navigate(
+                                destination.route
+                            )
                         }
                     }
-//                        if (findDestination == null) {
-
-
-//                        navController.navigate(
-//                            HOMEDestination()
-//                        )
-//                            navController.navigate(
-//                                destination.direction
-//                            ) {
-//                                restoreState = false
-//                                launchSingleTop = true
-//                            }
-//                        } else {
-//                        findDestination?.let { navController.navigateTo(findDestination.id) }
-//                        }
-
                 },
                 icon = {
                     Icon(
