@@ -11,6 +11,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import okio.ByteString.Companion.encodeUtf8
 
 object NetworkConfig {
     private const val LOCAL_URL: String = "http://10.0.2.2:8080/"
@@ -56,5 +57,11 @@ interface Client {
 
         }
     }
+}
 
+fun getBasicHeader(
+    auth: String
+): String {
+    val encoded = auth.encodeUtf8().base64()
+    return "Basic $encoded"
 }

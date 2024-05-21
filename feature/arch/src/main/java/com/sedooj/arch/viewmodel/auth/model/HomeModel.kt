@@ -10,5 +10,5 @@ interface HomeModel {
     suspend fun getResumeList()
     suspend fun getResume(resumeId: Long): Resume?
     suspend fun dropResume(resumeId: Long)
-    suspend fun downloadResume(resumeId: Long): ByteArray?
+    suspend fun downloadResume(resumeId: Long): String?
 }

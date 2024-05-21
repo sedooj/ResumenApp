@@ -5,6 +5,7 @@ import com.sedooj.api.domain.data.resume.entity.Resume
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.HomeModel
+import com.sedooj.localstorage.dao.AuthUserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val resumeNetworkRepository: ResumeNetworkRepository,
+    private val authUserDao: AuthUserDao
 ) : ViewModel(), HomeModel {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState : StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -48,7 +50,12 @@ class HomeViewModel @Inject constructor(
         getResumeList()
     }
 
-    override suspend fun downloadResume(resumeId: Long): ByteArray? {
+    override suspend fun downloadResume(resumeId: Long): String? {
         return resumeNetworkRepository.downloadResume(resumeId = resumeId)
+    }
+
+    suspend fun getCredentials(): String? {
+        val auth = authUserDao.getAuthorizationData()
+        return auth?.let { "${auth.username}:${auth.password}" }
     }
 }

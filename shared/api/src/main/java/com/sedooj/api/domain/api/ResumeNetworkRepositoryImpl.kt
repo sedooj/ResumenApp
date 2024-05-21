@@ -220,15 +220,16 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun downloadResume(resumeId: Long): ByteArray? {
+    override suspend fun downloadResume(resumeId: Long): String? {
         val authorizationData = authUserDao.getAuthorizationData() ?: return null
-        val response = client.get("${NetworkConfig.API_RESUME}list/download/${resumeId}") {
-            contentType(ContentType.Application.Pdf)
-            basicAuth(
-                username = authorizationData.username,
-                password = authorizationData.password
-            )
-        }
-        return response.body()
+        return "${NetworkConfig.API_RESUME}list/download/${resumeId}"
+//        val response = client.get("${NetworkConfig.API_RESUME}list/download/${resumeId}") {
+//            contentType(ContentType.Application.Pdf)
+//            basicAuth(
+//                username = authorizationData.username,
+//                password = authorizationData.password
+//            )
+//        }
+//        return response.body()
     }
 }

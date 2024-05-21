@@ -1,5 +1,9 @@
 package com.sedooj.ui_kit.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +47,7 @@ fun ResumeItemCard(
     shape: Shape = RoundedCornerShape(10.dp),
     elevation: CardElevation = CardDefaults.cardElevation(),
     border: BorderStroke? = null,
+    isDownloading: Boolean,
     resume: ResumeItemState,
     onEditResume: () -> Unit,
     onDropResume: () -> Unit,
@@ -116,7 +121,8 @@ fun ResumeItemCard(
                                     .weight(3f),
                                 onEditResume = { onEditResume() },
                                 onDropResume = { onDropResume() },
-                                onDownloadResume = { onDownloadResume() }
+                                onDownloadResume = { onDownloadResume() },
+                                isDownloading = isDownloading
                             )
                         }
                     }
@@ -124,11 +130,22 @@ fun ResumeItemCard(
             }
         }
     )
+    AnimatedVisibility(visible = isDownloading, enter = expandVertically(tween(300)), exit = shrinkVertically(
+        tween(150)
+    )) {
+        Text(
+            text = stringResource(id = R.string.resume_downloading_in_dir),
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
 private fun ResumeItemButtons(
     modifier: Modifier = Modifier,
+    isDownloading: Boolean,
     onEditResume: () -> Unit,
     onDropResume: () -> Unit,
     onDownloadResume: () -> Unit,
@@ -163,7 +180,8 @@ private fun ResumeItemButtons(
                 .weight(1f),
             onClick = { onDownloadResume() },
             icon = painterResource(id = R.drawable.download),
-            contentDescription = stringResource(id = R.string.download_resume)
+            contentDescription = stringResource(id = R.string.download_resume),
+            enabled = !isDownloading
         )
     }
 }

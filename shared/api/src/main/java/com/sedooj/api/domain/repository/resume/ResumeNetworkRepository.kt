@@ -11,5 +11,5 @@ interface ResumeNetworkRepository : Client {
     suspend fun getResumeList(): List<Resume>?
     suspend fun getResume(resumeId: Long): Resume?
     suspend fun dropResume(resumeId: Long)
-    suspend fun downloadResume(resumeId: Long): ByteArray?
+    suspend fun downloadResume(resumeId: Long): String?
 }
