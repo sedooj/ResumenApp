@@ -71,7 +71,7 @@ data class CreateResumeUseCase(
 
     data class SkillsInformation(
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
-        var programmingLanguagesSkillsInformation: List<ProgrammingLanguageSkillsInformation>?,
+        var workedProgrammingLanguageInformation: List<ProgrammingLanguageSkillsInformation>?,
     ) {
         data class LanguageSkillsInformation(
             var languageName: String,

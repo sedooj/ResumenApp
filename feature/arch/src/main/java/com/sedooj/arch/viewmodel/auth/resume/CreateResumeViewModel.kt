@@ -13,7 +13,6 @@ import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
-import com.sedooj.arch.viewmodel.auth.model.TabsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -71,7 +70,7 @@ data class CreateResumeUiState(
         languagesSkillsInformation = listOf(CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
             languageName = "Burton Meyers", knowledgeLevel = LanguageKnowledgeLevelType.A1
 
-        )), programmingLanguagesSkillsInformation = listOf(CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+        )), workedProgrammingLanguageInformation = listOf(CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
             languageName = "Burt Dickson"
         ))
 
@@ -171,7 +170,7 @@ class CreateResumeViewModel @Inject constructor(
             it.copy(
                 skillsInformation = CreateResumeUseCase.SkillsInformation(
                     languagesSkillsInformation = newLanguageSkillsList.toList(),
-                    programmingLanguagesSkillsInformation = _uiState.value.skillsInformation?.programmingLanguagesSkillsInformation
+                    workedProgrammingLanguageInformation = _uiState.value.skillsInformation?.workedProgrammingLanguageInformation
                 )
             )
         }
@@ -182,7 +181,7 @@ class CreateResumeViewModel @Inject constructor(
         input: CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation,
     ) {
         val newProgrammingLanguageSkillsList =
-            (_uiState.value.skillsInformation?.programmingLanguagesSkillsInformation
+            (_uiState.value.skillsInformation?.workedProgrammingLanguageInformation
                 ?: emptyList()).toMutableList()
         if (newProgrammingLanguageSkillsList.size <= index || newProgrammingLanguageSkillsList.isEmpty())
             newProgrammingLanguageSkillsList.add(input)
@@ -192,7 +191,7 @@ class CreateResumeViewModel @Inject constructor(
             it.copy(
                 skillsInformation = CreateResumeUseCase.SkillsInformation(
                     languagesSkillsInformation = _uiState.value.skillsInformation?.languagesSkillsInformation,
-                    programmingLanguagesSkillsInformation = newProgrammingLanguageSkillsList.toList()
+                    workedProgrammingLanguageInformation = newProgrammingLanguageSkillsList.toList()
                 )
             )
         }

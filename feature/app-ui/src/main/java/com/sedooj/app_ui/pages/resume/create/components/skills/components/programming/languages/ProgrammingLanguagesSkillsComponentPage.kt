@@ -38,7 +38,7 @@ fun ProgrammingLanguagesSkillsComponentPage(
 ) {
     BackHandler {}
     val programmingLanguageSkillList =
-        createResumeViewModel.uiState.collectAsState().value.skillsInformation?.programmingLanguagesSkillsInformation
+        createResumeViewModel.uiState.collectAsState().value.skillsInformation?.workedProgrammingLanguageInformation
     resultRecipient.onResult {
         createResumeViewModel.saveProgrammingLanguageSkill(
             it.id, CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
