@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.data.types.BusynessType
+import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
 import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
@@ -33,47 +34,71 @@ data class CreateResumeUiState(
     var title: String = "My test resume",
     var vacancyInformation: CreateResumeUseCase.VacancyInformation? = CreateResumeUseCase.VacancyInformation(
         stackType = StackType.FRONTEND,
-        platformType = PlatformType.NOT_SELECTED,
-        desiredRole = "consectetuer",
-        desiredSalaryFrom = "decore",
-        desiredSalaryTo = "has",
+        platformType = PlatformType.MOBILE,
+        desiredRole = "Junior Frontend Developer",
+        desiredSalaryFrom = "12000",
+        desiredSalaryTo = "18000",
         busynessType = BusynessType.FULL,
         scheduleType = ScheduleType.SHIFT_METHOD,
         readyForTravelling = false
-
     ),
     var personalInformation: CreateResumeUseCase.PersonalInformation? = CreateResumeUseCase.PersonalInformation(
-        firstName = "Krista Hinton",
-        secondName = "Ollie Benjamin",
-        thirdName = null,
-        dateOfBirth = "id",
-        city = "Heritage Park",
-        residenceCountry = "Morocco",
-        genderType = GenderType.NOT_SELECTED,
-        maritalStatus = MaritalStatus.NOT_SELECTED,
-        education = listOf(),
+        firstName = "Иван",
+        secondName = "Иванов",
+        thirdName = "Иванович",
+        dateOfBirth = "01.01.2000",
+        city = "Новосибирск",
+        residenceCountry = "Россия",
+        genderType = GenderType.MALE,
+        maritalStatus = MaritalStatus.NOT_MARRIED,
+        education = listOf(
+            CreateResumeUseCase.PersonalInformation.Education(
+                educationStage = EducationStage.INSTITUTE,
+                title = "НГТУ",
+                locationCity = "Новосибирск",
+                enterDate = "12.09.2023",
+                graduatedDate = "12.09.2027",
+                faculty = "АВТ",
+                speciality = "ИВТ"
+            )
+        ),
         hasChild = false,
-        email = "alfonso.cline@example.com",
-        aboutMe = null,
-        personalQualities = "prompta"
+        email = "ivanov@gmail.com",
+        aboutMe = "Ya da yab da",
+        personalQualities = "Dududududu"
     ),
     var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = listOf(
         CreateResumeUseCase.WorkExperienceInformation(
-            companyName = "Ty Nguyen",
-            kindOfActivity = "cursus",
-            gotJobDate = "adolescens",
-            quitJobDate = "ex",
-            isCurrentlyWorking = false
+            companyName = "Google",
+            kindOfActivity = "Frontend developer",
+            gotJobDate = "08.08.2024",
+            quitJobDate = "08.08.2027",
+            isCurrentlyWorking = true
         )
     ),
     var skillsInformation: CreateResumeUseCase.SkillsInformation? = CreateResumeUseCase.SkillsInformation(
-        languagesSkillsInformation = listOf(CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
-            languageName = "Burton Meyers", knowledgeLevel = LanguageKnowledgeLevelType.A1
-
-        )), workedProgrammingLanguageInformation = listOf(CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-            languageName = "Burt Dickson"
-        ))
-
+        languagesSkillsInformation = listOf(
+            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+                languageName = "English", knowledgeLevel = LanguageKnowledgeLevelType.B2
+            ),
+            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+                languageName = "French", knowledgeLevel = LanguageKnowledgeLevelType.A1
+            ),
+        ),
+        workedProgrammingLanguageInformation = listOf(
+            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                languageName = "C++"
+            ),
+            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                languageName = "Java"
+            ),
+            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                languageName = "Kotlin"
+            ),
+            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                languageName = ""
+            ),
+        )
     ),
     var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
 )

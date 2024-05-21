@@ -79,7 +79,7 @@ data class CreateResume(
     @Serializable
     data class SkillsInformation(
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
-        var programmingLanguageInformation: List<ProgrammingLanguageSkillsInformation>?,
+        var workedProgrammingLanguageInformation: List<ProgrammingLanguageSkillsInformation>?,
     ) {
         @Serializable
         data class LanguageSkillsInformation(

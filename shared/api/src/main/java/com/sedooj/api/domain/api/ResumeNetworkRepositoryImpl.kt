@@ -87,7 +87,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        programmingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
+                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
                             CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
                                 languageName = it.languageName
                             )
@@ -168,7 +168,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
-                        programmingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
+                        workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
                             CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
                                 languageName = it.languageName
                             )
