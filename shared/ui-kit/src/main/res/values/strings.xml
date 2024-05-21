@@ -34,6 +34,7 @@
     <string name="not_all_field_are_filled">Не все поля заполнены</string>
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
+    <string name="resume_downloading_in_dir">Резюме будет сохранено в загрузки</string>
     <string name="vacancy">Вакансия</string>
     <string name="type_vacancy">Информация о должности</string>
     <string name="type_languages">Языки</string>
