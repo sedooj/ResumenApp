@@ -163,8 +163,7 @@ private fun ResumeItemButtons(
                 .weight(1f),
             onClick = { onDownloadResume() },
             icon = painterResource(id = R.drawable.download),
-            contentDescription = stringResource(id = R.string.download_resume),
-            enabled = false
+            contentDescription = stringResource(id = R.string.download_resume)
         )
     }
 }

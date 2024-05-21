@@ -24,7 +24,11 @@ import com.sedooj.ui_kit.components.ResumeItemState
 import com.sedooj.ui_kit.screens.Screen
 import kotlinx.coroutines.launch
 
-@Destination<RootGraph>(start = false, route = Routes.MY_RESUMES, style = FadeScreensTransitions::class)
+@Destination<RootGraph>(
+    start = false,
+    route = Routes.MY_RESUMES,
+    style = FadeScreensTransitions::class
+)
 @Composable
 fun MyResumesScreen(
     destinationsNavigator: DestinationsNavigator,
@@ -57,7 +61,11 @@ fun MyResumesScreen(
                             homeViewModel.dropResume(resume.resumeId)
                         }
                     },
-                    onDownloadResume = {}
+                    onDownloadResume = {
+                        scope.launch {
+                            homeViewModel.downloadResume(resume.resumeId)
+                        }
+                    }
                 )
             }
         }
