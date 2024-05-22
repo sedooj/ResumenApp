@@ -26,6 +26,7 @@
     <string name="password">Пароль</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="no_account">Нет аккаунта?</string>
+    <string name="logout">Выйти</string>
     <string name="has_account">Уже есть аккаунт?</string>
     <string name="create_resume">Создать резюме</string>
     <string name="drop_resume">Удалить резюме</string>

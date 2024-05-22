@@ -15,6 +15,7 @@ import com.ramcosta.composedestinations.generated.destinations.EducationDestinat
 import com.ramcosta.composedestinations.generated.destinations.EducationEditorDestination
 import com.ramcosta.composedestinations.generated.destinations.PersonalMainDestination
 import com.ramcosta.composedestinations.generated.destinations.PersonalSecondaryDestination
+import com.ramcosta.composedestinations.generated.destinations.ProfileDestination
 import com.ramcosta.composedestinations.generated.destinations.ResumeListDestination
 import com.ramcosta.composedestinations.generated.destinations.SkillsLanguagesDestination
 import com.ramcosta.composedestinations.generated.destinations.SkillsProgrammingLanguagesDestination
@@ -25,6 +26,7 @@ import com.ramcosta.composedestinations.navigation.destination
 import com.sedooj.app_ui.pages.home.bottomBar.AnimatedBottomBar
 import com.sedooj.arch.viewmodel.auth.HomeViewModel
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
+import com.sedooj.arch.viewmodel.profile.UserViewModel
 
 @Composable
 fun MainScreen() {
@@ -37,6 +39,7 @@ fun MainScreen() {
     ) {
         val createResumeViewModel : CreateResumeViewModel = hiltViewModel()
         val myResumesViewModel : HomeViewModel = hiltViewModel()
+        val usersViewModel : UserViewModel = hiltViewModel()
         DestinationsNavHost(
             navGraph = NavGraphs.root,
             navController = navController,
@@ -68,6 +71,9 @@ fun MainScreen() {
                 }
                 destination(SkillsLanguagesDestination) {
                     dependency(createResumeViewModel)
+                }
+                destination(ProfileDestination) {
+                    dependency(usersViewModel)
                 }
                 destination(SkillsProgrammingLanguagesDestination) {
                     dependency(createResumeViewModel)
