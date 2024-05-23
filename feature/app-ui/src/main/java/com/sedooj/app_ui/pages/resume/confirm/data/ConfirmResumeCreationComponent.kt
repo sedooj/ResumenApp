@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sedooj.api.domain.data.template.TemplateEntity
@@ -40,30 +39,32 @@ fun ConfirmResumeCreationContent(
     selectedTemplateIndexValue: Int,
     selectedTemplateEntity: TemplateEntity?
 ) {
-    val templateList = getTemplateList()
+//    val templateList = getTemplateList()
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(id = string.choose_template),
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
-        )
-        ChooseTemplateComponent(
-            onSelect = onSelect,
-            templateList = templateList,
-            selectedTemplateIndexValue = selectedTemplateIndexValue,
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(10.dp)
-                ),
-            selectedTemplateEntity = selectedTemplateEntity
-        )
+//        Text(
+//            text = stringResource(id = string.choose_template),
+//            textAlign = TextAlign.Center,
+//            fontWeight = FontWeight.Bold
+//        )
+        UnavailableTemplatesComponent(modifier = Modifier.fillMaxWidth())
+//        ChooseTemplateComponent(
+//            onSelect = onSelect,
+//            templateList = templateList,
+//            selectedTemplateIndexValue = selectedTemplateIndexValue,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .border(
+//                    width = 1.dp,
+//                    color = MaterialTheme.colorScheme.primary,
+//                    shape = RoundedCornerShape(10.dp)
+//                ),
+//            selectedTemplateEntity = selectedTemplateEntity
+//        )
     }
 }
 
@@ -80,6 +81,22 @@ private fun getTemplateList(): List<TemplateEntity> {
         TemplateEntity(title = "quod", preview = 0, isPremium = false),
         TemplateEntity(title = "theophrastus", preview = 0, isPremium = false)
     )
+}
+
+@Composable
+private fun UnavailableTemplatesComponent(modifier: Modifier = Modifier) {
+//    Column(
+//        modifier = Modifier.fillMaxWidth(),
+//        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+    Text(
+        text = "Выбор шаблонов в данный момент не доступен, используется стандартный шаблон",
+        textAlign = TextAlign.Center,
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.error
+    )
+//    }
 }
 
 @Composable

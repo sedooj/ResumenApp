@@ -273,12 +273,12 @@ fun rememberVacancyDataMap(initInfo: CreateResumeUseCase.VacancyInformation?): S
 
             VacancyComponentFields.SALARY to if (initInfo?.desiredSalaryFrom == null && initInfo?.desiredSalaryTo == null)
                 SalaryValue(from = "", to = "")
-            else SalaryValue(from = initInfo.desiredSalaryFrom, to = initInfo.desiredSalaryTo),
+            else SalaryValue(from = initInfo.desiredSalaryFrom!!, to = initInfo.desiredSalaryTo!!),
 
             VacancyComponentFields.BUSYNESS to if (initInfo?.busynessType == null)
                 CustomValue(BusynessTypeConvertibleContainer(BusynessType.NOT_SELECTED))
             else
-                CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType)),
+                CustomValue(BusynessTypeConvertibleContainer(initInfo.busynessType!!)),
 
             VacancyComponentFields.SCHEDULE to if (initInfo?.scheduleType == null)
                 CustomValue(ScheduleTypeConvertibleContainer(ScheduleType.NOT_SELECTED))

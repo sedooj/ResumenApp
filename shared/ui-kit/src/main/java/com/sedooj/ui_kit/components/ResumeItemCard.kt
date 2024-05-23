@@ -1,5 +1,9 @@
 package com.sedooj.ui_kit.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -20,8 +25,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,11 +53,15 @@ fun ResumeItemCard(
     shape: Shape = RoundedCornerShape(10.dp),
     elevation: CardElevation = CardDefaults.cardElevation(),
     border: BorderStroke? = null,
+    isDownloading: Boolean,
     resume: ResumeItemState,
     onEditResume: () -> Unit,
     onDropResume: () -> Unit,
     onDownloadResume: () -> Unit,
 ) {
+    var isEnabled by remember {
+        mutableStateOf(true)
+    }
     Card(
         modifier = modifier.height(100.dp),
         shape = shape,
@@ -55,7 +69,7 @@ fun ResumeItemCard(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             contentColor = MaterialTheme.colorScheme.surfaceTint,
             disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            disabledContentColor = MaterialTheme.colorScheme.surfaceContainerLow
+            disabledContentColor = Color.White
         ),
         elevation = elevation,
         border = border,
@@ -115,8 +129,13 @@ fun ResumeItemCard(
                                     .fillMaxSize()
                                     .weight(3f),
                                 onEditResume = { onEditResume() },
-                                onDropResume = { onDropResume() },
-                                onDownloadResume = { onDownloadResume() }
+                                onDropResume = {
+                                    onDropResume()
+                                    isEnabled = false
+                                },
+                                onDownloadResume = { onDownloadResume() },
+                                isDownloading = isDownloading,
+                                isEnabled = isEnabled
                             )
                         }
                     }
@@ -124,14 +143,28 @@ fun ResumeItemCard(
             }
         }
     )
+    AnimatedVisibility(
+        visible = isDownloading, enter = expandVertically(tween(300)), exit = shrinkVertically(
+            tween(150)
+        )
+    ) {
+        Text(
+            text = stringResource(id = R.string.resume_downloading_in_dir),
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
 private fun ResumeItemButtons(
     modifier: Modifier = Modifier,
+    isDownloading: Boolean,
     onEditResume: () -> Unit,
     onDropResume: () -> Unit,
     onDownloadResume: () -> Unit,
+    isEnabled: Boolean,
 ) {
     Row(
         modifier = modifier,
@@ -148,6 +181,16 @@ private fun ResumeItemButtons(
             onClick = { onEditResume() },
             icon = painterResource(id = R.drawable.edit_resume),
             contentDescription = stringResource(id = R.string.edit_resume),
+            enabled = isEnabled
+        )
+        FilledIconButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            onClick = { onDownloadResume() },
+            icon = painterResource(id = R.drawable.download),
+            contentDescription = stringResource(id = R.string.download_resume),
+            enabled = !isDownloading && isEnabled
         )
         FilledIconButton(
             modifier = Modifier
@@ -156,14 +199,13 @@ private fun ResumeItemButtons(
             onClick = { onDropResume() },
             icon = painterResource(id = R.drawable.trash),
             contentDescription = stringResource(id = R.string.drop_resume),
-        )
-        FilledIconButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            onClick = { onDownloadResume() },
-            icon = painterResource(id = R.drawable.download),
-            contentDescription = stringResource(id = R.string.download_resume)
+            colors = ButtonColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                disabledContainerColor = Color.DarkGray,
+                disabledContentColor = Color.LightGray
+            ),
+            enabled = isEnabled
         )
     }
 }

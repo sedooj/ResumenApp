@@ -1,16 +1,14 @@
 package com.sedooj.app_ui.pages.resume.create
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -30,16 +27,18 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CreateResumeConfirmationDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.Direction
 import com.sedooj.app_ui.navigation.config.SlideScreenTransitions
 import com.sedooj.app_ui.pages.resume.create.components.CreateResumeComponentsPage
-import com.sedooj.app_ui.pages.resume.create.data.DoneBox
+import com.sedooj.app_ui.pages.resume.create.data.ErrorBox
 import com.sedooj.arch.Routes
 import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R.drawable
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.components.LostDataAlert
+import com.sedooj.ui_kit.fields.FilledButton
 import com.sedooj.ui_kit.screens.EditableTitleScreen
 import kotlinx.coroutines.launch
 
@@ -57,19 +56,28 @@ fun CreateResumePage(
     val viewModel = createResumeViewModel.uiState.collectAsState().value
     val isResumeFilled by remember {
         mutableStateOf(
-            viewModel.title.isNotEmpty()
-                    && viewModel.vacancyInformation != null
+            !viewModel.title.isNullOrEmpty()
                     && viewModel.personalInformation != null
-                    && viewModel.workExperienceInformation != null
-                    && viewModel.skillsInformation != null
+                    && viewModel.vacancyInformation != null
         )
     }
+    var hasError by remember {
+        mutableStateOf(viewModel.title == null)
+    }
+
+    LaunchedEffect(key1 = hasError) {
+        if (hasError) {
+            createResumeViewModel.init()
+            hasError = false
+        }
+    }
+
     val scope = rememberCoroutineScope()
     val defaultTitle = "New resume"
     val title = remember {
         mutableStateOf(
             TextFieldValue(
-                text = viewModel.title,
+                text = viewModel.title ?: "New resume",
                 selection = if (viewModel.title == defaultTitle) TextRange(
                     0,
                     defaultTitle.length
@@ -79,7 +87,11 @@ fun CreateResumePage(
     }
     val focusManager = LocalFocusManager.current
     BackHandler {
-        isAlertDialogVisible = true
+        if (!hasError)
+            isAlertDialogVisible = true
+        else {
+            destinationsNavigator.navigate(HomeDestination)
+        }
     }
     EditableTitleScreen(
         title = title.value,
@@ -101,9 +113,30 @@ fun CreateResumePage(
         alertDialog = {
             LostDataAlert(onDismiss = { isAlertDialogVisible = false }, onConfirm = {
                 isAlertDialogVisible = false
-                destinationsNavigator.navigateUp()
+                destinationsNavigator.navigate(HomeDestination)
                 createResumeViewModel.dropUiState()
             })
+        },
+        bottomBar = {
+            if (isResumeFilled) {
+                BottomAppBar(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                ) {
+                    FilledButton(
+                        label = stringResource(id = string.continue_create_resume),
+                        onClick = {
+                            scope.launch {
+                                destinationsNavigator.navigate(CreateResumeConfirmationDestination)
+                            }
+                        }
+                    )
+                }
+            }
+        },
+        hasError = hasError,
+        errorContent = {
+            ErrorBox(onClick = { destinationsNavigator.navigate(HomeDestination) })
         },
         showAlert = isAlertDialogVisible,
         actionButton = {
@@ -123,26 +156,7 @@ fun CreateResumePage(
                 destinationsNavigator.navigate(it)
             }
         )
-        if (isResumeFilled) {
-            DoneBox(
-                onClick = {
-                    scope.launch {
-                        destinationsNavigator.navigate(CreateResumeConfirmationDestination)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .border(
-                        1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .clip(shape = RoundedCornerShape(10.dp))
-            )
-        }
     }
-
 }
 
 @Composable

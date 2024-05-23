@@ -1,4 +1,4 @@
-package com.sedooj.api.domain.data.resume.usecase
+package com.sedooj.api.domain.data.resume.entity
 
 import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.types.BusynessType
@@ -9,10 +9,12 @@ import com.sedooj.api.domain.data.types.MaritalStatus
 import com.sedooj.api.domain.data.types.PlatformType
 import com.sedooj.api.domain.data.types.ScheduleType
 import com.sedooj.api.domain.data.types.StackType
+import kotlinx.serialization.Serializable
 
-data class CreateResumeUseCase(
+@Serializable
+data class UpdateResume(
     var title: String,
-    var resumeId: Long?,
+    var resumeId: Long,
     var vacancyInformation: VacancyInformation,
     var personalInformation: PersonalInformation,
     var workExperienceInformation: List<WorkExperienceInformation>?,
@@ -20,6 +22,7 @@ data class CreateResumeUseCase(
     var resumeOptions: ResumeOptionsComponent,
 ) {
 
+    @Serializable
     data class VacancyInformation(
         var stackType: StackType,
         var platformType: PlatformType,
@@ -28,9 +31,10 @@ data class CreateResumeUseCase(
         var desiredSalaryTo: String?,
         var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
-        var readyForTravelling: Boolean
+        var readyForTravelling: Boolean,
     )
 
+    @Serializable
     data class PersonalInformation(
         var firstName: String,
         var secondName: String,
@@ -46,6 +50,7 @@ data class CreateResumeUseCase(
         var aboutMe: String?,
         var personalQualities: String?,
     ) {
+        @Serializable
         class Education(
             var educationStage: EducationStage,
             var title: String,
@@ -56,12 +61,14 @@ data class CreateResumeUseCase(
             var speciality: String,
         )
 
+        @Serializable
         data class SocialMedia(
             var type: String,
             var url: String,
         )
     }
 
+    @Serializable
     data class WorkExperienceInformation(
         var companyName: String,
         var kindOfActivity: String,
@@ -70,22 +77,26 @@ data class CreateResumeUseCase(
         var isCurrentlyWorking: Boolean,
     )
 
+    @Serializable
     data class SkillsInformation(
         var languagesSkillsInformation: List<LanguageSkillsInformation>?,
         var workedProgrammingLanguageInformation: List<ProgrammingLanguageSkillsInformation>?,
     ) {
+        @Serializable
         data class LanguageSkillsInformation(
             var languageName: String,
             var knowledgeLevel: LanguageKnowledgeLevelType,
         )
+        @Serializable
         data class ProgrammingLanguageSkillsInformation(
-            var languageName: String,
+            var languageName: String
         )
     }
 
+    @Serializable
     data class ResumeOptionsComponent(
         var generatePreview: Boolean,
         var generateFinalResult: Boolean,
-        var generationTemplate: Templates?,
+        var generationTemplate: Templates?
     )
 }

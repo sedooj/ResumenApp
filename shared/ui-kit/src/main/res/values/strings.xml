@@ -14,6 +14,7 @@
     <string name="no">Нет</string>
     <string name="dont_save">Не сохранять</string>
     <string name="quit">Выйти</string>
+    <string name="back_to_main_menu">Выйти в главное меню</string>
     <string name="home">Главная</string>
     <string name="my_resumes">Мои резюме</string>
     <string name="profile">Профиль</string>
@@ -26,14 +27,18 @@
     <string name="password">Пароль</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="no_account">Нет аккаунта?</string>
+    <string name="logout">Выйти</string>
     <string name="has_account">Уже есть аккаунт?</string>
     <string name="create_resume">Создать резюме</string>
+    <string name="error_occurred_while_save_resume">Произошла ошибка при сохранении резюме, проверьте правильность заполнения полей</string>
+    <string name="one_more_time">Ещё раз</string>
     <string name="drop_resume">Удалить резюме</string>
     <string name="drop_education">Удалить данные об образовательном учреждении</string>
     <string name="delete">Удалить</string>
     <string name="not_all_field_are_filled">Не все поля заполнены</string>
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
+    <string name="resume_downloading_in_dir">Резюме будет сохранено в загрузки</string>
     <string name="vacancy">Вакансия</string>
     <string name="type_vacancy">Информация о должности</string>
     <string name="type_languages">Языки</string>
@@ -63,6 +68,7 @@
     <string name="go_back">Вернуться назад</string>
     <string name="back">Назад</string>
     <string name="continue_edit">Продолжить редактирование</string>
+    <string name="continue_create_resume">Продолжить</string>
     <string name="next">Далее</string>
     <string name="not_specified_femenine">Не указана</string>
     <string name="education_stage">Образовательное учреждение</string>
@@ -138,6 +144,7 @@
     <string name="chosen_template">Выбранный шаблон:</string>
     <string name="choose_template">Выберите желаемый шаблон</string>
     <string name="resume_creation_done">Все поля заполнены. Теперь выберите стиль вашего резюме используя наши шаблоны</string>
+    <string name="error_create_resume">Произошла ошибка при загрузке данных</string>
     <string name="field_must_contains_only_latin_chars">Поле должно содержать только латинские символы</string>
     <string name="resume_name">Название резюме</string>
     <string name="ruble">Рубли</string>

@@ -44,10 +44,13 @@ fun EditableTitleScreen(
     alignment: Alignment.Vertical = Alignment.CenterVertically,
     paddingValues: Dp = 15.dp,
     onValueChange: (TextFieldValue) -> Unit,
-    alertDialog:( @Composable () -> Unit)? = null,
+    alertDialog: (@Composable () -> Unit)? = null,
     showAlert: Boolean = false,
     onBack: (() -> Unit)? = null,
     hasBackButton: Boolean = false,
+    hasError: Boolean = false,
+    bottomBar: (@Composable () -> Unit)? = null,
+    errorContent: @Composable () -> Unit = { },
     content: @Composable () -> Unit,
 ) {
     val blurRadius by animateDpAsState(
@@ -62,42 +65,48 @@ fun EditableTitleScreen(
             )
         ),
         topBar = {
-            TopAppBar(
-                title = {
-                    TitleTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = title,
-                        onValueChange = {
-                            onValueChange(it)
-                        },
-                        maxLines = 1,
-                        singleLine = true,
-                        keyboardActions = KeyboardActions(onDone = {
-                            focusManager.clearFocus()
-                        })
-                    )
-                }, navigationIcon = {
-                    if (!hasBackButton)
-                        navigationButton()
-                    else
-                        BackNavButton(
-                            modifier = Modifier.size(15.dp),
-                            onBack = onBack!!
+            if (!hasError)
+                TopAppBar(
+                    title = {
+                        TitleTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = title,
+                            onValueChange = {
+                                onValueChange(it)
+                            },
+                            maxLines = 1,
+                            singleLine = true,
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                            })
                         )
-                }, actions = {
-                    actionButton()
-                })
-
+                    }, navigationIcon = {
+                        if (!hasBackButton)
+                            navigationButton()
+                        else
+                            BackNavButton(
+                                modifier = Modifier.size(15.dp),
+                                onBack = onBack!!
+                            )
+                    }, actions = {
+                        actionButton()
+                    })
+        },
+        bottomBar = {
+            if (bottomBar != null) {
+                bottomBar()
+            }
         },
         floatingActionButton = {
-            floatingActionButton()
+            if (!hasError)
+                floatingActionButton()
         },
         floatingActionButtonPosition = floatingActionButtonPosition,
         content = {
             ScaffoldContentComponent(
                 modifier = modifier.padding(it),
-                content = content,
-                alignment = alignment,
+                content = if (hasError) errorContent else content,
+                alignment = if (hasError) Alignment.CenterVertically else alignment,
                 paddingValues = paddingValues,
                 showAlert = showAlert,
                 alertDialog = alertDialog

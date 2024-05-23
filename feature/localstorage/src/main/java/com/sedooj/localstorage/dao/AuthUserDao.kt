@@ -1,6 +1,7 @@
 package com.sedooj.localstorage.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -16,4 +17,7 @@ interface AuthUserDao {
 
     @Update
     suspend fun update(auth: AuthUserEntity)
+
+    @Delete
+    suspend fun delete(auth: AuthUserEntity)
 }

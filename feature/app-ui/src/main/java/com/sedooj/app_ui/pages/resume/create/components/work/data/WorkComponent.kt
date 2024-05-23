@@ -68,7 +68,7 @@ fun createOrEdit(
                     company = work.companyName,
                     kindOfActivity = work.kindOfActivity,
                     enterJobDate = work.gotJobDate,
-                    quitJobDate = work.quitJobDate,
+                    quitJobDate = work.quitJobDate!!,
                     currentlyWorking = work.isCurrentlyWorking
                 )
             )

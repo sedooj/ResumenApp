@@ -146,7 +146,7 @@ fun rememberMainPersonalDataMap(initInfo: CreateResumeUseCase.PersonalInformatio
                 GenderConvertibleContainer(initInfo.genderType)
             ) else CustomValue(GenderConvertibleContainer(GenderType.NOT_SELECTED)),
             MainPersonalPageFields.MARITAL to if (initInfo?.maritalStatus != null) CustomValue(
-                MaritalConvertibleContainer(initInfo.maritalStatus)
+                MaritalConvertibleContainer(initInfo.maritalStatus!!)
             ) else CustomValue(
                 MaritalConvertibleContainer(MaritalStatus.NOT_SELECTED)
             ),

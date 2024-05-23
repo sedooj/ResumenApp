@@ -8,4 +8,8 @@ import com.sedooj.localstorage.dao.AuthUserDao
 @Database(entities = [AuthUserEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun authUserDao(): AuthUserDao
+
+    suspend fun clearCredentials(authUserEntity: AuthUserEntity) {
+        authUserDao().delete(authUserEntity)
+    }
 }

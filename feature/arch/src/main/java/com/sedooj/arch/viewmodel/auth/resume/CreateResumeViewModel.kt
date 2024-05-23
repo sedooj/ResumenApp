@@ -1,17 +1,12 @@
 package com.sedooj.arch.viewmodel.auth.resume
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.generator.Templates
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
-import com.sedooj.api.domain.data.types.BusynessType
-import com.sedooj.api.domain.data.types.EducationStage
 import com.sedooj.api.domain.data.types.GenderType
-import com.sedooj.api.domain.data.types.LanguageKnowledgeLevelType
 import com.sedooj.api.domain.data.types.MaritalStatus
-import com.sedooj.api.domain.data.types.PlatformType
-import com.sedooj.api.domain.data.types.ScheduleType
-import com.sedooj.api.domain.data.types.StackType
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.arch.viewmodel.auth.model.ResumeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,86 +17,85 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//data class CreateResumeUiState(
-//    var title: String = "New resume",
-//    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
-//    var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
-//    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
-//    var skillsInformation: CreateResumeUseCase.SkillsInformation? = null,
-//    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
-//)
 data class CreateResumeUiState(
-    var title: String = "My test resume",
-    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = CreateResumeUseCase.VacancyInformation(
-        stackType = StackType.FRONTEND,
-        platformType = PlatformType.MOBILE,
-        desiredRole = "Junior Frontend Developer",
-        desiredSalaryFrom = "12000",
-        desiredSalaryTo = "18000",
-        busynessType = BusynessType.FULL,
-        scheduleType = ScheduleType.SHIFT_METHOD,
-        readyForTravelling = false
-    ),
-    var personalInformation: CreateResumeUseCase.PersonalInformation? = CreateResumeUseCase.PersonalInformation(
-        firstName = "Иван",
-        secondName = "Иванов",
-        thirdName = "Иванович",
-        dateOfBirth = "01.01.2000",
-        city = "Новосибирск",
-        residenceCountry = "Россия",
-        genderType = GenderType.MALE,
-        maritalStatus = MaritalStatus.NOT_MARRIED,
-        education = listOf(
-            CreateResumeUseCase.PersonalInformation.Education(
-                educationStage = EducationStage.INSTITUTE,
-                title = "НГТУ",
-                locationCity = "Новосибирск",
-                enterDate = "12.09.2023",
-                graduatedDate = "12.09.2027",
-                faculty = "АВТ",
-                speciality = "ИВТ"
-            )
-        ),
-        hasChild = false,
-        email = "ivanov@gmail.com",
-        aboutMe = "Ya da yab da",
-        personalQualities = "Dududududu"
-    ),
-    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = listOf(
-        CreateResumeUseCase.WorkExperienceInformation(
-            companyName = "Google",
-            kindOfActivity = "Frontend developer",
-            gotJobDate = "08.08.2024",
-            quitJobDate = "08.08.2027",
-            isCurrentlyWorking = true
-        )
-    ),
-    var skillsInformation: CreateResumeUseCase.SkillsInformation? = CreateResumeUseCase.SkillsInformation(
-        languagesSkillsInformation = listOf(
-            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
-                languageName = "English", knowledgeLevel = LanguageKnowledgeLevelType.B2
-            ),
-            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
-                languageName = "French", knowledgeLevel = LanguageKnowledgeLevelType.A1
-            ),
-        ),
-        workedProgrammingLanguageInformation = listOf(
-            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-                languageName = "C++"
-            ),
-            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-                languageName = "Java"
-            ),
-            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-                languageName = "Kotlin"
-            ),
-            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-                languageName = ""
-            ),
-        )
-    ),
+    var title: String? = null,
+    var resumeId: Long? = null,
+    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
+    var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
+    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
+    var skillsInformation: CreateResumeUseCase.SkillsInformation? = null,
     var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
 )
+//data class CreateResumeUiState(
+//    var title: String? = "My test resume",
+//    var resumeId: Long? = null,
+//    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = CreateResumeUseCase.VacancyInformation(
+//        stackType = StackType.FRONTEND,
+//        platformType = PlatformType.MOBILE,
+//        desiredRole = "Junior Frontend Developer",
+//        desiredSalaryFrom = "12000",
+//        desiredSalaryTo = "18000",
+//        busynessType = BusynessType.FULL,
+//        scheduleType = ScheduleType.SHIFT_METHOD,
+//        readyForTravelling = false
+//    ),
+//    var personalInformation: CreateResumeUseCase.PersonalInformation? = CreateResumeUseCase.PersonalInformation(
+//        firstName = "Иван",
+//        secondName = "Иванов",
+//        thirdName = "Иванович",
+//        dateOfBirth = "01.01.2000",
+//        city = "Новосибирск",
+//        residenceCountry = "Россия",
+//        genderType = GenderType.MALE,
+//        maritalStatus = MaritalStatus.NOT_MARRIED,
+//        education = listOf(
+//            CreateResumeUseCase.PersonalInformation.Education(
+//                educationStage = EducationStage.INSTITUTE,
+//                title = "НГТУ",
+//                locationCity = "Новосибирск",
+//                enterDate = "12.09.2023",
+//                graduatedDate = "12.09.2027",
+//                faculty = "АВТ",
+//                speciality = "ИВТ"
+//            )
+//        ),
+//        hasChild = false,
+//        email = "ivanov@gmail.com",
+//        aboutMe = "Люблю слушать музыку",
+//        personalQualities = "Пунктуальный"
+//    ),
+//    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = listOf(
+//        CreateResumeUseCase.WorkExperienceInformation(
+//            companyName = "Google",
+//            kindOfActivity = "Frontend developer",
+//            gotJobDate = "08.08.2024",
+//            quitJobDate = "08.08.2027",
+//            isCurrentlyWorking = true
+//        )
+//    ),
+//    var skillsInformation: CreateResumeUseCase.SkillsInformation? = CreateResumeUseCase.SkillsInformation(
+//        languagesSkillsInformation = listOf(
+//            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+//                languageName = "English", knowledgeLevel = LanguageKnowledgeLevelType.B2
+//            ),
+//            CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+//                languageName = "French", knowledgeLevel = LanguageKnowledgeLevelType.A1
+//            ),
+//        ),
+//        workedProgrammingLanguageInformation = listOf(
+//            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+//                languageName = "C++"
+//            ),
+//            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+//                languageName = "Java"
+//            ),
+//            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+//                languageName = "Kotlin"
+//            ),
+//        )
+//    ),
+//    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
+//)
 
 @HiltViewModel
 class CreateResumeViewModel @Inject constructor(
@@ -110,9 +104,22 @@ class CreateResumeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CreateResumeUiState())
     val uiState: StateFlow<CreateResumeUiState> = _uiState.asStateFlow()
 
-    fun isFieldsFilled(): Boolean {
+    override fun init() {
+        _uiState.update {
+            it.copy(
+                title = "New resume",
+                vacancyInformation = null,
+                personalInformation = null,
+                workExperienceInformation = null,
+                skillsInformation = null,
+                resumeOptions = null,
+            )
+        }
+    }
+
+    fun isFieldsInitialized(): Boolean {
         val data = uiState.value
-        if (data.title.isEmpty()) return false
+        if (data.title == null) return false
         if (data.vacancyInformation == null) return false
         if (data.personalInformation == null) return false
         if (data.resumeOptions == null) return false
@@ -273,7 +280,7 @@ class CreateResumeViewModel @Inject constructor(
     override fun dropUiState() {
         _uiState.update {
             it.copy(
-                title = "New resume",
+                title = null,
                 vacancyInformation = null,
                 personalInformation = null,
                 workExperienceInformation = null,
@@ -283,29 +290,74 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override suspend fun push() {
+    override fun push(): Boolean {
         val value = uiState.value
+        var success = true
         viewModelScope.launch {
-            resumeNetworkRepository.createResume(
-                input = CreateResumeUseCase(
-                    title = value.title,
-                    vacancyInformation = value.vacancyInformation!!,
-                    personalInformation = value.personalInformation!!,
-                    workExperienceInformation = value.workExperienceInformation!!,
-                    skillsInformation = value.skillsInformation!!,
-                    resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
-                        generatePreview = true,
-                        generateFinalResult = true,
-                        generationTemplate = Templates.FREE_1
-
+            try {
+                resumeNetworkRepository.createResume(
+                    input = CreateResumeUseCase(
+                        title = value.title!!,
+                        vacancyInformation = value.vacancyInformation!!,
+                        personalInformation = value.personalInformation!!,
+                        workExperienceInformation = value.workExperienceInformation,
+                        skillsInformation = value.skillsInformation!!,
+                        resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                            generatePreview = true,
+                            generateFinalResult = true,
+                            generationTemplate = Templates.FREE_1
+                        ),
+                        resumeId = null
                     )
                 )
-            )
+            } catch (e: Exception) {
+                Log.d("Error while save resume", e.stackTrace.toString())
+                success = false
+            }
         }
+        return success
     }
 
+    override fun save(): Boolean {
+        val value = uiState.value
+        var success = true
+        viewModelScope.launch {
+            try {
+                resumeNetworkRepository.updateResume(
+                    input = CreateResumeUseCase(
+                        title = value.title!!,
+                        vacancyInformation = value.vacancyInformation!!,
+                        personalInformation = value.personalInformation!!,
+                        workExperienceInformation = value.workExperienceInformation!!,
+                        skillsInformation = value.skillsInformation!!,
+                        resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                            generatePreview = true,
+                            generateFinalResult = true,
+                            generationTemplate = Templates.FREE_1
+                        ),
+                        resumeId = value.resumeId
+                    )
+                )
+            } catch (e: Exception) {
+                Log.d("Error while update resume", e.toString())
+                success = false
+            }
+        }
+        return success
+    }
 
-    override fun save() {
-        TODO("Not yet implemented")
+    override suspend fun parseData(input: CreateResumeUseCase) {
+        dropUiState()
+        _uiState.update {
+            it.copy(
+                title = input.title,
+                resumeId = input.resumeId,
+                vacancyInformation = input.vacancyInformation,
+                personalInformation = input.personalInformation,
+                workExperienceInformation = input.workExperienceInformation,
+                skillsInformation = input.skillsInformation,
+                resumeOptions = input.resumeOptions
+            )
+        }
     }
 }
