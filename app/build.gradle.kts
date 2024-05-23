@@ -14,8 +14,8 @@ android {
         applicationId = "com.sedooj.resumen"
         minSdk = 29
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.0.2-alpha"
+        versionCode = 5
+        versionName = "0.0.1-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
