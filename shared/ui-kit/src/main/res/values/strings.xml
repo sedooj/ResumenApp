@@ -18,6 +18,7 @@
     <string name="home">Главная</string>
     <string name="my_resumes">Мои резюме</string>
     <string name="profile">Профиль</string>
+    <string name="profile_icon">Иконка профиля</string>
     <string name="sign_in">Войти</string>
     <string name="keep">Продолжить</string>
     <string name="sign_in_into_account">Войдите в аккаунт</string>
@@ -38,6 +39,7 @@
     <string name="not_all_field_are_filled">Не все поля заполнены</string>
     <string name="resume_list">Ваши резюме</string>
     <string name="resume">Резюме</string>
+    <string name="edit_profile">Редактировать профиль</string>
     <string name="resume_downloading_in_dir">Резюме будет сохранено в загрузки</string>
     <string name="vacancy">Вакансия</string>
     <string name="type_vacancy">Информация о должности</string>

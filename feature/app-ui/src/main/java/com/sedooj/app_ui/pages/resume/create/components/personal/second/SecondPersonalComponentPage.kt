@@ -93,6 +93,7 @@ fun SecondPersonalComponentPage(
                         )
                     )
                     isDataSaved = true
+                    destinationsNavigator.navigateUp()
                 },
                 isDataSaved = isDataSaved,
                 isDataEdited = isDataEdited

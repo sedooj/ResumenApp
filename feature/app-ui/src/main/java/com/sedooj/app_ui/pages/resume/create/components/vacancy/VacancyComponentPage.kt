@@ -94,6 +94,7 @@ fun VacancyComponentPage(
                         )
                     )
                     isDataSaved = true
+                    navigator.navigateUp()
                 }) {
                     Icon(
                         imageVector = Icons.Outlined.Done,

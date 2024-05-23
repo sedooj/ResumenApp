@@ -59,15 +59,15 @@ enum class MainPersonalPageFields(
     val readOnly: Boolean,
     val suggestions: List<CustomValue<ConvertibleValue>> = emptyList(),
 ) {
-    FIRST_NAME(fieldName = R.string.firstname, readOnly = false),
     SECOND_NAME(fieldName = R.string.secondname, readOnly = false),
+    FIRST_NAME(fieldName = R.string.firstname, readOnly = false),
     THIRD_NAME(fieldName = R.string.thirdname, readOnly = false),
     DATE_OF_BIRTH(fieldName = R.string.birth_date, readOnly = true),
-    CITY(fieldName = R.string.city, readOnly = false),
     RESIDENCE_COUNTRY(
         fieldName = R.string.residence_country,
         readOnly = false
     ),
+    CITY(fieldName = R.string.city, readOnly = false),
     GENDER(
         fieldName = R.string.gender_picker,
         suggestions = listOf(
