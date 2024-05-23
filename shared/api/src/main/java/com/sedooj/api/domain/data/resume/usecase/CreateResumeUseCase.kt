@@ -12,6 +12,7 @@ import com.sedooj.api.domain.data.types.StackType
 
 data class CreateResumeUseCase(
     var title: String,
+    var resumeId: Long?,
     var vacancyInformation: VacancyInformation,
     var personalInformation: PersonalInformation,
     var workExperienceInformation: List<WorkExperienceInformation>?,

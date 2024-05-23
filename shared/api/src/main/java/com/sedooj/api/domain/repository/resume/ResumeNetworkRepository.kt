@@ -7,7 +7,7 @@ import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 interface ResumeNetworkRepository : Client {
 
     suspend fun createResume(input: CreateResumeUseCase): Int?
-    suspend fun updateResume(resumeId: Long, input: CreateResumeUseCase): Int?
+    suspend fun updateResume(input: CreateResumeUseCase): Int?
     suspend fun getResumeList(): List<Resume>?
     suspend fun getResume(resumeId: Long): Resume?
     suspend fun dropResume(resumeId: Long)

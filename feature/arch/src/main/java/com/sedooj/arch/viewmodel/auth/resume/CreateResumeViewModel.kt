@@ -291,8 +291,8 @@ class CreateResumeViewModel @Inject constructor(
                         generatePreview = true,
                         generateFinalResult = true,
                         generationTemplate = Templates.FREE_1
-
-                    )
+                    ),
+                    resumeId = null
                 )
             )
         }
@@ -300,7 +300,24 @@ class CreateResumeViewModel @Inject constructor(
 
 
     override fun save() {
-        TODO("Not yet implemented")
+        val value = uiState.value
+        viewModelScope.launch {
+            resumeNetworkRepository.updateResume(
+                input = CreateResumeUseCase(
+                    title = value.title,
+                    vacancyInformation = value.vacancyInformation!!,
+                    personalInformation = value.personalInformation!!,
+                    workExperienceInformation = value.workExperienceInformation!!,
+                    skillsInformation = value.skillsInformation!!,
+                    resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                        generatePreview = true,
+                        generateFinalResult = true,
+                        generationTemplate = Templates.FREE_1
+                    ),
+                    resumeId = null
+                )
+            )
+        }
     }
 
     override suspend fun parseData(input: CreateResumeUseCase) {

@@ -179,8 +179,8 @@ private suspend fun parseData(
                 generatePreview = true,
                 generateFinalResult = true,
                 generationTemplate = Templates.FREE_1
-
-            )
+            ),
+            resumeId = resume.resumeId
         )
     )
 }

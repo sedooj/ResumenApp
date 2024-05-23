@@ -104,9 +104,9 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
         return response.status.value
     }
 
-    override suspend fun updateResume(resumeId: Long, input: CreateResumeUseCase): Int? {
+    override suspend fun updateResume(input: CreateResumeUseCase): Int? {
         val authorizationData = authUserDao.getAuthorizationData() ?: return null
-        val request = client.put("${NetworkConfig.API_RESUME}updateResume/${resumeId}") {
+        val request = client.put("${NetworkConfig.API_RESUME}updateResume/${input.resumeId}") {
             contentType(ContentType.Application.Json)
             basicAuth(
                 username = authorizationData.username,
