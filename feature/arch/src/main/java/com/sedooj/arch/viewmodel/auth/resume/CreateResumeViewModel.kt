@@ -1,5 +1,6 @@
 package com.sedooj.arch.viewmodel.auth.resume
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sedooj.api.domain.data.resume.generator.Templates
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CreateResumeUiState(
-    var title: String = "New resume",
+    var title: String? = null,
+    var resumeId: Long? = null,
     var vacancyInformation: CreateResumeUseCase.VacancyInformation? = null,
     var personalInformation: CreateResumeUseCase.PersonalInformation? = null,
     var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = null,
@@ -25,7 +27,8 @@ data class CreateResumeUiState(
     var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
 )
 //data class CreateResumeUiState(
-//    var title: String = "My test resume",
+//    var title: String? = "My test resume",
+//    var resumeId: Long? = null,
 //    var vacancyInformation: CreateResumeUseCase.VacancyInformation? = CreateResumeUseCase.VacancyInformation(
 //        stackType = StackType.FRONTEND,
 //        platformType = PlatformType.MOBILE,
@@ -89,9 +92,6 @@ data class CreateResumeUiState(
 //            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
 //                languageName = "Kotlin"
 //            ),
-//            CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
-//                languageName = ""
-//            ),
 //        )
 //    ),
 //    var resumeOptions: CreateResumeUseCase.ResumeOptionsComponent? = null,
@@ -104,9 +104,22 @@ class CreateResumeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CreateResumeUiState())
     val uiState: StateFlow<CreateResumeUiState> = _uiState.asStateFlow()
 
-    fun isFieldsFilled(): Boolean {
+    override fun init() {
+        _uiState.update {
+            it.copy(
+                title = "New resume",
+                vacancyInformation = null,
+                personalInformation = null,
+                workExperienceInformation = null,
+                skillsInformation = null,
+                resumeOptions = null,
+            )
+        }
+    }
+
+    fun isFieldsInitialized(): Boolean {
         val data = uiState.value
-        if (data.title.isEmpty()) return false
+        if (data.title == null) return false
         if (data.vacancyInformation == null) return false
         if (data.personalInformation == null) return false
         if (data.resumeOptions == null) return false
@@ -267,7 +280,7 @@ class CreateResumeViewModel @Inject constructor(
     override fun dropUiState() {
         _uiState.update {
             it.copy(
-                title = "New resume",
+                title = null,
                 vacancyInformation = null,
                 personalInformation = null,
                 workExperienceInformation = null,
@@ -277,53 +290,68 @@ class CreateResumeViewModel @Inject constructor(
         }
     }
 
-    override suspend fun push() {
+    override fun push(): Boolean {
         val value = uiState.value
+        var success = true
         viewModelScope.launch {
-            resumeNetworkRepository.createResume(
-                input = CreateResumeUseCase(
-                    title = value.title,
-                    vacancyInformation = value.vacancyInformation!!,
-                    personalInformation = value.personalInformation!!,
-                    workExperienceInformation = value.workExperienceInformation!!,
-                    skillsInformation = value.skillsInformation!!,
-                    resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
-                        generatePreview = true,
-                        generateFinalResult = true,
-                        generationTemplate = Templates.FREE_1
-                    ),
-                    resumeId = null
+            try {
+                resumeNetworkRepository.createResume(
+                    input = CreateResumeUseCase(
+                        title = value.title!!,
+                        vacancyInformation = value.vacancyInformation!!,
+                        personalInformation = value.personalInformation!!,
+                        workExperienceInformation = value.workExperienceInformation,
+                        skillsInformation = value.skillsInformation!!,
+                        resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                            generatePreview = true,
+                            generateFinalResult = true,
+                            generationTemplate = Templates.FREE_1
+                        ),
+                        resumeId = null
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                Log.d("Error while save resume", e.stackTrace.toString())
+                success = false
+            }
         }
+        return success
     }
 
-
-    override fun save() {
+    override fun save(): Boolean {
         val value = uiState.value
+        var success = true
         viewModelScope.launch {
-            resumeNetworkRepository.updateResume(
-                input = CreateResumeUseCase(
-                    title = value.title,
-                    vacancyInformation = value.vacancyInformation!!,
-                    personalInformation = value.personalInformation!!,
-                    workExperienceInformation = value.workExperienceInformation!!,
-                    skillsInformation = value.skillsInformation!!,
-                    resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
-                        generatePreview = true,
-                        generateFinalResult = true,
-                        generationTemplate = Templates.FREE_1
-                    ),
-                    resumeId = null
+            try {
+                resumeNetworkRepository.updateResume(
+                    input = CreateResumeUseCase(
+                        title = value.title!!,
+                        vacancyInformation = value.vacancyInformation!!,
+                        personalInformation = value.personalInformation!!,
+                        workExperienceInformation = value.workExperienceInformation!!,
+                        skillsInformation = value.skillsInformation!!,
+                        resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                            generatePreview = true,
+                            generateFinalResult = true,
+                            generationTemplate = Templates.FREE_1
+                        ),
+                        resumeId = value.resumeId
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                Log.d("Error while update resume", e.toString())
+                success = false
+            }
         }
+        return success
     }
 
     override suspend fun parseData(input: CreateResumeUseCase) {
+        dropUiState()
         _uiState.update {
             it.copy(
                 title = input.title,
+                resumeId = input.resumeId,
                 vacancyInformation = input.vacancyInformation,
                 personalInformation = input.personalInformation,
                 workExperienceInformation = input.workExperienceInformation,

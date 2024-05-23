@@ -37,9 +37,10 @@ fun ConfirmResumeCreationContent(
     onSelect: (Int, TemplateEntity) -> Unit,
     modifier: Modifier = Modifier,
     selectedTemplateIndexValue: Int,
-    selectedTemplateEntity: TemplateEntity?,
+    selectedTemplateEntity: TemplateEntity?
 ) {
 //    val templateList = getTemplateList()
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),

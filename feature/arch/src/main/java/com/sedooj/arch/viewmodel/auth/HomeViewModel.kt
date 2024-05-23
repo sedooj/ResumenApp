@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
     }
 
     override suspend fun updateResume(resumeId: Long, input: CreateResumeUseCase): Int? {
-        return resumeNetworkRepository.updateResume(resumeId = resumeId, input = input)
+        return resumeNetworkRepository.updateResume(input = input)
     }
 
     override suspend fun getResumeList() {

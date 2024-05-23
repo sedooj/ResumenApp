@@ -3,6 +3,7 @@ package com.sedooj.api.domain.api
 import com.sedooj.api.domain.NetworkConfig
 import com.sedooj.api.domain.data.resume.entity.CreateResume
 import com.sedooj.api.domain.data.resume.entity.Resume
+import com.sedooj.api.domain.data.resume.entity.UpdateResume
 import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.api.domain.repository.resume.ResumeNetworkRepository
 import com.sedooj.localstorage.dao.AuthUserDao
@@ -113,9 +114,10 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                 password = authorizationData.password
             )
             setBody(
-                CreateResume(
+                UpdateResume(
                     title = input.title,
-                    vacancyInformation = CreateResume.VacancyInformation(
+                    resumeId = input.resumeId!!,
+                    vacancyInformation = UpdateResume.VacancyInformation(
                         stackType = input.vacancyInformation.stackType,
                         platformType = input.vacancyInformation.platformType,
                         desiredRole = input.vacancyInformation.desiredRole,
@@ -126,7 +128,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         readyForTravelling = input.vacancyInformation.readyForTravelling
 
                     ),
-                    personalInformation = CreateResume.PersonalInformation(
+                    personalInformation = UpdateResume.PersonalInformation(
                         firstName = input.personalInformation.firstName,
                         secondName = input.personalInformation.secondName,
                         thirdName = input.personalInformation.thirdName,
@@ -136,7 +138,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                         genderType = input.personalInformation.genderType,
                         maritalStatus = input.personalInformation.maritalStatus,
                         education = input.personalInformation.education?.map {
-                            CreateResume.PersonalInformation.Education(
+                            UpdateResume.PersonalInformation.Education(
                                 educationStage = it.educationStage,
                                 title = it.title,
                                 locationCity = it.locationCity,
@@ -153,7 +155,7 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
 
                     ),
                     workExperienceInformation = input.workExperienceInformation?.map {
-                        CreateResume.WorkExperienceInformation(
+                        UpdateResume.WorkExperienceInformation(
                             companyName = it.companyName,
                             kindOfActivity = it.kindOfActivity,
                             gotJobDate = it.gotJobDate,
@@ -161,20 +163,20 @@ class ResumeNetworkRepositoryImpl @Inject constructor(
                             isCurrentlyWorking = it.isCurrentlyWorking
                         )
                     },
-                    skillsInformation = CreateResume.SkillsInformation(
+                    skillsInformation = UpdateResume.SkillsInformation(
                         languagesSkillsInformation = input.skillsInformation.languagesSkillsInformation?.map {
-                            CreateResume.SkillsInformation.LanguageSkillsInformation(
+                            UpdateResume.SkillsInformation.LanguageSkillsInformation(
                                 languageName = it.languageName,
                                 knowledgeLevel = it.knowledgeLevel
                             )
                         },
                         workedProgrammingLanguageInformation = input.skillsInformation.workedProgrammingLanguageInformation?.map {
-                            CreateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                            UpdateResume.SkillsInformation.ProgrammingLanguageSkillsInformation(
                                 languageName = it.languageName
                             )
                         }
                     ),
-                    resumeOptions = CreateResume.ResumeOptionsComponent(
+                    resumeOptions = UpdateResume.ResumeOptionsComponent(
                         generatePreview = input.resumeOptions.generatePreview,
                         generateFinalResult = input.resumeOptions.generateFinalResult,
                         generationTemplate = input.resumeOptions.generationTemplate
