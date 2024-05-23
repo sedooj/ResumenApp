@@ -302,4 +302,17 @@ class CreateResumeViewModel @Inject constructor(
     override fun save() {
         TODO("Not yet implemented")
     }
+
+    override suspend fun parseData(input: CreateResumeUseCase) {
+        _uiState.update {
+            it.copy(
+                title = input.title,
+                vacancyInformation = input.vacancyInformation,
+                personalInformation = input.personalInformation,
+                workExperienceInformation = input.workExperienceInformation,
+                skillsInformation = input.skillsInformation,
+                resumeOptions = input.resumeOptions
+            )
+        }
+    }
 }

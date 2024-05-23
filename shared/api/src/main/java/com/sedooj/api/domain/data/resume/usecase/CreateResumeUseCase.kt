@@ -23,9 +23,9 @@ data class CreateResumeUseCase(
         var stackType: StackType,
         var platformType: PlatformType,
         var desiredRole: String,
-        var desiredSalaryFrom: String,
-        var desiredSalaryTo: String,
-        var busynessType: BusynessType,
+        var desiredSalaryFrom: String?,
+        var desiredSalaryTo: String?,
+        var busynessType: BusynessType?,
         var scheduleType: ScheduleType,
         var readyForTravelling: Boolean
     )
@@ -38,12 +38,12 @@ data class CreateResumeUseCase(
         var city: String,
         var residenceCountry: String,
         var genderType: GenderType,
-        var maritalStatus: MaritalStatus,
-        var education: List<Education>,
+        var maritalStatus: MaritalStatus?,
+        var education: List<Education>?,
         var hasChild: Boolean,
-        var email: String,
+        var email: String?,
         var aboutMe: String?,
-        var personalQualities: String,
+        var personalQualities: String?,
     ) {
         class Education(
             var educationStage: EducationStage,
@@ -65,7 +65,7 @@ data class CreateResumeUseCase(
         var companyName: String,
         var kindOfActivity: String,
         var gotJobDate: String,
-        var quitJobDate: String,
+        var quitJobDate: String?,
         var isCurrentlyWorking: Boolean,
     )
 

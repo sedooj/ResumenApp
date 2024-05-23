@@ -20,11 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CreateResumeDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sedooj.api.domain.data.resume.entity.Resume
+import com.sedooj.api.domain.data.resume.generator.Templates
+import com.sedooj.api.domain.data.resume.usecase.CreateResumeUseCase
 import com.sedooj.app_ui.navigation.config.FadeScreensTransitions
 import com.sedooj.arch.Routes
 import com.sedooj.arch.downloader.ResumeDownloader
 import com.sedooj.arch.viewmodel.auth.HomeViewModel
+import com.sedooj.arch.viewmodel.auth.resume.CreateResumeViewModel
 import com.sedooj.ui_kit.R.string
 import com.sedooj.ui_kit.components.ResumeItemCard
 import com.sedooj.ui_kit.components.ResumeItemState
@@ -40,6 +45,7 @@ import kotlinx.coroutines.launch
 fun MyResumesScreen(
     destinationsNavigator: DestinationsNavigator,
     homeViewModel: HomeViewModel,
+    createResumeViewModel: CreateResumeViewModel,
 ) {
     val context = LocalContext.current
     val downloader = ResumeDownloader(context)
@@ -65,7 +71,10 @@ fun MyResumesScreen(
                     resume = ResumeItemState(
                         resumeId = resume.resumeId, title = resume.title,
                     ),
-                    onEditResume = {},
+                    onEditResume = {
+                        scope.launch { parseData(resume, createResumeViewModel) }
+                        destinationsNavigator.navigate(CreateResumeDestination)
+                    },
                     onDropResume = {
                         scope.launch {
                             homeViewModel.dropResume(resume.resumeId)
@@ -77,8 +86,16 @@ fun MyResumesScreen(
                             val url = homeViewModel.downloadResume(resume.resumeId)
                             if (url != null && credentials != null) {
                                 isDownloading = true
-                                downloader.downloadFile(url = url, auth = credentials, fileName = resume.title)
-                                Toast.makeText(context, "Загрузка файла ${resume.title}", Toast.LENGTH_SHORT).show()
+                                downloader.downloadFile(
+                                    url = url,
+                                    auth = credentials,
+                                    fileName = resume.title
+                                )
+                                Toast.makeText(
+                                    context,
+                                    "Загрузка файла ${resume.title}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     },
@@ -87,6 +104,85 @@ fun MyResumesScreen(
             }
         }
     }
+}
+
+
+private suspend fun parseData(
+    resume: Resume,
+    createResumeViewModel: CreateResumeViewModel,
+) {
+    createResumeViewModel.parseData(
+        input = CreateResumeUseCase(
+            title = resume.title,
+            vacancyInformation = CreateResumeUseCase.VacancyInformation(
+                stackType = resume.vacancyInformation.stackType,
+                platformType = resume.vacancyInformation.platformType,
+                desiredRole = resume.vacancyInformation.desiredRole,
+                desiredSalaryFrom = resume.vacancyInformation.desiredSalaryFrom,
+                desiredSalaryTo = resume.vacancyInformation.desiredSalaryTo,
+                busynessType = resume.vacancyInformation.busynessType,
+                scheduleType = resume.vacancyInformation.scheduleType,
+                readyForTravelling = resume.vacancyInformation.readyForTravelling
+
+            ),
+            personalInformation = CreateResumeUseCase.PersonalInformation(
+                firstName = resume.personalInformation.firstName,
+                secondName = resume.personalInformation.secondName,
+                thirdName = resume.personalInformation.thirdName,
+                dateOfBirth = resume.personalInformation.dateOfBirth,
+                city = resume.personalInformation.city,
+                residenceCountry = resume.personalInformation.residenceCountry,
+                genderType = resume.personalInformation.genderType,
+                maritalStatus = resume.personalInformation.maritalStatus,
+                education = resume.personalInformation.education?.map {
+                    CreateResumeUseCase.PersonalInformation.Education(
+                        educationStage = it.educationStage,
+                        title = it.title,
+                        locationCity = it.locationCity,
+                        enterDate = it.enterDate,
+                        graduatedDate = it.graduatedDate,
+                        faculty = it.faculty,
+                        speciality = it.speciality
+                    )
+                },
+                hasChild = resume.personalInformation.hasChild,
+                email = resume.personalInformation.email,
+                aboutMe = resume.personalInformation.aboutMe,
+                personalQualities = resume.personalInformation.personalQualities
+
+            ),
+            workExperienceInformation = resume.workExperienceInformation?.map {
+                CreateResumeUseCase.WorkExperienceInformation(
+                    companyName = it.companyName,
+                    kindOfActivity = it.kindOfActivity,
+                    gotJobDate = it.gotJobDate,
+                    quitJobDate = it.quitJobDate,
+                    isCurrentlyWorking = it.isCurrentlyWorking
+                )
+            },
+            skillsInformation = CreateResumeUseCase.SkillsInformation(
+                languagesSkillsInformation = resume.skillsInformation.languagesSkillsInformation?.map {
+                    CreateResumeUseCase.SkillsInformation.LanguageSkillsInformation(
+                        languageName = it.languageName,
+                        knowledgeLevel = it.knowledgeLevel
+
+                    )
+                },
+                workedProgrammingLanguageInformation = resume.skillsInformation.workedProgrammingLanguageInformation?.map {
+                    CreateResumeUseCase.SkillsInformation.ProgrammingLanguageSkillsInformation(
+                        languageName = it.languageName
+                    )
+                }
+
+            ),
+            resumeOptions = CreateResumeUseCase.ResumeOptionsComponent(
+                generatePreview = true,
+                generateFinalResult = true,
+                generationTemplate = Templates.FREE_1
+
+            )
+        )
+    )
 }
 
 

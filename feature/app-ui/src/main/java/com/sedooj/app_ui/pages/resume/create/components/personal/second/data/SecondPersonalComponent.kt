@@ -72,12 +72,12 @@ fun rememberSecondPersonalDataMap(initInfo: CreateResumeUseCase.PersonalInformat
                     if (initInfo?.email == null)
                         TextValue("")
                     else
-                        TextValue(initInfo.email),
+                        TextValue(initInfo.email!!),
             SecondPageFields.ABOUT_ME to if (initInfo?.aboutMe != null) TextValue(initInfo.aboutMe!!) else TextValue(
                 ""
             ),
             SecondPageFields.PERSONAL_QUALITIES to if (initInfo?.personalQualities != null) TextValue(
-                initInfo.personalQualities
+                initInfo.personalQualities!!
             ) else TextValue("")
         )
     }

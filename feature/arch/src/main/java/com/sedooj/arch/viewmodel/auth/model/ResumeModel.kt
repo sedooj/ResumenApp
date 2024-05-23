@@ -33,4 +33,6 @@ interface ResumeModel {
     suspend fun push()
 
     fun save()
+
+    suspend fun parseData(input: CreateResumeUseCase)
 }
