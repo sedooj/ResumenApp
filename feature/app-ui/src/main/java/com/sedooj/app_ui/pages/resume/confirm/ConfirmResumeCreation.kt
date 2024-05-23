@@ -68,7 +68,8 @@ fun ConfirmResumeCreationPage(
                         navigator.navigate(HomeDestination)
                     },
                     enabled =
-                    selectedTemplateIndexValue != -1 && selectedTemplateEntityValue != null,
+//                    selectedTemplateIndexValue != -1 && selectedTemplateEntityValue != null,
+                    true,
                     modifier = Modifier.padding(start = 15.dp, end = 15.dp)
                 )
             }

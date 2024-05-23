@@ -14,8 +14,8 @@ android {
         applicationId = "com.sedooj.resumen"
         minSdk = 29
         targetSdk = 34
-        versionCode = 3
-        versionName = "0.0.1-alpha"
+        versionCode = 4
+        versionName = "0.0.2-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,7 +31,7 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = true
+            isDebuggable = false
         }
     }
     compileOptions {

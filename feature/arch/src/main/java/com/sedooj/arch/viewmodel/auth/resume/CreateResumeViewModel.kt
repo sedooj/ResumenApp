@@ -58,8 +58,8 @@ data class CreateResumeUiState(
 //        ),
 //        hasChild = false,
 //        email = "ivanov@gmail.com",
-//        aboutMe = "Ya da yab da",
-//        personalQualities = "Dududududu"
+//        aboutMe = "Люблю слушать музыку",
+//        personalQualities = "Пунктуальный"
 //    ),
 //    var workExperienceInformation: List<CreateResumeUseCase.WorkExperienceInformation>? = listOf(
 //        CreateResumeUseCase.WorkExperienceInformation(
